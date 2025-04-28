@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Подробное описание букета | Цветочный Рай - магазин свежих цветов">
+    <meta name="keywords" content="букет, цветы, заказать букет, доставка цветов">
+    <title>Букет - Цветочный Рай</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="logo">Floww</a>
+            <nav class="nav header__nav">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="index.html" class="nav__link">Главная</a></li>
+                    <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
+                    <li class="nav__item"><a href="index.html#delivery" class="nav__link">Доставка</a></li>
+                    <li class="nav__item"><a href="index.html#about" class="nav__link">О нас</a></li>
+                    <li class="nav__item"><a href="contact.html" class="nav__link">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="header__actions">
+                <button class="header__action-btn" aria-label="Поиск"><img src="../assets/search.svg"
+                        alt="Поиск"></button>
+                <button class="header__action-btn" aria-label="Избранное"><img src="../assets/heart.svg"
+                        alt="Избранное"></button>
+                <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
+                    <img src="../assets/cart.svg" alt="Корзина">
+                    <span class="cart-count" data-cart-count>0</span>
+                </a>
+                <button class="burger-menu" aria-label="Открыть меню">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="product-page">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ul class="breadcrumbs__list">
+                    <li class="breadcrumbs__item"><a href="index.html" class="breadcrumbs__link">Главная</a></li>
+                    <li class="breadcrumbs__item"><a href="catalog.html" class="breadcrumbs__link">Каталог</a></li>
+                    <li class="breadcrumbs__item"><a href="catalog.html?category=bouquets" class="breadcrumbs__link"
+                            id="product-category">Букеты</a></li>
+                    <li class="breadcrumbs__item breadcrumbs__item--current" id="product-breadcrumb-name">Название
+                        букета</li>
+                </ul>
+            </div>
+
+            <div class="product" id="product-details">
+                <div class="product__gallery">
+                    <div class="product__main-image">
+                        <img src="../img/placeholder-large.jpg" alt="Букет Нежность" id="product-main-image"
+                            class="product__image">
+                        <span class="product__discount" id="product-discount"></span>
+                    </div>
+                    <div class="product__thumbnails" id="product-thumbnails">
+                        <button class="product__thumbnail active" data-image="../img/placeholder-large.jpg">
+                            <img src="../img/placeholder-thumb.jpg" alt="Фото 1">
+                        </button>
+                        <button class="product__thumbnail" data-image="../img/placeholder-large2.jpg">
+                            <img src="../img/placeholder-thumb2.jpg" alt="Фото 2">
+                        </button>
+                        <button class="product__thumbnail" data-image="../img/placeholder-large3.jpg">
+                            <img src="../img/placeholder-thumb3.jpg" alt="Фото 3">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product__info">
+                    <h1 class="product__title" id="product-title">Название букета</h1>
+                    <div class="product__reviews">
+                        <div class="product__rating" id="product-rating">★★★★★</div>
+                        <a href="#reviews" class="product__reviews-link">Отзывы (<span id="reviews-count">3</span>)</a>
+                    </div>
+                    <div class="product__price-block">
+                        <div class="product__price" id="product-price">2500 ₽</div>
+                        <div class="product__old-price" id="product-old-price"></div>
+                    </div>
+
+                    <div class="product__description" id="product-description">
+                        <p>Нежный букет для самых любимых. Созданный с любовью и заботой.</p>
+                    </div>
+
+                    <div class="product__options">
+                        <div class="product__option">
+                            <label for="product-size" class="product__option-label">Размер:</label>
+                            <div class="product__size-buttons">
+                                <button class="product__size-btn active" data-price="2500"
+                                    data-size="small">Маленький</button>
+                                <button class="product__size-btn" data-price="3500" data-size="medium">Средний</button>
+                                <button class="product__size-btn" data-price="4500" data-size="large">Большой</button>
+                            </div>
+                        </div>
+                        <div class="product__option">
+                            <label for="product-quantity" class="product__option-label">Количество:</label>
+                            <div class="product__quantity">
+                                <button class="product__quantity-btn" id="quantity-minus">-</button>
+                                <input type="number" id="product-quantity" value="1" min="1" max="99"
+                                    class="product__quantity-input">
+                                <button class="product__quantity-btn" id="quantity-plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product__actions">
+                        <button class="btn btn--primary" id="add-to-cart">Добавить в корзину</button>
+                        <button class="btn btn--outline product__wishlist-btn" id="add-to-wishlist">
+                            <img src="../assets/heart.svg" alt="Добавить в избранное">
+                        </button>
+                    </div>
+
+                    <div class="product__meta">
+                        <div class="product__meta-item">
+                            <strong>Артикул:</strong> <span id="product-sku">FL-0001</span>
+                        </div>
+                        <div class="product__meta-item">
+                            <strong>Категория:</strong> <span id="product-category-meta">Букеты</span>
+                        </div>
+                        <div class="product__meta-item product__availability">
+                            <span class="product__in-stock">В наличии</span>
+                        </div>
+                    </div>
+
+                    <div class="product__delivery">
+                        <div class="product__delivery-item">
+                            <img src="../assets/time.svg" alt="Доставка" class="product__delivery-icon">
+                            <div>
+                                <h4>Быстрая доставка</h4>
+                                <p>Доставим в течение 2 часов</p>
+                            </div>
+                        </div>
+                        <div class="product__delivery-item">
+                            <img src="../assets/quality.svg" alt="Гарантия" class="product__delivery-icon">
+                            <div>
+                                <h4>Гарантия свежести</h4>
+                                <p>Цветы простоят минимум 7 дней</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product__tabs">
+                <div class="product__tabs-header">
+                    <button class="product__tab-btn active" data-tab="description">Описание</button>
+                    <button class="product__tab-btn" data-tab="specs">Состав</button>
+                    <button class="product__tab-btn" data-tab="reviews">Отзывы</button>
+                    <button class="product__tab-btn" data-tab="delivery">Доставка</button>
+                </div>
+                <div class="product__tabs-content">
+                    <div class="product__tab-panel active" id="tab-description">
+                        <p>Нежный букет для самых любимых. Этот великолепный букет станет прекрасным подарком для любого
+                            события.
+                            Созданный с любовью и заботой, он украсит ваш дом и поднимет настроение.</p>
+                        <p>Наши флористы тщательно отбирают только самые свежие цветы, чтобы создать неповторимые
+                            композиции.
+                            Каждый букет уникален и собран вручную.</p>
+                    </div>
+                    <div class="product__tab-panel" id="tab-specs">
+                        <ul class="product__specs-list">
+                            <li><strong>Цветы:</strong> розы, гипсофила</li>
+                            <li><strong>Количество цветов:</strong> 15 шт</li>
+                            <li><strong>Высота букета:</strong> 50 см</li>
+                            <li><strong>Упаковка:</strong> крафт-бумага, атласная лента</li>
+                            <li><strong>Дополнительно:</strong> открытка с вашим текстом (по желанию)</li>
+                        </ul>
+                    </div>
+                    <div class="product__tab-panel" id="tab-reviews">
+                        <div class="product__reviews-summary">
+                            <div class="product__reviews-average">
+                                <div class="product__reviews-stars">★★★★★</div>
+                                <div class="product__reviews-count">5.0 из 5</div>
+                                <div class="product__reviews-total">На основе 3 отзывов</div>
+                            </div>
+                            <button class="btn btn--secondary" id="write-review-btn">Написать отзыв</button>
+                        </div>
+
+                        <div class="product__reviews-list" id="reviews-container">
+                            <div class="review-card">
+                                <div class="review-card__author">
+                                    <img src="../img/avatar1.jpg" alt="Анна Петрова" class="review-card__avatar">
+                                    <div>
+                                        <strong>Анна Петрова</strong>
+                                        <div class="review-card__rating">★★★★★</div>
+                                        <div class="review-card__date">12.04.2025</div>
+                                    </div>
+                                </div>
+                                <p>"Заказывала этот букет для мамы на день рождения. Доставили вовремя, цветы свежие и
+                                    красивые.
+                                    Мама была в восторге! Простоял более недели. Обязательно буду заказывать еще."</p>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-card__author">
+                                    <img src="../img/avatar2.jpg" alt="Иван Сидоров" class="review-card__avatar">
+                                    <div>
+                                        <strong>Иван Сидоров</strong>
+                                        <div class="review-card__rating">★★★★★</div>
+                                        <div class="review-card__date">03.03.2025</div>
+                                    </div>
+                                </div>
+                                <p>"Отличный букет! Заказал для жены на годовщину. Флористы помогли с выбором и создали
+                                    именно то, что
+                                    я хотел. Жена была очень довольна. Рекомендую!"</p>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-card__author">
+                                    <img src="../img/avatar3.jpg" alt="Елена Смирнова" class="review-card__avatar">
+                                    <div>
+                                        <strong>Елена Смирнова</strong>
+                                        <div class="review-card__rating">★★★★★</div>
+                                        <div class="review-card__date">15.02.2025</div>
+                                    </div>
+                                </div>
+                                <p>"Букет просто восхитительный! Цветы очень свежие и ароматные. Букет был упакован с
+                                    большой заботой.
+                                    Спасибо за оперативную доставку и внимательное отношение!"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product__tab-panel" id="tab-delivery">
+                        <h3>Доставка и оплата</h3>
+                        <div class="product__delivery-info">
+                            <div class="product__delivery-block">
+                                <h4>Способы доставки:</h4>
+                                <ul>
+                                    <li>Курьерская доставка по городу: 300 ₽</li>
+                                    <li>Срочная доставка (в течение 2 часов): 500 ₽</li>
+                                    <li>Самовывоз из магазина: бесплатно</li>
+                                </ul>
+                            </div>
+                            <div class="product__delivery-block">
+                                <h4>Способы оплаты:</h4>
+                                <ul>
+                                    <li>Наличными при получении</li>
+                                    <li>Банковской картой при получении</li>
+                                    <li>Онлайн-оплата на сайте</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Рекомендуемые товары -->
+            <section class="related-products">
+                <h2 class="section__title">Вам может понравиться</h2>
+                <div class="product-grid" id="related-products-container">
+                    <!-- Рекомендуемые товары будут загружены из JSON -->
+                    <div class="product-card-placeholder"></div>
+                    <div class="product-card-placeholder"></div>
+                    <div class="product-card-placeholder"></div>
+                    <div class="product-card-placeholder"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__column footer__column--about">
+                <a href="index.html" class="logo footer__logo">Цветочный Рай</a>
+                <p>Магазин свежих цветов и букетов с доставкой по всему городу. Создаем уникальные композиции для любого
+                    случая.</p>
+            </div>
+            <div class="footer__column">
+                <h4 class="footer__title">Навигация</h4>
+                <ul class="footer__list">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="index.html#delivery">Доставка</a></li>
+                    <li><a href="index.html#about">О нас</a></li>
+                    <li><a href="contact.html">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer__column">
+                <h4 class="footer__title">Категории</h4>
+                <ul class="footer__list" id="footer-categories">
+                    <!-- Категории будут загружены из JSON -->
+                    <li><a href="catalog.html?category=bouquets">Букеты</a></li>
+                    <li><a href="catalog.html?category=roses">Розы</a></li>
+                    <li><a href="catalog.html?category=plants">Комнатные растения</a></li>
+                    <li><a href="catalog.html?category=gifts">Подарки</a></li>
+                    <li><a href="catalog.html?category=wedding">Свадебные букеты</a></li>
+                </ul>
+            </div>
+            <div class="footer__column">
+                <h4 class="footer__title">Контакты</h4>
+                <address class="footer__contact-info">
+                    <p>ул. Цветочная, 123<br>Москва, Россия</p>
+                    <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                    <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
+                </address>
+                <div class="footer__socials">
+                    <a href="#" aria-label="Facebook"><img src="../assets/facebook.svg" alt="Facebook"></a>
+                    <a href="#" aria-label="Instagram"><img src="../assets/instagram.svg" alt="Instagram"></a>
+                    <a href="#" aria-label="VK"><img src="../assets/vk.svg" alt="VK"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <div class="container footer__bottom-container">
+                <p>© 2025 Цветочный Рай. Все права защищены.</p>
+                <nav>
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Условия использования</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu">
+        <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
+        <nav class="mobile-menu__nav">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="index.html#delivery">Доставка</a></li>
+                <li><a href="index.html#about">О нас</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </nav>
+        <div class="mobile-menu__actions">
+            <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
+            <!-- Другие действия если нужно -->
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Модальное окно для написания отзыва -->
+    <div class="modal" id="review-modal">
+        <div class="modal__content">
+            <button class="modal__close" aria-label="Закрыть">×</button>
+            <div class="modal__body">
+                <h3 class="modal__title">Написать отзыв</h3>
+                <form id="review-form" class="review-form">
+                    <div class="form-group">
+                        <label for="review-name" class="form-label">Ваше имя</label>
+                        <input type="text" id="review-name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ваша оценка</label>
+                        <div class="rating-select" id="rating-select">
+                            <button type="button" class="rating-btn" data-rating="1">★</button>
+                            <button type="button" class="rating-btn" data-rating="2">★</button>
+                            <button type="button" class="rating-btn" data-rating="3">★</button>
+                            <button type="button" class="rating-btn" data-rating="4">★</button>
+                            <button type="button" class="rating-btn" data-rating="5">★</button>
+                        </div>
+                        <input type="hidden" id="review-rating" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="review-text" class="form-label">Ваш отзыв</label>
+                        <textarea id="review-text" class="form-textarea" rows="5" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn--primary">Отправить отзыв</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/cart.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
