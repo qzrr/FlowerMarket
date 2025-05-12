@@ -13,298 +13,296 @@
 </head>
 
 <body>
-  <header class="header">
-    <div class="container header__container">
-      <a href="index.html" class="logo">Floww</a>
-      <nav class="nav header__nav">
-        <ul class="nav__list">
-          <li class="nav__item"><a href="index.html" class="nav__link active">Главная</a></li>
-          <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
-          <li class="nav__item"><a href="delivery.html" class="nav__link">Доставка</a></li>
-          <li class="nav__item"><a href="about.html" class="nav__link">О нас</a></li>
-          <li class="nav__item"><a href="contact.html" class="nav__link">Контакты</a></li>
-        </ul>
-      </nav>
-      <div class="header__actions">
-        <button class="header__action-btn" aria-label="Поиск"><img src="../assets/search.svg" alt="Поиск"></button>
-        <button class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg" alt="Аккаунт"></button>
-        <button class="header__action-btn" aria-label="Избранное"><img src="../assets/heart.svg"
-            alt="Избранное"></button>
-        <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
-          <img src="../assets/cart.svg" alt="Корзина">
-          <span class="cart-count" data-cart-count>0</span>
-        </a>
-        <button class="burger-menu" aria-label="Открыть меню">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+<header class="header">
+  <div class="container header__container">
+    <a href="index.html" class="logo">Floww</a>
+    <nav class="nav header__nav">
+      <ul class="nav__list">
+        <li class="nav__item"><a href="index.html" class="nav__link active">Главная</a></li>
+        <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
+        <li class="nav__item"><a href="delivery.html" class="nav__link">Доставка</a></li>
+        <li class="nav__item"><a href="about.html" class="nav__link">О нас</a></li>
+        <li class="nav__item"><a href="contact.html" class="nav__link">Контакты</a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <a href="search.html" class="header__action-btn" aria-label="Поиск"><img src="../assets/search.svg"
+                                                                               alt="Поиск"></a>
+      <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
+                                                                               alt="Аккаунт"></a>
+      <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img src="../assets/favorite.svg"
+                                                                                     alt="Избранное"></a>
+      <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
+        <img src="../assets/Shopping%20bag.svg" alt="Корзина">
+        <!-- Сделать счетчик товаров в корзине -->
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <button class="burger-menu" aria-label="Открыть меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero Section (Slider) -->
+  <section class="hero">
+    <div class="hero__slider">
+      <!-- Слайды будут добавлены JS или могут быть здесь статично -->
+      <div class="hero__slide active" style="background-image: url('../img/картинка rose.png');">
+        <div class="container hero__slide-content">
+          <h2>Комнатные растения</h2>
+          <p>Создайте уютную атмосферу в вашем доме</p>
+          <a href="catalog.html?category=plants" class="btn">Выбрать растение</a>
+        </div>
+      </div>
+      <div class="hero__slide"
+           style="background-image: url('../img/pngtree-floral-flowers-bright-blank-background-image_2160290.jpg');">
+        <div class="container hero__slide-content">
+          <h2>Свежие Букеты</h2>
+          <p>Доставка по городу в течение 2 часов</p>
+          <a href="catalog.html?category=bouquets" class="btn">Выбрать букет</a>
+        </div>
+      </div>
+      <!-- ... другие слайды ... -->
+    </div>
+    <div class="hero__controls">
+      <button class="hero__control hero__control--prev" aria-label="Предыдущий слайд">&lt;</button>
+      <div class="hero__dots">
+        <!-- Точки будут добавлены JS -->
+      </div>
+      <button class="hero__control hero__control--next" aria-label="Следующий слайд">&gt;</button>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories section">
+    <div class="container">
+      <h2 class="section__title">Категории цветов</h2>
+      <div class="categories__grid" id="categories-container">
+        <div class="category-card-placeholder"></div>
+        <div class="category-card-placeholder"></div>
+        <div class="category-card-placeholder"></div>
+        <div class="category-card-placeholder"></div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <!-- Hero Section (Slider) -->
-    <section class="hero">
-      <div class="hero__slider">
-        <!-- Слайды будут добавлены JS или могут быть здесь статично -->
-        <div class="hero__slide active" style="background-image: url('../img/1.jpg');">
-          <div class="container hero__slide-content">
-            <h2>Комнатные растения</h2>
-            <p>Создайте уютную атмосферу в вашем доме</p>
-            <a href="catalog.html?category=plants" class="btn">Выбрать растение</a>
-          </div>
-        </div>
-        <div class="hero__slide" style="background-image: url('../img/2.jpg');">
-          <div class="container hero__slide-content">
-            <h2>Свежие Букеты</h2>
-            <p>Доставка по городу в течение 2 часов</p>
-            <a href="catalog.html?category=bouquets" class="btn">Выбрать букет</a>
-          </div>
-        </div>
-        <!-- ... другие слайды ... -->
+  <!-- Popular Bouquets Section -->
+  <section class="popular section">
+    <div class="container">
+      <h2 class="section__title">Популярные букеты</h2>
+      <div class="popular__controls">
+        <input type="search" placeholder="Поиск..." class="search-input" id="popular-search">
+        <button class="filter-btn" aria-label="Фильтры" id="filter-toggle">☰</button>
       </div>
-      <div class="hero__controls">
-        <button class="hero__control hero__control--prev" aria-label="Предыдущий слайд">&lt;</button>
-        <div class="hero__dots">
-          <!-- Точки будут добавлены JS -->
-        </div>
-        <button class="hero__control hero__control--next" aria-label="Следующий слайд">&gt;</button>
+      <div class="product-grid" id="popular-products-container">
+        <!-- Популярные товары будут загружены из JSON -->
+        <div class="product-card-placeholder"></div>
+        <div class="product-card-placeholder"></div>
+        <div class="product-card-placeholder"></div>
+        <div class="product-card-placeholder"></div>
       </div>
-    </section>
+      <div class="popular__actions">
+        <a href="catalog.html" class="btn">Смотреть все букеты</a>
+      </div>
+    </div>
+  </section>
 
-    <!-- Categories Section -->
-    <section class="categories section">
-      <div class="container">
-        <h2 class="section__title">Категории цветов</h2>
-        <div class="categories__grid" id="categories-container">
-          <!-- Категории будут загружены из JSON -->
-          <div class="category-card-placeholder"></div>
-          <div class="category-card-placeholder"></div>
-          <div class="category-card-placeholder"></div>
-          <div class="category-card-placeholder"></div>
-        </div>
+  <!-- About Section -->
+  <section class="about section" id="about">
+    <div class="container about__container">
+      <div class="about__content">
+        <h2 class="section__title">О нашем магазине</h2>
+        <p>Мы создаем уникальные цветочные композиции с любовью и заботой уже более 10 лет. Наши флористы - настоящие
+          художники, которые превращают каждый букет в произведение искусства.</p>
+        <p>Мы используем только свежие цветы, доставленные напрямую от проверенных поставщиков, чтобы ваш букет
+          радовал
+          вас как можно дольше.</p>
+        <button class="btn btn--secondary" id="about-more-btn">Узнать больше</button>
       </div>
-    </section>
+      <div class="about__image">
+        <img src="../img/image-10.jpg" alt="Интерьер магазина Цветочный Рай">
+      </div>
+    </div>
+  </section>
 
-    <!-- Popular Bouquets Section -->
-    <section class="popular section">
-      <div class="container">
-        <h2 class="section__title">Популярные букеты</h2>
-        <div class="popular__controls">
-          <input type="search" placeholder="Поиск..." class="search-input" id="popular-search">
-          <button class="filter-btn" aria-label="Фильтры" id="filter-toggle">☰</button>
-        </div>
-        <div class="product-grid" id="popular-products-container">
-          <!-- Популярные товары будут загружены из JSON -->
-          <div class="product-card-placeholder"></div>
-          <div class="product-card-placeholder"></div>
-          <div class="product-card-placeholder"></div>
-          <div class="product-card-placeholder"></div>
-        </div>
-        <div class="popular__actions">
-          <a href="catalog.html" class="btn">Смотреть все букеты</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about section" id="about">
-      <div class="container about__container">
-        <div class="about__content">
-          <h2 class="section__title">О нашем магазине</h2>
-          <p>Мы создаем уникальные цветочные композиции с любовью и заботой уже более 10 лет. Наши флористы - настоящие
-            художники, которые превращают каждый букет в произведение искусства.</p>
-          <p>Мы используем только свежие цветы, доставленные напрямую от проверенных поставщиков, чтобы ваш букет
-            радовал
-            вас как можно дольше.</p>
-          <button class="btn btn--secondary" id="about-more-btn">Узнать больше</button>
-        </div>
-        <div class="about__image">
-          <img src="../img/about.jpg" alt="Интерьер магазина Цветочный Рай">
-        </div>
-      </div>
-    </section>
-
-    <!-- Delivery Section -->
-    <section class="delivery section" id="delivery">
-      <div class="container">
-        <h2 class="section__title">Доставка цветов</h2>
-        <div class="delivery__grid">
-          <div class="delivery__item">
-            <div class="delivery__icon">
-              <img src="../assets/time.svg" alt="Быстрая доставка">
-            </div>
-            <h3>Быстрая доставка</h3>
-            <p>Доставляем букеты в течение 2 часов по всему городу</p>
+  <!-- Delivery Section -->
+  <section class="delivery section" id="delivery">
+    <div class="container">
+      <h2 class="section__title">Доставка цветов</h2>
+      <div class="delivery__grid">
+        <div class="delivery__item">
+          <div class="delivery__icon">
+            <img src="../assets/time.svg" alt="Быстрая доставка">
           </div>
-          <div class="delivery__item">
-            <div class="delivery__icon">
-              <img src="../assets/quality.svg" alt="Гарантия свежести">
-            </div>
-            <h3>Гарантия свежести</h3>
-            <p>Мы гарантируем, что ваши цветы будут стоять не менее 7 дней</p>
-          </div>
-          <div class="delivery__item">
-            <div class="delivery__icon">
-              <img src="../assets/gift.svg" alt="Подарки">
-            </div>
-            <h3>Подарки к заказу</h3>
-            <p>При заказе от 5000₽ дарим открытку или сладкий комплимент</p>
-          </div>
-          <div class="delivery__item">
-            <div class="delivery__icon">
-              <img src="../assets/payment.svg" alt="Оплата">
-            </div>
-            <h3>Удобная оплата</h3>
-            <p>Принимаем оплату картой, наличными или через онлайн-сервисы</p>
-          </div>
+          <h3>Быстрая доставка</h3>
+          <p>Доставляем букеты в течение 2 часов по всему городу</p>
         </div>
-      </div>
-    </section>
-
-    <!-- Reviews Section -->
-    <section class="reviews section">
-      <div class="container">
-        <h2 class="section__title">Отзывы наших клиентов</h2>
-        <div class="reviews__slider" id="reviews-container">
-          <!-- Отзывы можно загрузить из JSON или оставить статичными -->
-          <div class="review-card">
-            <div class="review-card__author">
-              <img src="../img/avatar1.jpg" alt="Анна Петрова" class="review-card__avatar">
-              <div>
-                <strong>Анна Петрова</strong>
-                <div class="review-card__rating">★★★★★</div>
-              </div>
-            </div>
-            <p>"Заказывала букет на день рождения мамы. Доставили вовремя, цветы свежие и красивые. Мама была в
-              восторге!
-              Обязательно буду заказывать еще."</p>
+        <div class="delivery__item">
+          <div class="delivery__icon">
+            <img src="../assets/quality.svg" alt="Гарантия свежести">
           </div>
-          <div class="review-card">
-            <div class="review-card__author">
-              <img src="../img/avatar2.jpg" alt="Иван Сидоров" class="review-card__avatar">
-              <div>
-                <strong>Иван Сидоров</strong>
-                <div class="review-card__rating">★★★★★</div>
-              </div>
-            </div>
-            <p>"Отличный сервис! Заказал букет для жены на годовщину. Флористы помогли с выбором и создали именно то,
-              что
-              я хотел. Рекомендую!"</p>
+          <h3>Гарантия свежести</h3>
+          <p>Мы гарантируем, что ваши цветы будут стоять не менее 7 дней</p>
+        </div>
+        <div class="delivery__item">
+          <div class="delivery__icon">
+            <img src="../assets/gift.svg" alt="Подарки">
           </div>
-          <div class="review-card">
-            <div class="review-card__author">
-              <img src="../img/avatar3.jpg" alt="Елена Смирнова" class="review-card__avatar">
-              <div>
-                <strong>Елена Смирнова</strong>
-                <div class="review-card__rating">★★★★★</div>
-              </div>
-            </div>
-            <p>"Заказываю цветы здесь уже третий раз. Всегда свежие, красивые и стоят долго. Отдельное спасибо за
-              оперативную доставку и внимательное отношение!"</p>
+          <h3>Подарки к заказу</h3>
+          <p>При заказе от 5000₽ дарим открытку или сладкий комплимент</p>
+        </div>
+        <div class="delivery__item">
+          <div class="delivery__icon">
+            <img src="../assets/payment.svg" alt="Оплата">
           </div>
-        </div>
-        <!-- Контролы для слайдера отзывов -->
-        <div class="reviews__controls">
-          <button class="reviews__control reviews__control--prev" aria-label="Предыдущий отзыв">&lt;</button>
-          <button class="reviews__control reviews__control--next" aria-label="Следующий отзыв">&gt;</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta section section--primary-bg">
-      <div class="container cta__container">
-        <h2>Готовы сделать заказ?</h2>
-        <p>Закажите букет прямо сейчас и получите скидку 10% на первый заказ. Мы доставим ваш букет в любую точку города
-          в
-          течение 2 часов.</p>
-        <div class="cta__actions">
-          <a href="catalog.html" class="btn btn--light">Выбрать букет</a>
-          <a href="contact.html" class="btn btn--outline-light">Связаться с нами</a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="footer">
-    <div class="container footer__container">
-      <div class="footer__column footer__column--about">
-        <a href="index.html" class="logo footer__logo">Цветочный Рай</a>
-        <p>Магазин свежих цветов и букетов с доставкой по всему городу. Создаем уникальные композиции для любого
-          случая.</p>
-      </div>
-      <div class="footer__column">
-        <h4 class="footer__title">Навигация</h4>
-        <ul class="footer__list">
-          <li><a href="index.html">Главная</a></li>
-          <li><a href="catalog.html">Каталог</a></li>
-          <li><a href="delivery.html">Доставка</a></li>
-          <li><a href="about.html">О нас</a></li>
-          <li><a href="contact.html">Контакты</a></li>
-        </ul>
-      </div>
-      <div class="footer__column">
-        <h4 class="footer__title">Категории</h4>
-        <ul class="footer__list" id="footer-categories">
-          <!-- Категории будут загружены из JSON -->
-          <li><a href="catalog.html?category=bouquets">Букеты</a></li>
-          <li><a href="catalog.html?category=roses">Розы</a></li>
-          <li><a href="catalog.html?category=plants">Комнатные растения</a></li>
-          <li><a href="catalog.html?category=gifts">Подарки</a></li>
-          <li><a href="catalog.html?category=wedding">Свадебные букеты</a></li>
-        </ul>
-      </div>
-      <div class="footer__column">
-        <h4 class="footer__title">Контакты</h4>
-        <address class="footer__contact-info">
-          <p>ул. Цветочная, 123<br>Москва, Россия</p>
-          <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
-          <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
-        </address>
-        <div class="footer__socials">
-          <!-- Добавьте иконки соцсетей -->
-          <a href="#" aria-label="Facebook"><img src="../assets/facebook.svg" alt="Facebook"></a>
-          <a href="#" aria-label="Instagram"><img src="../assets/instagram.svg" alt="Instagram"></a>
-          <a href="#" aria-label="VK"><img src="../assets/vk.svg" alt="VK"></a>
+          <h3>Удобная оплата</h3>
+          <p>Принимаем оплату картой, наличными или через онлайн-сервисы</p>
         </div>
       </div>
     </div>
-    <div class="footer__bottom">
-      <div class="container footer__bottom-container">
-        <p>© 2025 Цветочный Рай. Все права защищены.</p>
-        <nav>
-          <a href="#">Политика конфиденциальности</a>
-          <a href="#">Условия использования</a>
-        </nav>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews section">
+    <div class="container">
+      <h2 class="section__title">Отзывы наших клиентов</h2>
+      <div class="reviews__slider" id="reviews-container">
+        <!-- Отзывы можно загрузить из JSON или оставить статичными -->
+        <div class="review-card">
+          <div class="review-card__author">
+            <img src="../img/аватар%20ольга.png" alt="Анна Петрова" class="review-card__avatar">
+            <div>
+              <strong>Анна Петрова</strong>
+              <div class="review-card__rating">★★★★★</div>
+            </div>
+          </div>
+          <p>"Заказывала букет на день рождения мамы. Доставили вовремя, цветы свежие и красивые. Мама была в
+            восторге!
+            Обязательно буду заказывать еще."</p>
+        </div>
+        <div class="review-card">
+          <div class="review-card__author">
+            <img src="../img/ава%20саши.png" alt="Иван Сидоров" class="review-card__avatar">
+            <div>
+              <strong>Иван Сидоров</strong>
+              <div class="review-card__rating">★★★★★</div>
+            </div>
+          </div>
+          <p>"Отличный сервис! Заказал букет для жены на годовщину. Флористы помогли с выбором и создали именно то,
+            что
+            я хотел. Рекомендую!"</p>
+        </div>
+        <div class="review-card">
+          <div class="review-card__author">
+            <img src="../img/аватар%20ольга.png" alt="Елена Смирнова" class="review-card__avatar">
+            <div>
+              <strong>Елена Смирнова</strong>
+              <div class="review-card__rating">★★★★★</div>
+            </div>
+          </div>
+          <p>"Заказываю цветы здесь уже третий раз. Всегда свежие, красивые и стоят долго. Отдельное спасибо за
+            оперативную доставку и внимательное отношение!"</p>
+        </div>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- Мобильное меню (скрыто по умолчанию) -->
-  <div class="mobile-menu">
-    <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
-    <nav class="mobile-menu__nav">
-      <ul>
+  <!-- CTA Section -->
+  <section class="cta section section--primary-bg">
+    <div class="container cta__container">
+      <h2>Готовы сделать заказ?</h2>
+      <p>Закажите букет прямо сейчас и получите скидку 10% на первый заказ. Мы доставим ваш букет в любую точку города
+        в
+        течение 2 часов.</p>
+      <div class="cta__actions">
+        <a href="catalog.html" class="btn btn--light">Выбрать букет</a>
+        <a href="contact.html" class="btn btn--outline-light">Связаться с нами</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__column footer__column--about">
+      <a href="index.html" class="logo footer__logo">Floww</a>
+      <p>Магазин свежих цветов и букетов с доставкой по всему городу. Создаем уникальные композиции для любого
+        случая.</p>
+    </div>
+    <div class="footer__column">
+      <h4 class="footer__title">Навигация</h4>
+      <ul class="footer__list">
         <li><a href="index.html">Главная</a></li>
         <li><a href="catalog.html">Каталог</a></li>
         <li><a href="delivery.html">Доставка</a></li>
         <li><a href="about.html">О нас</a></li>
         <li><a href="contact.html">Контакты</a></li>
       </ul>
-    </nav>
-    <div class="mobile-menu__actions">
-      <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
-      <!-- Другие действия если нужно -->
+    </div>
+    <div class="footer__column">
+      <h4 class="footer__title">Категории</h4>
+      <ul class="footer__list" id="footer-categories">
+        <!-- Категории будут загружены из JSON -->
+        <li><a href="catalog.html?category=bouquets">Букеты</a></li>
+        <li><a href="catalog.html?category=roses">Розы</a></li>
+        <li><a href="catalog.html?category=plants">Комнатные растения</a></li>
+        <li><a href="catalog.html?category=gifts">Подарки</a></li>
+        <li><a href="catalog.html?category=wedding">Свадебные букеты</a></li>
+      </ul>
+    </div>
+    <div class="footer__column">
+      <h4 class="footer__title">Контакты</h4>
+      <address class="footer__contact-info">
+        <p>ул. Баумана, 123<br>Казань, Россия</p>
+        <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+        <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
+      </address>
+      <div class="footer__socials">
+        <!-- Добавьте иконки соцсетей -->
+        <a href="#" aria-label="Facebook"><img src="../assets/FacebookDark.svg" alt="Facebook"></a>
+        <a href="#" aria-label="Instagram"><img src="../assets/InstagramDark.svg" alt="Instagram"></a>
+        <a href="#" aria-label="VK"><img src="../assets/icons8-vk%20(1).svg" alt="VK"></a>
+      </div>
     </div>
   </div>
-  <div class="overlay"></div> <!-- Для затемнения фона при открытии моб. меню -->
+  <div class="footer__bottom">
+    <div class="container footer__bottom-container">
+      <p>© 2025 Floww. Все права защищены.</p>
+      <nav>
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Условия использования</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- Мобильное меню (скрыто по умолчанию) -->
+<div class="mobile-menu">
+  <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
+  <nav class="mobile-menu__nav">
+    <ul>
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="catalog.html">Каталог</a></li>
+      <li><a href="delivery.html">Доставка</a></li>
+      <li><a href="about.html">О нас</a></li>
+      <li><a href="contact.html">Контакты</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__actions">
+    <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
+    <!-- Другие действия если нужно -->
+  </div>
+</div>
+<div class="overlay"></div> <!-- Для затемнения фона при открытии моб. меню -->
 
 
-  <script src="../js/cart.js"></script>
-  <script src="../js/main.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/main.js"></script>
 </body>
 
 </html>
