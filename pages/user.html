@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Личный кабинет - Цветочный Рай">
+  <meta name="keywords" content="личный кабинет, профиль, заказы, цветочный магазин">
+  <title>Личный кабинет - Цветочный Рай</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+<header class="header">
+  <div class="container header__container">
+    <a href="index.html" class="logo">Floww</a>
+    <nav class="nav header__nav">
+      <ul class="nav__list">
+        <li class="nav__item"><a href="index.html" class="nav__link">Главная</a></li>
+        <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
+        <li class="nav__item"><a href="delivery.html" class="nav__link">Доставка</a></li>
+        <li class="nav__item"><a href="about.html" class="nav__link">О нас</a></li>
+        <li class="nav__item"><a href="contact.html" class="nav__link">Контакты</a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
+                                                                                  alt="Поиск"></button>
+      <a href="user.html" class="header__action-btn active" aria-label="Аккаунт"><img src="../assets/user.svg"
+                                                                                      alt="Аккаунт"></a>
+      <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img
+        src="../assets/favorite.svg" alt="Избранное"></a>
+      <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
+        <img src="../assets/cart.svg" alt="Корзина">
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <button class="burger-menu" aria-label="Открыть меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="user-page">
+  <div class="container">
+    <h1 class="page-title">Личный кабинет</h1>
+    <div class="user-dashboard">
+      <aside class="user-sidebar">
+        <div class="user-profile">
+          <div class="user-avatar">
+            <img src="../assets/account_circle.svg" alt="Аватар пользователя" id="user-avatar">
+          </div>
+          <h2 id="user-name">Гость</h2>
+        </div>
+        <nav class="user-navigation">
+          <ul>
+            <li><a href="#" class="active" data-tab="profile">Профиль</a></li>
+            <li><a href="#" data-tab="orders">История заказов</a></li>
+            <li><a href="#" data-tab="favorites">Избранное</a></li>
+            <li><a href="#" data-tab="addresses">Адреса доставки</a></li>
+            <li><a href="#" data-tab="settings">Настройки</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="user-content">
+        <!-- Профиль -->
+        <section class="user-tab active" id="profile">
+          <h2>Мой профиль</h2>
+          <form class="user-form" id="profile-form">
+            <div class="form-group">
+              <label for="user-fullname">ФИО</label>
+              <input type="text" id="user-fullname" name="fullname"
+                     placeholder="Введите ваше полное имя">
+            </div>
+            <div class="form-group">
+              <label for="user-email">Email</label>
+              <input type="email" id="user-email" name="email" placeholder="Введите ваш email">
+            </div>
+            <div class="form-group">
+              <label for="user-phone">Телефон</label>
+              <input type="tel" id="user-phone" name="phone" placeholder="+7 (___) ___-__-__">
+            </div>
+            <div class="form-group">
+              <label for="user-birthday">Дата рождения</label>
+              <input type="date" id="user-birthday" name="birthday">
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+          </form>
+        </section>
+
+        <!-- История заказов -->
+        <section class="user-tab" id="orders">
+          <h2>История заказов</h2>
+          <div class="orders-empty-state">
+            <p>У вас пока нет заказов.</p>
+            <a href="catalog.html" class="btn btn-primary">Перейти в каталог</a>
+          </div>
+        </section>
+
+        <!-- Избранное -->
+        <section class="user-tab" id="favorites">
+          <h2>Избранное</h2>
+          <div class="favorites-container product-grid">
+            <!-- Избранное будет загружено через JavaScript -->
+          </div>
+        </section>
+
+        <!-- Адреса доставки -->
+        <section class="user-tab" id="addresses">
+          <h2>Мои адреса доставки</h2>
+          <div class="address-empty-state">
+            <p>У вас пока нет сохраненных адресов.</p>
+          </div>
+          <button class="btn btn-primary add-address-btn">Добавить новый адрес</button>
+        </section>
+
+        <!-- Настройки -->
+        <section class="user-tab" id="settings">
+          <h2>Настройки аккаунта</h2>
+          <form class="user-form" id="settings-form">
+            <div class="form-group">
+              <label for="change-password">Новый пароль</label>
+              <input type="password" id="change-password" name="new-password"
+                     placeholder="Введите новый пароль">
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Подтверждение пароля</label>
+              <input type="password" id="confirm-password" name="confirm-password"
+                     placeholder="Подтвердите новый пароль">
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="notification-email" name="notification-email" checked>
+              <label for="notification-email">Получать уведомления о заказах по email</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="notification-sms" name="notification-sms" checked>
+              <label for="notification-sms">Получать SMS-уведомления</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+          </form>
+
+          <div class="logout-section">
+            <button class="btn btn-secondary" id="logout-btn">Выйти из аккаунта</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__column footer__column--about">
+      <a href="index.html" class="logo footer__logo">Floww</a>
+      <p>Магазин свежих цветов и букетов с доставкой по всему городу. Создаем уникальные композиции для любого
+        случая.</p>
+    </div>
+    <div class="footer__column">
+      <h4 class="footer__title">Навигация</h4>
+      <ul class="footer__list">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="catalog.html">Каталог</a></li>
+        <li><a href="delivery.html">Доставка</a></li>
+        <li><a href="about.html">О нас</a></li>
+        <li><a href="contact.html">Контакты</a></li>
+      </ul>
+    </div>
+    <div class="footer__column">
+      <h4 class="footer__title">Категории</h4>
+      <ul class="footer__list" id="footer-categories">
+        <!-- Категории будут добавлены через JavaScript -->
+      </ul>
+    </div>
+    <div class="footer__column">
+      <h4 class="footer__title">Контакты</h4>
+      <div class="footer__contact-info">
+        <p>Адрес: г. Москва, ул. Цветочная, д. 123</p>
+        <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+        <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
+      </div>
+      <div class="footer__socials">
+        <a href="#" aria-label="Мы во ВКонтакте"><img src="../assets/icons8-vk%20(1).svg" alt="ВКонтакте"></a>
+        <a href="#" aria-label="Мы в Telegram"><img src="../assets/InstagramDark.svg" alt="Telegram"></a>
+        <a href="#" aria-label="Наш канал на YouTube"><img src="../assets/FacebookDark.svg" alt="YouTube"></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <div class="container footer__bottom-container">
+      <p>© 2023 Цветочный Рай. Все права защищены.</p>
+      <nav>
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Условия использования</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- Мобильное меню -->
+<div class="mobile-menu">
+  <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
+  <nav class="mobile-menu__nav">
+    <ul>
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="catalog.html">Каталог</a></li>
+      <li><a href="delivery.html">Доставка</a></li>
+      <li><a href="about.html">О нас</a></li>
+      <li><a href="contact.html">Контакты</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__actions">
+    <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
+  </div>
+</div>
+<div class="overlay"></div>
+
+<!-- Модальное окно поиска -->
+<div class="search-modal" id="searchModal">
+  <div class="search-modal__content">
+    <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
+    <h2 class="search-modal__title">Поиск товаров</h2>
+    <form class="search-form" id="modalSearchForm">
+      <div class="search-input-container">
+        <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
+               aria-label="Поиск по каталогу" autofocus>
+        <button type="submit" class="btn btn-primary">Найти</button>
+      </div>
+    </form>
+    <div class="search-modal__results" id="modalSearchResults">
+      <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+      <p class="search-hint">Введите запрос для поиска по каталогу</p>
+    </div>
+  </div>
+</div>
+
+<script src="../js/cart.js"></script>
+<script src="../js/main.js" type="module"></script>
+<script src="../js/user.js" type="module"></script>
+</body>
+
+</html>

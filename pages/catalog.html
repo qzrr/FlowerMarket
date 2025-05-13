@@ -25,7 +25,8 @@
         </ul>
       </nav>
       <div class="header__actions">
-        <button class="header__action-btn" aria-label="Поиск"><img src="../assets/search.svg" alt="Поиск"></button>
+        <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
+            alt="Поиск"></button>
         <button class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg" alt="Аккаунт"></button>
         <button class="header__action-btn" aria-label="Избранное"><img src="../assets/heart.svg"
             alt="Избранное"></button>
@@ -42,7 +43,7 @@
 
   <main class="catalog-page">
     <div class="container">
-      
+
       <h1 class="page-title">Каталог цветов</h1>
 
       <div class="catalog__filters-wrapper">
@@ -199,8 +200,27 @@
   </div>
   <div class="overlay"></div>
 
+  <!-- Модальное окно поиска -->
+  <div class="search-modal" id="searchModal">
+    <div class="search-modal__content">
+      <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
+      <h2 class="search-modal__title">Поиск товаров</h2>
+      <form class="search-form" id="modalSearchForm">
+        <div class="search-input-container">
+          <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
+            aria-label="Поиск по каталогу" autofocus>
+          <button type="submit" class="btn btn-primary">Найти</button>
+        </div>
+      </form>
+      <div class="search-modal__results" id="modalSearchResults">
+        <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+        <p class="search-hint">Введите запрос для поиска по каталогу</p>
+      </div>
+    </div>
+  </div>
+
   <script src="../js/cart.js"></script>
-  <script src="../js/main.js"></script>
+  <script src="../js/main.js" type="module"></script>
 </body>
 
 </html>

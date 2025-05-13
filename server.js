@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const Database = require('./data/db');
+const sqlite3 = require('sqlite3');
 
 const app = express();
 const port = 3000;
@@ -36,6 +37,52 @@ app.get('/api/products/category/:category', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// Поиск продуктов
+app.get('/api/products/search', (req, res) => {
+    const searchQuery = req.query.q ? req.query.q.toLowerCase() : '';
+
+    if (!searchQuery || searchQuery.length < 3) {
+        return res.status(400).json({ error: 'Поисковый запрос должен содержать минимум 3 символа' });
+    }
+
+    const db = new sqlite3.Database('./flowers.db');
+
+    db.all(`
+    SELECT p.*,
+           GROUP_CONCAT(DISTINCT i.image_url) as images,
+           GROUP_CONCAT(DISTINCT c.item) as composition,
+           GROUP_CONCAT(DISTINCT s.name || '|' || s.price) as sizes
+    FROM products p
+           LEFT JOIN images i ON p.id = i.product_id
+           LEFT JOIN compositions c ON p.id = c.product_id
+           LEFT JOIN sizes s ON p.id = s.product_id
+    WHERE LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ? OR LOWER(p.categoryName) LIKE ?
+    GROUP BY p.id
+    ORDER BY p.name
+  `, [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`], (err, rows) => {
+        if (err) {
+            console.error('Error searching products:', err);
+            res.status(500).json({ error: 'Ошибка при поиске товаров' });
+            db.close();
+            return;
+        }
+
+        // Преобразуем результаты в нужный формат
+        const products = rows.map(row => ({
+            ...row,
+            images: row.images ? row.images.split(',') : [],
+            composition: row.composition ? row.composition.split(',') : [],
+            sizes: row.sizes ? row.sizes.split(',').map(size => {
+                const [name, price] = size.split('|');
+                return { name, price: parseInt(price) };
+            }) : []
+        }));
+
+        res.json(products);
+        db.close();
+    });
 });
 
 // Получение продукта по ID (должен идти после других специфичных маршрутов /api/products/...)

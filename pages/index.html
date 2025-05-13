@@ -26,14 +26,14 @@
       </ul>
     </nav>
     <div class="header__actions">
-      <a href="search.html" class="header__action-btn" aria-label="Поиск"><img src="../assets/search.svg"
-                                                                               alt="Поиск"></a>
+      <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
+                                                                                  alt="Поиск"></button>
       <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
                                                                                alt="Аккаунт"></a>
       <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img src="../assets/favorite.svg"
                                                                                      alt="Избранное"></a>
       <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
-        <img src="../assets/Shopping%20bag.svg" alt="Корзина">
+        <img src="../assets/cart.svg" alt="Корзина">
         <!-- Сделать счетчик товаров в корзине -->
         <span class="cart-count" data-cart-count>0</span>
       </a>
@@ -50,7 +50,6 @@
   <!-- Hero Section (Slider) -->
   <section class="hero">
     <div class="hero__slider">
-      <!-- Слайды будут добавлены JS или могут быть здесь статично -->
       <div class="hero__slide active" style="background-image: url('../img/картинка rose.png');">
         <div class="container hero__slide-content">
           <h2>Комнатные растения</h2>
@@ -66,12 +65,10 @@
           <a href="catalog.html?category=bouquets" class="btn">Выбрать букет</a>
         </div>
       </div>
-      <!-- ... другие слайды ... -->
     </div>
     <div class="hero__controls">
       <button class="hero__control hero__control--prev" aria-label="Предыдущий слайд">&lt;</button>
       <div class="hero__dots">
-        <!-- Точки будут добавлены JS -->
       </div>
       <button class="hero__control hero__control--next" aria-label="Следующий слайд">&gt;</button>
     </div>
@@ -94,12 +91,7 @@
   <section class="popular section">
     <div class="container">
       <h2 class="section__title">Популярные букеты</h2>
-      <div class="popular__controls">
-        <input type="search" placeholder="Поиск..." class="search-input" id="popular-search">
-        <button class="filter-btn" aria-label="Фильтры" id="filter-toggle">☰</button>
-      </div>
       <div class="product-grid" id="popular-products-container">
-        <!-- Популярные товары будут загружены из JSON -->
         <div class="product-card-placeholder"></div>
         <div class="product-card-placeholder"></div>
         <div class="product-card-placeholder"></div>
@@ -121,7 +113,7 @@
         <p>Мы используем только свежие цветы, доставленные напрямую от проверенных поставщиков, чтобы ваш букет
           радовал
           вас как можно дольше.</p>
-        <button class="btn btn--secondary" id="about-more-btn">Узнать больше</button>
+        <a href="about.html" class="btn btn--secondary" id="about-more-btn">Узнать больше</a>
       </div>
       <div class="about__image">
         <img src="../img/image-10.jpg" alt="Интерьер магазина Цветочный Рай">
@@ -136,28 +128,28 @@
       <div class="delivery__grid">
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/time.svg" alt="Быстрая доставка">
+            <img src="../img/icons8-таймер-48.png" alt="Быстрая доставка">
           </div>
           <h3>Быстрая доставка</h3>
           <p>Доставляем букеты в течение 2 часов по всему городу</p>
         </div>
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/quality.svg" alt="Гарантия свежести">
+            <img src="../assets/Feather.svg" alt="Гарантия свежести">
           </div>
           <h3>Гарантия свежести</h3>
           <p>Мы гарантируем, что ваши цветы будут стоять не менее 7 дней</p>
         </div>
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/gift.svg" alt="Подарки">
+            <img src="../assets/Gift.svg" alt="Подарки">
           </div>
           <h3>Подарки к заказу</h3>
           <p>При заказе от 5000₽ дарим открытку или сладкий комплимент</p>
         </div>
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/payment.svg" alt="Оплата">
+            <img src="../assets/Shopping%20cart.svg" alt="Оплата">
           </div>
           <h3>Удобная оплата</h3>
           <p>Принимаем оплату картой, наличными или через онлайн-сервисы</p>
@@ -167,45 +159,47 @@
   </section>
 
   <!-- Reviews Section -->
-  <section class="reviews section">
-    <div class="container">
-      <h2 class="section__title">Отзывы наших клиентов</h2>
-      <div class="reviews__slider" id="reviews-container">
-        <!-- Отзывы можно загрузить из JSON или оставить статичными -->
-        <div class="review-card">
-          <div class="review-card__author">
-            <img src="../img/аватар%20ольга.png" alt="Анна Петрова" class="review-card__avatar">
-            <div>
-              <strong>Анна Петрова</strong>
-              <div class="review-card__rating">★★★★★</div>
-            </div>
-          </div>
-          <p>"Заказывала букет на день рождения мамы. Доставили вовремя, цветы свежие и красивые. Мама была в
-            восторге!
-            Обязательно буду заказывать еще."</p>
+  <section class="about-testimonials">
+    <h2 class="section__title">Что говорят наши клиенты</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-card__text">
+          <p>"Заказываю букеты в Floww уже больше 3 лет. Всегда свежие цветы, красивые
+            композиции и вежливый персонал. Очень рекомендую!"</p>
         </div>
-        <div class="review-card">
-          <div class="review-card__author">
-            <img src="../img/ава%20саши.png" alt="Иван Сидоров" class="review-card__avatar">
-            <div>
-              <strong>Иван Сидоров</strong>
-              <div class="review-card__rating">★★★★★</div>
-            </div>
+        <div class="testimonial-card__author">
+          <img src="../img/аватар%20алисы.png" alt="Мария Иванова" class="testimonial-card__avatar">
+          <div>
+            <strong>Мария Иванова</strong>
+            <div class="testimonial-card__rating">★★★★★</div>
           </div>
-          <p>"Отличный сервис! Заказал букет для жены на годовщину. Флористы помогли с выбором и создали именно то,
-            что
-            я хотел. Рекомендую!"</p>
         </div>
-        <div class="review-card">
-          <div class="review-card__author">
-            <img src="../img/аватар%20ольга.png" alt="Елена Смирнова" class="review-card__avatar">
-            <div>
-              <strong>Елена Смирнова</strong>
-              <div class="review-card__rating">★★★★★</div>
-            </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-card__text">
+          <p>"Сколько раз заказывала в Floww – ни разу не подвели, а это для меня главное. Уже, наверное, лет пять их
+            клиентка. Букеты всегда прекрасные, стоят долго, и персонал такой отзывчивый, приятно общаться. Молодцы, так
+            держать! Рекомендую от души."</p>
+        </div>
+        <div class="testimonial-card__author">
+          <img src="../img/аватар%20ольга.png" alt="Ольга Олеговна" class="testimonial-card__avatar">
+          <div>
+            <strong>Ольга Олеговна</strong>
+            <div class="testimonial-card__rating">★★★★★</div>
           </div>
-          <p>"Заказываю цветы здесь уже третий раз. Всегда свежие, красивые и стоят долго. Отдельное спасибо за
-            оперативную доставку и внимательное отношение!"</p>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-card__text ">
+          <p>"Заказал букет для жены на годовщину. Флористы помогли с выбором и создали именно то, что
+            я хотел. Жена была в восторге!"</p>
+        </div>
+        <div class="testimonial-card__author">
+          <img src="../img/ава%20саши.png" alt="Алексей Петров" class="testimonial-card__avatar">
+          <div>
+            <strong>Алексей Петров</strong>
+            <div class="testimonial-card__rating">★★★★★</div>
+          </div>
         </div>
       </div>
     </div>
@@ -219,7 +213,7 @@
         в
         течение 2 часов.</p>
       <div class="cta__actions">
-        <a href="catalog.html" class="btn btn--light">Выбрать букет</a>
+        <a href="catalog.html" class="btn btn--outline-light">Выбрать букет</a>
         <a href="contact.html" class="btn btn--outline-light">Связаться с нами</a>
       </div>
     </div>
@@ -247,7 +241,6 @@
     <div class="footer__column">
       <h4 class="footer__title">Категории</h4>
       <ul class="footer__list" id="footer-categories">
-        <!-- Категории будут загружены из JSON -->
         <li><a href="catalog.html?category=bouquets">Букеты</a></li>
         <li><a href="catalog.html?category=roses">Розы</a></li>
         <li><a href="catalog.html?category=plants">Комнатные растения</a></li>
@@ -300,9 +293,27 @@
 </div>
 <div class="overlay"></div> <!-- Для затемнения фона при открытии моб. меню -->
 
+<!-- Модальное окно поиска -->
+<div class="search-modal" id="searchModal">
+  <div class="search-modal__content">
+    <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
+    <h2 class="search-modal__title">Поиск товаров</h2>
+    <form class="search-form" id="modalSearchForm">
+      <div class="search-input-container">
+        <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
+               aria-label="Поиск по каталогу" autofocus>
+        <button type="submit" class="btn btn-primary">Найти</button>
+      </div>
+    </form>
+    <div class="search-modal__results" id="modalSearchResults">
+      <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+      <p class="search-hint">Введите запрос для поиска по каталогу</p>
+    </div>
+  </div>
+</div>
 
 <script src="../js/cart.js"></script>
-<script src="../js/main.js"></script>
+<script src="../js/main.js" type="module"></script>
 </body>
 
 </html>

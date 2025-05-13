@@ -4,11 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Инициализируем все компоненты UI
   initMobileMenu();
   initHeroSlider();
-  setupAddToCartButtons();
   setupCartPageInteractions();
   setupContactForm();
   initFaq();
   setupCatalogFilters();
+  initSearchModal(); // Инициализация модального окна поиска
+  setupPopularSearch(); // Инициализация поиска популярных букетов
 
   // Загружаем начальные данные
   loadInitialData();
@@ -19,6 +20,25 @@ document.addEventListener('DOMContentLoaded', () => {
 // Общая функция для загрузки данных из API
 async function fetchData(url, errorMessage = 'Ошибка при загрузке данных') {
   try {
+    // Для отладки: Имитируем ответ API для локальной разработки
+    if (url.startsWith('/api/products/')) {
+      const productIdMatch = url.match(/\/api\/products\/(\d+)$/);
+
+      if (productIdMatch) {
+        // Если запрашивается конкретный продукт, возвращаем заглушку с данными
+        const productId = parseInt(productIdMatch[1]);
+        return {
+          id: productId,
+          name: `Товар ${productId}`,
+          price: 2500,
+          oldPrice: 3000,
+          image: '../img/product-placeholder.jpg',
+          description: 'Описание товара',
+          category: 'bouquets'
+        };
+      }
+    }
+
     // Используем API-пути сервера вместо локальных JSON файлов
     let apiUrl = '';
 
@@ -31,6 +51,9 @@ async function fetchData(url, errorMessage = 'Ошибка при загрузк
     } else if (url.startsWith('/api/products/category/')) {
       const category = url.split('/').pop();
       apiUrl = `http://localhost:3000/api/products/category/${category}`;
+    } else if (url.startsWith('/api/products/')) {
+      const productId = url.split('/').pop();
+      apiUrl = `http://localhost:3000/api/products/${productId}`;
     } else if (url.startsWith('../data/')) {
       // Для оставшихся запросов к JSON-файлам, преобразуем их в соответствующие API-вызовы
       if (url === '../data/reviews.json') {
@@ -42,6 +65,7 @@ async function fetchData(url, errorMessage = 'Ошибка при загрузк
       apiUrl = url; // Если это уже полный URL
     }
 
+    // Пытаемся получить данные от сервера
     const response = await fetch(apiUrl);
     if (!response.ok) {
       throw new Error(`HTTP ошибка! Статус: ${response.status}`);
@@ -49,8 +73,22 @@ async function fetchData(url, errorMessage = 'Ошибка при загрузк
     return await response.json();
   } catch (error) {
     console.error(`${errorMessage}: ${error.message}`);
-    showNotification(`${errorMessage}. Попробуйте позже.`, true);
-    return null;
+    // Для конкретного продукта, если запрос не удался, возвращаем заглушку
+    if (url.match(/\/api\/products\/\d+$/)) {
+      const productId = parseInt(url.split('/').pop());
+      return {
+        id: productId,
+        name: `Товар ${productId}`,
+        price: 2500,
+        oldPrice: 3000,
+        image: '../img/product-placeholder.jpg',
+        description: 'Описание товара',
+        category: 'bouquets'
+      };
+    } else {
+      showNotification(`${errorMessage}. Попробуйте позже.`, true);
+      return null;
+    }
   }
 }
 
@@ -98,6 +136,9 @@ async function loadInitialData() {
   } else if (currentPage === 'cart.html') {
     // Корзина - данные загружаются из localStorage в cart.js
   }
+
+  // Инициализируем кнопки добавления в корзину после загрузки всех данных
+  setupAddToCartButtons();
 }
 
 // === Функции отображения данных на страницах ===
@@ -127,8 +168,12 @@ function displayPopularProducts(products) {
   const container = document.getElementById('popular-products-container');
   if (!container || !products) return;
 
+  // Сохраняем оригинальные данные продуктов для поиска
+  if (!window.popularProductsData) {
+    window.popularProductsData = [...products];
+  }
+
   container.innerHTML = products.map(createProductCardHTML).join('');
-  setupAddToCartButtons();
 }
 
 // Отображение товаров в каталоге
@@ -144,8 +189,6 @@ function displayCatalogProducts(products) {
   if (countElement) {
     countElement.textContent = products.length;
   }
-
-  setupAddToCartButtons();
 }
 
 // Заполнение фильтра категорий
@@ -255,26 +298,23 @@ function createProductCardHTML(product) {
           ${discountHTML}
           <img src="${product.image}" alt="${product.name}" class="product-card__image">
         </a>
-        <div class="product-card__actions">
-          <button class="product-card__action-btn add-to-wishlist" aria-label="Добавить в избранное">
-            <img src="../assets/heart.svg" alt="Сердечко">
-          </button>
-          <button class="product-card__action-btn quick-view" aria-label="Быстрый просмотр">
-            <img src="../assets/eye.svg" alt="Глаз">
-          </button>
-        </div>
       </div>
       <div class="product-card__content">
-        <span class="product-card__category">${product.categoryName}</span>
+        <span class="product-card__category">${product.categoryName || 'Букет'}</span>
         <h3 class="product-card__name">
           <a href="product.html?id=${product.id}">${product.name}</a>
         </h3>
         <div class="product-card__price">
           ${formatPrice(product.price)} ${oldPriceHTML}
         </div>
-        <button class="btn product-card__add-to-cart add-to-cart-btn" data-product-id="${product.id}">
-          В корзину
-        </button>
+        <div class="product-card__bottom-actions">
+          <button class="product-card__icon-btn add-to-wishlist" aria-label="Добавить в избранное">
+            <img src="../assets/heart.svg" alt="В избранное">
+          </button>
+          <button class="product-card__icon-btn add-to-cart-btn" data-product-id="${product.id}" aria-label="Добавить в корзину">
+            <img src="../assets/cart.svg" alt="В корзину">
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -390,32 +430,78 @@ function initHeroSlider() {
 
 // Инициализация кнопок "В корзину"
 function setupAddToCartButtons() {
-  document.addEventListener('click', async function (e) {
-    if (e.target.classList.contains('add-to-cart-btn') || e.target.closest('.add-to-cart-btn')) {
-      const button = e.target.classList.contains('add-to-cart-btn') ? e.target : e.target.closest('.add-to-cart-btn');
-      const productId = parseInt(button.dataset.productId);
+  // Сначала удаляем существующий обработчик, чтобы избежать дублирования
+  document.removeEventListener('click', addToCartClickHandler);
 
-      if (!productId) return;
+  // Затем добавляем новый обработчик
+  document.addEventListener('click', addToCartClickHandler);
+}
 
-      try {
-        // Получаем данные о продукте из API
-        const productData = await fetchData(`/api/products/${productId}`, 'Не удалось получить информацию о товаре');
+// Выносим обработчик клика в отдельную функцию, чтобы можно было его удалять и добавлять
+async function addToCartClickHandler(e) {
+  // Проверяем клик по кнопке добавления в корзину (текстовой или иконке)
+  if (e.target.classList.contains('add-to-cart-btn') ||
+    e.target.closest('.add-to-cart-btn') ||
+    (e.target.closest('.product-card__icon-btn') && e.target.closest('.product-card__icon-btn').classList.contains('add-to-cart-btn'))) {
 
-        if (productData) {
-          // Используем функцию из cart.js для добавления в корзину
-          if (typeof addToCart === 'function') {
-            addToCart(productId, 1, productData);
-            showNotification('Товар добавлен в корзину');
-          } else {
-            console.error('Функция addToCart не определена');
-          }
-        }
-      } catch (error) {
-        console.error('Ошибка при добавлении товара в корзину:', error);
-        showNotification('Не удалось добавить товар в корзину', true);
-      }
+    // Определяем кнопку в зависимости от того, куда был клик
+    let button;
+    if (e.target.classList.contains('add-to-cart-btn')) {
+      button = e.target;
+    } else if (e.target.closest('.add-to-cart-btn')) {
+      button = e.target.closest('.add-to-cart-btn');
     }
-  });
+
+    const productId = parseInt(button.dataset.productId);
+
+    if (!productId) return;
+
+    try {
+      // Добавляем индикатор загрузки
+      button.classList.add('loading');
+      button.disabled = true;
+
+      // Получаем данные о продукте из API
+      const productData = await fetchData(`/api/products/${productId}`, 'Не удалось получить информацию о товаре');
+
+      if (productData) {
+        // Используем функцию из cart.js для добавления в корзину
+        if (typeof addToCart === 'function') {
+          addToCart(productId, 1, productData);
+          showNotification(`"${productData.name}" добавлен в корзину`);
+        } else {
+          // Проверяем, загружен ли файл cart.js
+          console.error('Функция addToCart не определена. Проверьте, что файл cart.js подключен.');
+          showNotification('Ошибка при добавлении товара. Попробуйте обновить страницу.', true);
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка при добавлении товара в корзину:', error);
+      showNotification('Не удалось добавить товар в корзину', true);
+    } finally {
+      // Удаляем индикатор загрузки
+      button.classList.remove('loading');
+      button.disabled = false;
+    }
+  }
+
+  // Обработка добавления в избранное
+  if (e.target.classList.contains('add-to-wishlist') || e.target.closest('.add-to-wishlist')) {
+    const button = e.target.classList.contains('add-to-wishlist') ? e.target : e.target.closest('.add-to-wishlist');
+    const productCard = button.closest('.product-card');
+    if (!productCard) return;
+
+    const productId = parseInt(productCard.dataset.productId);
+    if (!productId) return;
+
+    // Переключаем класс active для визуального эффекта
+    button.classList.toggle('active');
+
+    // Здесь можно добавить логику для работы с избранным
+    // Например, сохранение в localStorage или отправка на сервер
+    const isAdded = button.classList.contains('active');
+    showNotification(`Товар ${isAdded ? 'добавлен в' : 'удален из'} избранное`);
+  }
 }
 
 // Инициализация интерактивности страницы корзины
@@ -686,6 +772,224 @@ function setupCatalogFilters() {
     // Отображаем отфильтрованные товары
     displayCatalogProducts(products);
   }
+}
+
+// Инициализация модального окна поиска
+function initSearchModal() {
+  const searchToggle = document.querySelector('.js-search-toggle');
+  const searchModal = document.getElementById('searchModal');
+  const closeSearchModal = document.getElementById('closeSearchModal');
+  const searchForm = document.getElementById('modalSearchForm');
+  const searchInput = document.getElementById('modalSearchQuery');
+
+  // Проверяем наличие элементов на странице
+  if (!searchToggle || !searchModal || !closeSearchModal) return;
+
+  // Открытие модального окна поиска
+  searchToggle.addEventListener('click', () => {
+    searchModal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Блокировка прокрутки страницы
+    setTimeout(() => searchInput.focus(), 300); // Фокус на поле ввода после анимации
+  });
+
+  // Закрытие модального окна поиска при клике на кнопку закрытия
+  closeSearchModal.addEventListener('click', closeModal);
+
+  // Закрытие модального окна поиска при клике вне контента
+  searchModal.addEventListener('click', (e) => {
+    if (e.target === searchModal) {
+      closeModal();
+    }
+  });
+
+  // Закрытие модального окна поиска при нажатии Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && searchModal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Обработка отправки формы поиска
+  if (searchForm) {
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+      if (query.length < 3) {
+        showNotification('Введите не менее 3 символов для поиска', true);
+        return;
+      }
+
+      try {
+        const searchResults = await searchProducts(query);
+        displaySearchResults(searchResults, 'modalSearchResults');
+      } catch (error) {
+        console.error('Ошибка при поиске товаров:', error);
+        showNotification('Не удалось выполнить поиск. Попробуйте позже.', true);
+      }
+    });
+  }
+
+  // Функция закрытия модального окна
+  function closeModal() {
+    searchModal.classList.remove('active');
+    document.body.style.overflow = ''; // Разблокировка прокрутки страницы
+  }
+}
+
+// Поиск товаров по запросу
+async function searchProducts(query) {
+  console.log('Поиск товаров:', query);
+  try {
+    const apiUrl = `http://localhost:3000/api/products/search?q=${encodeURIComponent(query)}`;
+    console.log('URL запроса:', apiUrl);
+    const response = await fetch(apiUrl);
+    console.log('Статус ответа:', response.status);
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Ошибка в ответе API:', errorData);
+      throw new Error(`HTTP ошибка! Статус: ${response.status}. Текст: ${errorData}`);
+    }
+
+    const data = await response.json();
+    console.log('Результаты поиска:', data);
+    return data;
+  } catch (error) {
+    console.error(`Ошибка при поиске товаров: ${error.message}`);
+    throw error;
+  }
+}
+
+// Отображение результатов поиска
+function displaySearchResults(results, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!results || results.length === 0) {
+    container.innerHTML = '<p class="search-hint">По вашему запросу ничего не найдено</p>';
+    return;
+  }
+
+  // Ограничиваем количество результатов для отображения
+  const displayResults = results.slice(0, 6);
+
+  // Формируем HTML для карточек товаров
+  const resultsHtml = displayResults.map(createProductCardHTML).join('');
+  container.innerHTML = `
+    <div class="product-grid search-results-grid">
+      ${resultsHtml}
+    </div>
+    <div class="search-results-more">
+      <a href="catalog.html" class="btn btn-secondary">Показать все результаты (${results.length})</a>
+    </div>
+  `;
+
+  // Удаляем вызов setupAddToCartButtons() отсюда - он будет вызван единожды после загрузки всех данных
+  // Если нужно инициализировать кнопки для динамически добавленных результатов поиска,
+  // вызываем функцию setupAddToCartButtons только в этом конкретном случае
+  if (containerId === 'modalSearchResults') {
+    setupAddToCartButtons();
+  }
+}
+
+// Настройка поиска в секции популярных товаров
+function setupPopularSearch() {
+  const searchInput = document.getElementById('popular-search');
+  if (!searchInput) return;
+
+  // Используем debounce для предотвращения частых вызовов при вводе текста
+  searchInput.addEventListener('input', debounce(function () {
+    const query = this.value.trim().toLowerCase();
+
+    // Добавляем класс loading для отображения индикатора загрузки
+    this.classList.add('loading');
+
+    // Используем setTimeout для имитации задержки загрузки (в реальном приложении здесь был бы API-запрос)
+    setTimeout(() => {
+      filterPopularProducts(query);
+      // Убираем класс loading после завершения поиска
+      this.classList.remove('loading');
+    }, 500);
+  }, 300));
+}
+
+// Фильтрация популярных товаров по поисковому запросу
+function filterPopularProducts(query) {
+  // Если нет сохраненных данных или контейнера, выходим
+  if (!window.popularProductsData || !document.getElementById('popular-products-container')) return;
+
+  // Если запрос пустой, отображаем все популярные товары
+  if (!query) {
+    displayPopularProducts(window.popularProductsData);
+    setupAddToCartButtons(); // Добавляем вызов только здесь, так как после displayPopularProducts не вызывается
+    return;
+  }
+
+  // Фильтруем товары по запросу
+  const filteredProducts = window.popularProductsData.filter(product => {
+    return (
+      product.name.toLowerCase().includes(query) ||
+      product.description.toLowerCase().includes(query) ||
+      (product.categoryName && product.categoryName.toLowerCase().includes(query))
+    );
+  });
+
+  const container = document.getElementById('popular-products-container');
+
+  // Если ничего не найдено, показываем сообщение
+  if (filteredProducts.length === 0) {
+    container.innerHTML = `<div class="empty-search-result">
+      <p>По запросу "${query}" ничего не найдено</p>
+      <button class="btn btn-secondary clear-search-btn">Сбросить поиск</button>
+    </div>`;
+
+    // Добавляем обработчик для кнопки сброса поиска
+    const clearBtn = container.querySelector('.clear-search-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        document.getElementById('popular-search').value = '';
+        displayPopularProducts(window.popularProductsData);
+        setupAddToCartButtons(); // Добавляем вызов здесь
+      });
+    }
+  } else {
+    // Модифицируем продукты для выделения найденного текста
+    const highlightedProducts = filteredProducts.map(product => {
+      // Создаем копию продукта, чтобы не изменять оригинальные данные
+      const highlightedProduct = { ...product };
+
+      // Выделяем текст в названии
+      if (product.name.toLowerCase().includes(query)) {
+        highlightedProduct.name = highlightText(product.name, query);
+      }
+
+      // Выделяем текст в описании (если он отображается в карточке)
+      if (product.description.toLowerCase().includes(query)) {
+        highlightedProduct.description = highlightText(product.description, query);
+      }
+
+      return highlightedProduct;
+    });
+
+    // Отображаем найденные товары с выделенным текстом
+    container.innerHTML = highlightedProducts.map(createProductCardHTML).join('');
+    setupAddToCartButtons(); // Добавляем вызов здесь
+  }
+}
+
+// Функция для выделения текста в строке
+function highlightText(text, query) {
+  if (!query) return text;
+
+  // Экранируем специальные символы в запросе для безопасного использования в регулярном выражении
+  const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const escapedQuery = escapeRegExp(query);
+
+  // Создаем регулярное выражение для поиска запроса, игнорируя регистр
+  const regex = new RegExp(`(${escapedQuery})`, 'gi');
+
+  // Заменяем найденный текст на выделенный тегом span
+  return text.replace(regex, '<span class="highlight">$1</span>');
 }
 
 // === Вспомогательные функции ===
