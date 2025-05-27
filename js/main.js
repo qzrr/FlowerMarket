@@ -32,7 +32,7 @@ async function fetchData(url, errorMessage = 'Ошибка при загрузк
           name: `Товар ${productId}`,
           price: 2500,
           oldPrice: 3000,
-          image: '../img/product-placeholder.jpg',
+          image: '/product-placeholder.jpg',
           description: 'Описание товара',
           category: 'bouquets'
         };
@@ -81,7 +81,7 @@ async function fetchData(url, errorMessage = 'Ошибка при загрузк
         name: `Товар ${productId}`,
         price: 2500,
         oldPrice: 3000,
-        image: '../img/product-placeholder.jpg',
+        image: '/product-placeholder.jpg',
         description: 'Описание товара',
         category: 'bouquets'
       };

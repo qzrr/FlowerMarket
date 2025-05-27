@@ -1,319 +1,426 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Цветочный Рай - магазин свежих цветов и букетов с доставкой"
+    />
+    <meta
+      name="keywords"
+      content="цветы, букеты, доставка цветов, цветочный магазин"
+    />
+    <title>Цветочный Рай - Главная</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+    <!-- Добавьте сюда favicon -->
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Цветочный Рай - магазин свежих цветов и букетов с доставкой">
-  <meta name="keywords" content="цветы, букеты, доставка цветов, цветочный магазин">
-  <title>Цветочный Рай - Главная</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="icon" href="../favicon.ico" type="image/x-icon">
-  <!-- Добавьте сюда favicon -->
-</head>
-
-<body>
-<header class="header">
-  <div class="container header__container">
-    <a href="index.html" class="logo">Floww</a>
-    <nav class="nav header__nav">
-      <ul class="nav__list">
-        <li class="nav__item"><a href="index.html" class="nav__link active">Главная</a></li>
-        <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
-        <li class="nav__item"><a href="delivery.html" class="nav__link">Доставка</a></li>
-        <li class="nav__item"><a href="about.html" class="nav__link">О нас</a></li>
-        <li class="nav__item"><a href="contact.html" class="nav__link">Контакты</a></li>
-      </ul>
-    </nav>
-    <div class="header__actions">
-      <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
-                                                                                  alt="Поиск"></button>
-      <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
-                                                                               alt="Аккаунт"></a>
-      <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img src="../assets/favorite.svg"
-                                                                                     alt="Избранное"></a>
-      <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
-        <img src="../assets/cart.svg" alt="Корзина">
-        <!-- Сделать счетчик товаров в корзине -->
-        <span class="cart-count" data-cart-count>0</span>
-      </a>
-      <button class="burger-menu" aria-label="Открыть меню">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<main>
-  <!-- Hero Section (Slider) -->
-  <section class="hero">
-    <div class="hero__slider">
-      <div class="hero__slide active" style="background-image: url('../img/картинка rose.png');">
-        <div class="container hero__slide-content">
-          <h2>Комнатные растения</h2>
-          <p>Создайте уютную атмосферу в вашем доме</p>
-          <a href="catalog.html?category=plants" class="btn">Выбрать растение</a>
+  <body>
+    <header class="header">
+      <div class="container header__container">
+        <a href="index.html" class="logo">Floww</a>
+        <nav class="nav header__nav">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link active">Главная</a>
+            </li>
+            <li class="nav__item">
+              <a href="catalog.html" class="nav__link">Каталог</a>
+            </li>
+            <li class="nav__item">
+              <a href="delivery.html" class="nav__link">Доставка</a>
+            </li>
+            <li class="nav__item">
+              <a href="about.html" class="nav__link">О нас</a>
+            </li>
+            <li class="nav__item">
+              <a href="contact.html" class="nav__link">Контакты</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="header__actions">
+          <button
+            class="header__action-btn js-search-toggle"
+            aria-label="Поиск"
+          >
+            <img src="../assets/search.svg" alt="Поиск" />
+          </button>
+          <a href="user.html" class="header__action-btn" aria-label="Аккаунт"
+            ><img src="../assets/user.svg" alt="Аккаунт"
+          /></a>
+          <a
+            href="favorite.html"
+            class="header__action-btn"
+            aria-label="Избранное"
+            ><img src="../assets/favorite.svg" alt="Избранное"
+          /></a>
+          <a
+            href="cart.html"
+            class="header__action-btn header__cart-btn"
+            aria-label="Корзина"
+          >
+            <img src="../assets/cart.svg" alt="Корзина" />
+            <!-- Сделать счетчик товаров в корзине -->
+            <span class="cart-count" data-cart-count>0</span>
+          </a>
+          <button class="burger-menu" aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </div>
-      <div class="hero__slide"
-           style="background-image: url('../img/pngtree-floral-flowers-bright-blank-background-image_2160290.jpg');">
-        <div class="container hero__slide-content">
-          <h2>Свежие Букеты</h2>
-          <p>Доставка по городу в течение 2 часов</p>
-          <a href="catalog.html?category=bouquets" class="btn">Выбрать букет</a>
-        </div>
-      </div>
-    </div>
-    <div class="hero__controls">
-      <button class="hero__control hero__control--prev" aria-label="Предыдущий слайд">&lt;</button>
-      <div class="hero__dots">
-      </div>
-      <button class="hero__control hero__control--next" aria-label="Следующий слайд">&gt;</button>
-    </div>
-  </section>
+    </header>
 
-  <!-- Categories Section -->
-  <section class="categories section">
-    <div class="container">
-      <h2 class="section__title">Категории цветов</h2>
-      <div class="categories__grid" id="categories-container">
-        <div class="category-card-placeholder"></div>
-        <div class="category-card-placeholder"></div>
-        <div class="category-card-placeholder"></div>
-        <div class="category-card-placeholder"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Popular Bouquets Section -->
-  <section class="popular section">
-    <div class="container">
-      <h2 class="section__title">Популярные букеты</h2>
-      <div class="product-grid" id="popular-products-container">
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-      </div>
-      <div class="popular__actions">
-        <a href="catalog.html" class="btn">Смотреть все букеты</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="about section" id="about">
-    <div class="container about__container">
-      <div class="about__content">
-        <h2 class="section__title">О нашем магазине</h2>
-        <p>Мы создаем уникальные цветочные композиции с любовью и заботой уже более 10 лет. Наши флористы - настоящие
-          художники, которые превращают каждый букет в произведение искусства.</p>
-        <p>Мы используем только свежие цветы, доставленные напрямую от проверенных поставщиков, чтобы ваш букет
-          радовал
-          вас как можно дольше.</p>
-        <a href="about.html" class="btn btn--secondary" id="about-more-btn">Узнать больше</a>
-      </div>
-      <div class="about__image">
-        <img src="../img/image-10.jpg" alt="Интерьер магазина Цветочный Рай">
-      </div>
-    </div>
-  </section>
-
-  <!-- Delivery Section -->
-  <section class="delivery section" id="delivery">
-    <div class="container">
-      <h2 class="section__title">Доставка цветов</h2>
-      <div class="delivery__grid">
-        <div class="delivery__item">
-          <div class="delivery__icon">
-            <img src="../img/icons8-таймер-48.png" alt="Быстрая доставка">
+    <main>
+      <!-- Hero Section (Slider) -->
+      <section class="hero">
+        <div class="hero__slider">
+          <div
+            class="hero__slide active"
+            style="background-image: url('../img/картинка rose.png')"
+          >
+            <div class="container hero__slide-content">
+              <h2>Комнатные растения</h2>
+              <p>Создайте уютную атмосферу в вашем доме</p>
+              <a href="catalog.html?category=plants" class="btn"
+                >Выбрать растение</a
+              >
+            </div>
           </div>
-          <h3>Быстрая доставка</h3>
-          <p>Доставляем букеты в течение 2 часов по всему городу</p>
-        </div>
-        <div class="delivery__item">
-          <div class="delivery__icon">
-            <img src="../assets/Feather.svg" alt="Гарантия свежести">
-          </div>
-          <h3>Гарантия свежести</h3>
-          <p>Мы гарантируем, что ваши цветы будут стоять не менее 7 дней</p>
-        </div>
-        <div class="delivery__item">
-          <div class="delivery__icon">
-            <img src="../assets/Gift.svg" alt="Подарки">
-          </div>
-          <h3>Подарки к заказу</h3>
-          <p>При заказе от 5000₽ дарим открытку или сладкий комплимент</p>
-        </div>
-        <div class="delivery__item">
-          <div class="delivery__icon">
-            <img src="../assets/Shopping%20cart.svg" alt="Оплата">
-          </div>
-          <h3>Удобная оплата</h3>
-          <p>Принимаем оплату картой, наличными или через онлайн-сервисы</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Reviews Section -->
-  <section class="about-testimonials">
-    <h2 class="section__title">Что говорят наши клиенты</h2>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="testimonial-card__text">
-          <p>"Заказываю букеты в Floww уже больше 3 лет. Всегда свежие цветы, красивые
-            композиции и вежливый персонал. Очень рекомендую!"</p>
-        </div>
-        <div class="testimonial-card__author">
-          <img src="../img/аватар%20алисы.png" alt="Мария Иванова" class="testimonial-card__avatar">
-          <div>
-            <strong>Мария Иванова</strong>
-            <div class="testimonial-card__rating">★★★★★</div>
+          <div
+            class="hero__slide"
+            style="
+              background-image: url('../img/pngtree-floral-flowers-bright-blank-background-image_2160290.jpg');
+            "
+          >
+            <div class="container hero__slide-content">
+              <h2>Свежие Букеты</h2>
+              <p>Доставка по городу в течение 2 часов</p>
+              <a href="catalog.html?category=bouquets" class="btn"
+                >Выбрать букет</a
+              >
+            </div>
           </div>
         </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-card__text">
-          <p>"Сколько раз заказывала в Floww – ни разу не подвели, а это для меня главное. Уже, наверное, лет пять их
-            клиентка. Букеты всегда прекрасные, стоят долго, и персонал такой отзывчивый, приятно общаться. Молодцы, так
-            держать! Рекомендую от души."</p>
+        <div class="hero__controls">
+          <button
+            class="hero__control hero__control--prev"
+            aria-label="Предыдущий слайд"
+          >
+            &lt;
+          </button>
+          <div class="hero__dots"></div>
+          <button
+            class="hero__control hero__control--next"
+            aria-label="Следующий слайд"
+          >
+            &gt;
+          </button>
         </div>
-        <div class="testimonial-card__author">
-          <img src="../img/аватар%20ольга.png" alt="Ольга Олеговна" class="testimonial-card__avatar">
-          <div>
-            <strong>Ольга Олеговна</strong>
-            <div class="testimonial-card__rating">★★★★★</div>
+      </section>
+
+      <!-- Categories Section -->
+      <section class="categories section">
+        <div class="container">
+          <h2 class="section__title">Категории цветов</h2>
+          <div class="categories__grid" id="categories-container">
+            <div class="category-card-placeholder"></div>
+            <div class="category-card-placeholder"></div>
+            <div class="category-card-placeholder"></div>
+            <div class="category-card-placeholder"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Popular Bouquets Section -->
+      <section class="popular section">
+        <div class="container">
+          <h2 class="section__title">Популярные букеты</h2>
+          <div class="product-grid" id="popular-products-container">
+            <div class="product-card-placeholder"></div>
+            <div class="product-card-placeholder"></div>
+            <div class="product-card-placeholder"></div>
+            <div class="product-card-placeholder"></div>
+          </div>
+          <div class="popular__actions">
+            <a href="catalog.html" class="btn">Смотреть все букеты</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section class="about section" id="about">
+        <div class="container about__container">
+          <div class="about__content">
+            <h2 class="section__title">О нашем магазине</h2>
+            <p>
+              Мы создаем уникальные цветочные композиции с любовью и заботой уже
+              более 10 лет. Наши флористы - настоящие художники, которые
+              превращают каждый букет в произведение искусства.
+            </p>
+            <p>
+              Мы используем только свежие цветы, доставленные напрямую от
+              проверенных поставщиков, чтобы ваш букет радовал вас как можно
+              дольше.
+            </p>
+            <a href="about.html" class="btn btn--secondary" id="about-more-btn"
+              >Узнать больше</a
+            >
+          </div>
+          <div class="about__image">
+            <img
+              src="../img/image-10.jpg"
+              alt="Интерьер магазина Цветочный Рай"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Delivery Section -->
+      <section class="delivery section" id="delivery">
+        <div class="container">
+          <h2 class="section__title">Доставка цветов</h2>
+          <div class="delivery__grid">
+            <div class="delivery__item">
+              <div class="delivery__icon">
+                <img src="../img/icons8-таймер-48.png" alt="Быстрая доставка" />
+              </div>
+              <h3>Быстрая доставка</h3>
+              <p>Доставляем букеты в течение 2 часов по всему городу</p>
+            </div>
+            <div class="delivery__item">
+              <div class="delivery__icon">
+                <img src="../assets/Feather.svg" alt="Гарантия свежести" />
+              </div>
+              <h3>Гарантия свежести</h3>
+              <p>Мы гарантируем, что ваши цветы будут стоять не менее 7 дней</p>
+            </div>
+            <div class="delivery__item">
+              <div class="delivery__icon">
+                <img src="../assets/Gift.svg" alt="Подарки" />
+              </div>
+              <h3>Подарки к заказу</h3>
+              <p>При заказе от 5000₽ дарим открытку или сладкий комплимент</p>
+            </div>
+            <div class="delivery__item">
+              <div class="delivery__icon">
+                <img src="../assets/Shopping%20cart.svg" alt="Оплата" />
+              </div>
+              <h3>Удобная оплата</h3>
+              <p>Принимаем оплату картой, наличными или через онлайн-сервисы</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reviews Section -->
+      <section class="about-testimonials">
+        <h2 class="section__title">Что говорят наши клиенты</h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-card__text">
+              <p>
+                "Заказываю букеты в Floww уже больше 3 лет. Всегда свежие цветы,
+                красивые композиции и вежливый персонал. Очень рекомендую!"
+              </p>
+            </div>
+            <div class="testimonial-card__author">
+              <img
+                src="../img/аватар%20алисы.png"
+                alt="Мария Иванова"
+                class="testimonial-card__avatar"
+              />
+              <div>
+                <strong>Мария Иванова</strong>
+                <div class="testimonial-card__rating">★★★★★</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-card__text">
+              <p>
+                "Сколько раз заказывала в Floww – ни разу не подвели, а это для
+                меня главное. Уже, наверное, лет пять их клиентка. Букеты всегда
+                прекрасные, стоят долго, и персонал такой отзывчивый, приятно
+                общаться. Молодцы, так держать! Рекомендую от души."
+              </p>
+            </div>
+            <div class="testimonial-card__author">
+              <img
+                src="../img/аватар%20ольга.png"
+                alt="Ольга Олеговна"
+                class="testimonial-card__avatar"
+              />
+              <div>
+                <strong>Ольга Олеговна</strong>
+                <div class="testimonial-card__rating">★★★★★</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-card__text">
+              <p>
+                "Заказал букет для жены на годовщину. Флористы помогли с выбором
+                и создали именно то, что я хотел. Жена была в восторге!"
+              </p>
+            </div>
+            <div class="testimonial-card__author">
+              <img
+                src="../img/ава%20саши.png"
+                alt="Алексей Петров"
+                class="testimonial-card__avatar"
+              />
+              <div>
+                <strong>Алексей Петров</strong>
+                <div class="testimonial-card__rating">★★★★★</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="cta section section--primary-bg">
+        <div class="container cta__container">
+          <h2>Готовы сделать заказ?</h2>
+          <p>
+            Закажите букет прямо сейчас и получите скидку 10% на первый заказ.
+            Мы доставим ваш букет в любую точку города в течение 2 часов.
+          </p>
+          <div class="cta__actions">
+            <a href="catalog.html" class="btn btn--outline-light"
+              >Выбрать букет</a
+            >
+            <a href="contact.html" class="btn btn--outline-light"
+              >Связаться с нами</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__container">
+        <div class="footer__column footer__column--about">
+          <a href="index.html" class="logo footer__logo">Floww</a>
+          <p>
+            Магазин свежих цветов и букетов с доставкой по всему городу. Создаем
+            уникальные композиции для любого случая.
+          </p>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__title">Навигация</h4>
+          <ul class="footer__list">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li><a href="delivery.html">Доставка</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__title">Категории</h4>
+          <ul class="footer__list" id="footer-categories">
+            <li><a href="catalog.html?category=bouquets">Букеты</a></li>
+            <li><a href="catalog.html?category=roses">Розы</a></li>
+            <li>
+              <a href="catalog.html?category=plants">Комнатные растения</a>
+            </li>
+            <li><a href="catalog.html?category=gifts">Подарки</a></li>
+            <li>
+              <a href="catalog.html?category=wedding">Свадебные букеты</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__title">Контакты</h4>
+          <address class="footer__contact-info">
+            <p>ул. Баумана, 123<br />Казань, Россия</p>
+            <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+            <p>
+              Email:
+              <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a>
+            </p>
+          </address>
+          <div class="footer__socials">
+            <!-- Добавьте иконки соцсетей -->
+            <a href="#" aria-label="Facebook"
+              ><img src="../assets/FacebookDark.svg" alt="Facebook"
+            /></a>
+            <a href="#" aria-label="Instagram"
+              ><img src="../assets/InstagramDark.svg" alt="Instagram"
+            /></a>
+            <a href="#" aria-label="VK"
+              ><img src="../assets/icons8-vk%20(1).svg" alt="VK"
+            /></a>
           </div>
         </div>
       </div>
-      <div class="testimonial-card">
-        <div class="testimonial-card__text ">
-          <p>"Заказал букет для жены на годовщину. Флористы помогли с выбором и создали именно то, что
-            я хотел. Жена была в восторге!"</p>
-        </div>
-        <div class="testimonial-card__author">
-          <img src="../img/ава%20саши.png" alt="Алексей Петров" class="testimonial-card__avatar">
-          <div>
-            <strong>Алексей Петров</strong>
-            <div class="testimonial-card__rating">★★★★★</div>
-          </div>
+      <div class="footer__bottom">
+        <div class="container footer__bottom-container">
+          <p>© 2025 Floww. Все права защищены.</p>
+          <nav>
+            <a href="#">Политика конфиденциальности</a>
+            <a href="#">Условия использования</a>
+          </nav>
         </div>
       </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- CTA Section -->
-  <section class="cta section section--primary-bg">
-    <div class="container cta__container">
-      <h2>Готовы сделать заказ?</h2>
-      <p>Закажите букет прямо сейчас и получите скидку 10% на первый заказ. Мы доставим ваш букет в любую точку города
-        в
-        течение 2 часов.</p>
-      <div class="cta__actions">
-        <a href="catalog.html" class="btn btn--outline-light">Выбрать букет</a>
-        <a href="contact.html" class="btn btn--outline-light">Связаться с нами</a>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="footer">
-  <div class="container footer__container">
-    <div class="footer__column footer__column--about">
-      <a href="index.html" class="logo footer__logo">Floww</a>
-      <p>Магазин свежих цветов и букетов с доставкой по всему городу. Создаем уникальные композиции для любого
-        случая.</p>
-    </div>
-    <div class="footer__column">
-      <h4 class="footer__title">Навигация</h4>
-      <ul class="footer__list">
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="catalog.html">Каталог</a></li>
-        <li><a href="delivery.html">Доставка</a></li>
-        <li><a href="about.html">О нас</a></li>
-        <li><a href="contact.html">Контакты</a></li>
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h4 class="footer__title">Категории</h4>
-      <ul class="footer__list" id="footer-categories">
-        <li><a href="catalog.html?category=bouquets">Букеты</a></li>
-        <li><a href="catalog.html?category=roses">Розы</a></li>
-        <li><a href="catalog.html?category=plants">Комнатные растения</a></li>
-        <li><a href="catalog.html?category=gifts">Подарки</a></li>
-        <li><a href="catalog.html?category=wedding">Свадебные букеты</a></li>
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h4 class="footer__title">Контакты</h4>
-      <address class="footer__contact-info">
-        <p>ул. Баумана, 123<br>Казань, Россия</p>
-        <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
-        <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
-      </address>
-      <div class="footer__socials">
-        <!-- Добавьте иконки соцсетей -->
-        <a href="#" aria-label="Facebook"><img src="../assets/FacebookDark.svg" alt="Facebook"></a>
-        <a href="#" aria-label="Instagram"><img src="../assets/InstagramDark.svg" alt="Instagram"></a>
-        <a href="#" aria-label="VK"><img src="../assets/icons8-vk%20(1).svg" alt="VK"></a>
-      </div>
-    </div>
-  </div>
-  <div class="footer__bottom">
-    <div class="container footer__bottom-container">
-      <p>© 2025 Floww. Все права защищены.</p>
-      <nav>
-        <a href="#">Политика конфиденциальности</a>
-        <a href="#">Условия использования</a>
+    <!-- Мобильное меню (скрыто по умолчанию) -->
+    <div class="mobile-menu">
+      <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
+      <nav class="mobile-menu__nav">
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="delivery.html">Доставка</a></li>
+          <li><a href="about.html">О нас</a></li>
+          <li><a href="contact.html">Контакты</a></li>
+        </ul>
       </nav>
-    </div>
-  </div>
-</footer>
-
-<!-- Мобильное меню (скрыто по умолчанию) -->
-<div class="mobile-menu">
-  <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
-  <nav class="mobile-menu__nav">
-    <ul>
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="catalog.html">Каталог</a></li>
-      <li><a href="delivery.html">Доставка</a></li>
-      <li><a href="about.html">О нас</a></li>
-      <li><a href="contact.html">Контакты</a></li>
-    </ul>
-  </nav>
-  <div class="mobile-menu__actions">
-    <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
-    <!-- Другие действия если нужно -->
-  </div>
-</div>
-<div class="overlay"></div> <!-- Для затемнения фона при открытии моб. меню -->
-
-<!-- Модальное окно поиска -->
-<div class="search-modal" id="searchModal">
-  <div class="search-modal__content">
-    <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
-    <h2 class="search-modal__title">Поиск товаров</h2>
-    <form class="search-form" id="modalSearchForm">
-      <div class="search-input-container">
-        <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
-               aria-label="Поиск по каталогу" autofocus>
-        <button type="submit" class="btn btn-primary">Найти</button>
+      <div class="mobile-menu__actions">
+        <a href="cart.html" class="btn"
+          >Корзина (<span data-cart-count>0</span>)</a
+        >
+        <!-- Другие действия если нужно -->
       </div>
-    </form>
-    <div class="search-modal__results" id="modalSearchResults">
-      <!-- Результаты поиска будут добавлены здесь через JavaScript -->
-      <p class="search-hint">Введите запрос для поиска по каталогу</p>
     </div>
-  </div>
-</div>
+    <div class="overlay"></div>
+    <!-- Для затемнения фона при открытии моб. меню -->
 
-<script src="../js/cart.js"></script>
-<script src="../js/main.js" type="module"></script>
-</body>
+    <!-- Модальное окно поиска -->
+    <div class="search-modal" id="searchModal">
+      <div class="search-modal__content">
+        <button
+          class="search-modal__close"
+          id="closeSearchModal"
+          aria-label="Закрыть поиск"
+        ></button>
+        <h2 class="search-modal__title">Поиск товаров</h2>
+        <form class="search-form" id="modalSearchForm">
+          <div class="search-input-container">
+            <input
+              type="search"
+              id="modalSearchQuery"
+              placeholder="Введите запрос для поиска..."
+              aria-label="Поиск по каталогу"
+              autofocus
+            />
+            <button type="submit" class="btn btn-primary">Найти</button>
+          </div>
+        </form>
+        <div class="search-modal__results" id="modalSearchResults">
+          <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+          <p class="search-hint">Введите запрос для поиска по каталогу</p>
+        </div>
+      </div>
+    </div>
 
+    <script src="../js/cart.js"></script>
+    <script src="../js/main.js" type="module"></script>
+  </body>
 </html>

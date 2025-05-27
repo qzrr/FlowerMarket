@@ -3,23 +3,26 @@
  */
 
 class API {
-  static BASE_URL = '/api';
+  static BASE_URL = "/api";
+
+  static async request(endpoint, options = {}) {
+    try {
+      const response = await fetch(`${this.BASE_URL}${endpoint}`, options);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Ошибка запроса ${endpoint}:`, error);
+      throw error;
+    }
+  }
 
   /**
    * Получение всех продуктов
    * @returns {Promise<Array>} Массив продуктов
    */
-  static async getProducts() {
-    try {
-      const response = await fetch(`${this.BASE_URL}/products`);
-      if (!response.ok) {
-        throw new Error(`Ошибка HTTP: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Ошибка при получении продуктов:', error);
-      throw error;
-    }
+
+  static getProducts() {
+    return this.request("/products");
   }
 
   /**
@@ -47,13 +50,18 @@ class API {
    */
   static async getProductsByCategory(category) {
     try {
-      const response = await fetch(`${this.BASE_URL}/products/category/${category}`);
+      const response = await fetch(
+        `${this.BASE_URL}/products/category/${category}`
+      );
       if (!response.ok) {
         throw new Error(`Ошибка HTTP: ${response.status}`);
       }
       return await response.json();
     } catch (error) {
-      console.error(`Ошибка при получении продуктов категории ${category}:`, error);
+      console.error(
+        `Ошибка при получении продуктов категории ${category}:`,
+        error
+      );
       throw error;
     }
   }
@@ -70,7 +78,7 @@ class API {
       }
       return await response.json();
     } catch (error) {
-      console.error('Ошибка при получении популярных продуктов:', error);
+      console.error("Ошибка при получении популярных продуктов:", error);
       throw error;
     }
   }
@@ -87,44 +95,40 @@ class API {
       }
       return await response.json();
     } catch (error) {
-      console.error('Ошибка при получении категорий:', error);
-      
-      // Для разработки: если API не работает, возвращаем моковые данные
+      console.error("Ошибка при получении категорий:", error);
+
+      //Для разработки: если API не работает, возвращаем моковые данные
       const mockCategories = [
         {
           id: "bouquets",
           name: "Букеты",
-          image: "../img/categories/bouquets.jpg",
-          description: "Свежие и яркие букеты для любого повода",
+          image: "/categories/bouquets.jpg",
           count: 12,
-          featured: true
+          featured: true,
         },
         {
           id: "roses",
           name: "Розы",
-          image: "../img/categories/roses.jpg",
-          description: "Классические розы всех сортов и оттенков",
+          image: "/categories/roses.jpg",
           count: 8,
-          featured: true
+          featured: true,
         },
         {
           id: "plants",
           name: "Комнатные растения",
-          image: "../img/categories/plants.jpg",
-          description: "Растения для дома и офиса в стильных горшках",
+          image: "img/categories/plants.jpg",
           count: 10,
-          featured: true
+          featured: true,
         },
         {
           id: "gifts",
           name: "Подарки",
-          image: "../img/categories/gifts.jpg",
-          description: "Цветочные композиции и подарочные наборы",
+          image: "/categories/gifts.jpg",
           count: 6,
-          featured: true
-        }
+          featured: true,
+        },
       ];
-      
+
       return mockCategories;
     }
   }
@@ -136,13 +140,18 @@ class API {
    */
   static async getReviewsForProduct(productId) {
     try {
-      const response = await fetch(`${this.BASE_URL}/reviews?productId=${productId}`);
+      const response = await fetch(
+        `${this.BASE_URL}/reviews/productId=${productId}`
+      );
       if (!response.ok) {
         throw new Error(`Ошибка HTTP: ${response.status}`);
       }
       return await response.json();
     } catch (error) {
-      console.error(`Ошибка при получении отзывов для продукта #${productId}:`, error);
+      console.error(
+        `Ошибка при получении отзывов для продукта #${productId}:`,
+        error
+      );
       throw error;
     }
   }
@@ -155,20 +164,20 @@ class API {
   static async submitContactForm(formData) {
     try {
       const response = await fetch(`${this.BASE_URL}/contact`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-      
+
       if (!response.ok) {
         throw new Error(`Ошибка HTTP: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
-      console.error('Ошибка при отправке формы:', error);
+      console.error("Ошибка при отправке формы:", error);
       throw error;
     }
   }
@@ -181,17 +190,17 @@ class API {
   static async validatePromoCode(code) {
     try {
       const response = await fetch(`${this.BASE_URL}/promos/validate`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ code })
+        body: JSON.stringify({ code }),
       });
-      
+
       if (!response.ok) {
         throw new Error(`Ошибка HTTP: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error(`Ошибка при проверке промокода ${code}:`, error);
@@ -204,27 +213,15 @@ class API {
    * @param {Object} orderData Данные заказа
    * @returns {Promise<Object>} Результат оформления
    */
-  static async submitOrder(orderData) {
-    try {
-      const response = await fetch(`${this.BASE_URL}/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(orderData)
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Ошибка HTTP: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Ошибка при оформлении заказа:', error);
-      throw error;
-    }
+
+  static submitOrder(orderData) {
+    return this.request("/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
   }
 }
 
 // Экспортируем API для использования в других файлах
-window.API = API; 
+window.API = API;
