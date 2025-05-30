@@ -1,176 +1,119 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('flowers.db');
+// ./data/db.js
+const fs = require('fs').promises;
+const path = require('path');
+
+const DB_PATH = path.join(__dirname, 'products.json');
+let databaseCache = null;
+
+async function loadDb() {
+  if (databaseCache) {
+    return databaseCache;
+  }
+  try {
+    const rawData = await fs.readFile(DB_PATH, 'utf-8');
+    databaseCache = JSON.parse(rawData);
+    // Преобразуем строки дат в объекты Date для удобства сравнения там, где это нужно
+    if (databaseCache.promos) {
+      databaseCache.promos.forEach(promo => {
+        if (promo.expiryDate) {
+          promo.expiryDateObj = new Date(promo.expiryDate);
+        }
+      });
+    }
+    if (databaseCache.reviews) {
+      databaseCache.reviews.forEach(review => {
+        if (review.date) {
+          // "DD.MM.YYYY" -> "YYYY-MM-DD" для корректного парсинга Date
+          const parts = review.date.split('.');
+          if (parts.length === 3) {
+            review.dateObj = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+          } else {
+            review.dateObj = new Date(review.date); // Попытка парсинга как есть
+          }
+        }
+      });
+    }
+    return databaseCache;
+  } catch (error) {
+    console.error("Не удалось загрузить или распарсить JSON БД:", error);
+    return { products: [], categories: [], promos: [], reviews: [] };
+  }
+}
+
+// Вспомогательная функция для парсинга даты "DD.MM.YYYY"
+function parseCustomDate(dateStr) { // "DD.MM.YYYY"
+  const parts = dateStr.split('.');
+  if (parts.length === 3) {
+    // Месяцы в JS Date от 0 до 11
+    return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+  }
+  return new Date(dateStr); // Fallback
+}
+
 
 class Database {
-    static async getProducts() {
-        return new Promise((resolve, reject) => {
-            db.all(`
-        SELECT p.*,
-               GROUP_CONCAT(DISTINCT i.image_url)              as images,
-               GROUP_CONCAT(DISTINCT c.item)                   as composition,
-               GROUP_CONCAT(DISTINCT s.name || '|' || s.price) as sizes
-        FROM products p
-               LEFT JOIN images i ON p.id = i.product_id
-               LEFT JOIN compositions c ON p.id = c.product_id
-               LEFT JOIN sizes s ON p.id = s.product_id
-        GROUP BY p.id
-      `, (err, rows) => {
-                if (err) reject(err);
-                else {
-                    const products = rows.map(row => ({
-                        ...row,
-                        images: row.images ? row.images.split(',') : [],
-                        composition: row.composition ? row.composition.split(',') : [],
-                        sizes: row.sizes ? row.sizes.split(',').map(size => {
-                            const [name, price] = size.split('|');
-                            return { name, price: parseInt(price) };
-                        }) : []
-                    }));
-                    resolve(products);
-                }
-            });
-        });
-    }
+  static async getProducts() {
+    const db = await loadDb();
+    return db.products || [];
+  }
 
-    static async getProductById(id) {
-        return new Promise((resolve, reject) => {
-            db.get(`
-        SELECT p.*,
-               GROUP_CONCAT(DISTINCT i.image_url)              as images,
-               GROUP_CONCAT(DISTINCT c.item)                   as composition,
-               GROUP_CONCAT(DISTINCT s.name || '|' || s.price) as sizes
-        FROM products p
-               LEFT JOIN images i ON p.id = i.product_id
-               LEFT JOIN compositions c ON p.id = c.product_id
-               LEFT JOIN sizes s ON p.id = s.product_id
-        WHERE p.id = ?
-        GROUP BY p.id
-      `, [id], (err, row) => {
-                if (err) reject(err);
-                else if (!row) resolve(null);
-                else {
-                    const product = {
-                        ...row,
-                        images: row.images ? row.images.split(',') : [],
-                        composition: row.composition ? row.composition.split(',') : [],
-                        sizes: row.sizes ? row.sizes.split(',').map(size => {
-                            const [name, price] = size.split('|');
-                            return { name, price: parseInt(price) };
-                        }) : []
-                    };
-                    resolve(product);
-                }
-            });
-        });
-    }
+  static async getProductById(id) {
+    const db = await loadDb();
+    const productId = parseInt(id, 10);
+    return (db.products || []).find(p => p.id === productId);
+  }
 
-    static async getProductsByCategory(category) {
-        return new Promise((resolve, reject) => {
-            db.all(`
-        SELECT p.*,
-               GROUP_CONCAT(DISTINCT i.image_url)              as images,
-               GROUP_CONCAT(DISTINCT c.item)                   as composition,
-               GROUP_CONCAT(DISTINCT s.name || '|' || s.price) as sizes
-        FROM products p
-               LEFT JOIN images i ON p.id = i.product_id
-               LEFT JOIN compositions c ON p.id = c.product_id
-               LEFT JOIN sizes s ON p.id = s.product_id
-        WHERE p.category = ?
-        GROUP BY p.id
-      `, [category], (err, rows) => {
-                if (err) reject(err);
-                else {
-                    const products = rows.map(row => ({
-                        ...row,
-                        images: row.images ? row.images.split(',') : [],
-                        composition: row.composition ? row.composition.split(',') : [],
-                        sizes: row.sizes ? row.sizes.split(',').map(size => {
-                            const [name, price] = size.split('|');
-                            return { name, price: parseInt(price) };
-                        }) : []
-                    }));
-                    resolve(products);
-                }
-            });
-        });
-    }
+  static async getProductsByCategory(categorySlug) {
+    const db = await loadDb();
+    const lowerCategorySlug = categorySlug.toLowerCase();
+    return (db.products || []).filter(p => p.category?.toLowerCase() === lowerCategorySlug);
+  }
 
-    static async getPopularProducts() {
-        return new Promise((resolve, reject) => {
-            db.all(`
-        SELECT p.*,
-               GROUP_CONCAT(DISTINCT i.image_url)              as images,
-               GROUP_CONCAT(DISTINCT c.item)                   as composition,
-               GROUP_CONCAT(DISTINCT s.name || '|' || s.price) as sizes
-        FROM products p
-               LEFT JOIN images i ON p.id = i.product_id
-               LEFT JOIN compositions c ON p.id = c.product_id
-               LEFT JOIN sizes s ON p.id = s.product_id
-        WHERE p.popular = 1
-        GROUP BY p.id
-      `, (err, rows) => {
-                if (err) reject(err);
-                else {
-                    const products = rows.map(row => ({
-                        ...row,
-                        images: row.images ? row.images.split(',') : [],
-                        composition: row.composition ? row.composition.split(',') : [],
-                        sizes: row.sizes ? row.sizes.split(',').map(size => {
-                            const [name, price] = size.split('|');
-                            return { name, price: parseInt(price) };
-                        }) : []
-                    }));
-                    resolve(products);
-                }
-            });
-        });
-    }
+  static async getPopularProducts() {
+    const db = await loadDb();
+    return (db.products || []).filter(p => p.popular === true);
+  }
 
-    static async getCategories() {
-        return new Promise((resolve, reject) => {
-            db.all(`
-        SELECT * FROM categories ORDER BY name
-      `, (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows);
-            });
-        });
-    }
+  static async getCategories() {
+    const db = await loadDb();
+    return db.categories || [];
+  }
 
-    static async getPromos() {
-        return new Promise((resolve, reject) => {
-            db.all(`
-        SELECT * FROM promos WHERE expires_at > datetime('now')
-      `, (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows);
-            });
-        });
-    }
+  static async getPromos() {
+    const db = await loadDb();
+    const now = new Date();
+    return (db.promos || []).filter(promo => promo.expiryDateObj && promo.expiryDateObj > now);
+  }
 
-    static async getReviews() {
-        return new Promise((resolve, reject) => {
-            db.all(`
-        SELECT * FROM reviews ORDER BY date DESC
-      `, (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows);
-            });
-        });
-    }
+  static async getReviews() {
+    const db = await loadDb();
+    // Сортировка по дате (от новых к старым)
+    return (db.reviews || []).sort((a, b) => (b.dateObj || 0) - (a.dateObj || 0));
+  }
 
-    static async getReviewsByProductId(productId) {
-        return new Promise((resolve, reject) => {
-            db.all(`
-        SELECT * FROM reviews 
-        WHERE product_id = ? 
-        ORDER BY date DESC
-      `, [productId], (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows);
-            });
-        });
-    }
+  static async getReviewsByProductId(productId) {
+    const db = await loadDb();
+    const prodId = parseInt(productId, 10);
+    const productReviews = (db.reviews || []).filter(r => r.productId === prodId);
+    // Сортировка по дате (от новых к старым)
+    return productReviews.sort((a, b) => (b.dateObj || 0) - (a.dateObj || 0));
+  }
+
+  // Метод для поиска, который будет использоваться в server.js
+  static async searchProducts(query) {
+    const db = await loadDb();
+    const searchQuery = query.toLowerCase();
+    if (!db.products) return [];
+
+    return db.products.filter(product => {
+      const nameMatch = product.name?.toLowerCase().includes(searchQuery);
+      const descriptionMatch = product.description?.toLowerCase().includes(searchQuery);
+      const categoryMatch = product.categoryName?.toLowerCase().includes(searchQuery);
+      // Можно добавить поиск по другим полям, например, по составу:
+      // const compositionMatch = product.composition?.some(item => item.toLowerCase().includes(searchQuery));
+      return nameMatch || descriptionMatch || categoryMatch;
+    });
+  }
 }
 
 module.exports = Database;

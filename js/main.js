@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroSlider();
   setupCartPageInteractions();
   setupContactForm();
-  initFaq();
   setupCatalogFilters();
   initSearchModal(); // Инициализация модального окна поиска
   setupPopularSearch(); // Инициализация поиска популярных букетов
@@ -625,43 +624,6 @@ function setupContactForm() {
   }
 }
 
-// Инициализация аккордеона FAQ
-function initFaq() {
-  const faqItems = document.querySelectorAll('.faq-item');
-  if (faqItems.length === 0) return;
-
-  faqItems.forEach(item => {
-    const question = item.querySelector('.faq-question');
-    const answer = item.querySelector('.faq-answer');
-
-    if (!question || !answer) return;
-
-    // Устанавливаем начальную высоту для ответов (скрыто)
-    answer.style.height = '0px';
-
-    question.addEventListener('click', () => {
-      // Проверяем, активен ли текущий вопрос
-      const isActive = item.classList.contains('active');
-
-      // Закрываем все вопросы
-      faqItems.forEach(otherItem => {
-        if (otherItem !== item) {
-          otherItem.classList.remove('active');
-          otherItem.querySelector('.faq-answer').style.height = '0px';
-        }
-      });
-
-      // Переключаем текущий вопрос
-      if (isActive) {
-        item.classList.remove('active');
-        answer.style.height = '0px';
-      } else {
-        item.classList.add('active');
-        answer.style.height = answer.scrollHeight + 'px';
-      }
-    });
-  });
-}
 
 // Инициализация фильтров каталога
 function setupCatalogFilters() {
@@ -956,7 +918,7 @@ function filterPopularProducts(query) {
     // Модифицируем продукты для выделения найденного текста
     const highlightedProducts = filteredProducts.map(product => {
       // Создаем копию продукта, чтобы не изменять оригинальные данные
-      const highlightedProduct = { ...product };
+      const highlightedProduct = {...product};
 
       // Выделяем текст в названии
       if (product.name.toLowerCase().includes(query)) {

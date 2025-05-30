@@ -1,0 +1,124 @@
+[
+  {
+    "id": 1,
+    "email": "user@example.com",
+    "password": "password123",
+    "fullname": "Иван Петров",
+    "phone": "+7 (999) 123-45-67",
+    "birthday": "1990-05-15",
+    "avatar": "../img/avatars/avatar1.jpg",
+    "addresses": [
+      {
+        "id": 1,
+        "title": "Домашний",
+        "address": "ул. Ленина, д. 10, кв. 25",
+        "city": "Москва",
+        "zipcode": "123456",
+        "isDefault": true
+      }
+    ],
+    "orders": [
+      {
+        "id": "ORD-2025-001",
+        "date": "2025-04-15",
+        "status": "delivered",
+        "total": 3500,
+        "items": [
+          {
+            "id": 1,
+            "name": "Букет 'Нежность'",
+            "price": 2500,
+            "quantity": 1,
+            "image": "../img/placeholder-large.jpg"
+          },
+          {
+            "id": 4,
+            "name": "Композиция 'Тропики'",
+            "price": 1000,
+            "quantity": 1,
+            "image": "../img/placeholder-large.jpg"
+          }
+        ],
+        "delivery": {
+          "method": "courier",
+          "cost": 300,
+          "address": "ул. Ленина, д. 10, кв. 25, Москва"
+        },
+        "payment": {
+          "method": "card",
+          "status": "paid"
+        }
+      }
+    ],
+    "favorites": [2, 3],
+    "settings": {
+      "emailNotifications": true,
+      "smsNotifications": true
+    }
+  },
+  {
+    "id": 2,
+    "email": "anna@example.com",
+    "password": "anna2025",
+    "fullname": "Анна Смирнова",
+    "phone": "+7 (999) 987-65-43",
+    "birthday": "1995-08-20",
+    "avatar": "../img/avatars/avatar2.jpg",
+    "addresses": [
+      {
+        "id": 1,
+        "title": "Домашний",
+        "address": "ул. Пушкина, д. 5, кв. 42",
+        "city": "Москва",
+        "zipcode": "123457",
+        "isDefault": true
+      },
+      {
+        "id": 2,
+        "title": "Рабочий",
+        "address": "ул. Гагарина, д. 15, офис 301",
+        "city": "Москва",
+        "zipcode": "123458",
+        "isDefault": false
+      }
+    ],
+    "orders": [
+      {
+        "id": "ORD-2025-002",
+        "date": "2025-05-10",
+        "status": "delivered",
+        "total": 5500,
+        "items": [
+          {
+            "id": 3,
+            "name": "Букет 'Классика'",
+            "price": 4000,
+            "quantity": 1,
+            "image": "../img/placeholder-large3.jpg"
+          },
+          {
+            "id": 2,
+            "name": "Букет 'Яркое лето'",
+            "price": 1500,
+            "quantity": 1,
+            "image": "../img/placeholder-large2.jpg"
+          }
+        ],
+        "delivery": {
+          "method": "express",
+          "cost": 500,
+          "address": "ул. Гагарина, д. 15, офис 301, Москва"
+        },
+        "payment": {
+          "method": "card",
+          "status": "paid"
+        }
+      }
+    ],
+    "favorites": [1, 4],
+    "settings": {
+      "emailNotifications": true,
+      "smsNotifications": false
+    }
+  }
+]

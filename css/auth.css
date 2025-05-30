@@ -1,0 +1,314 @@
+/* Стили для авторизации и личного кабинета */
+
+/* Форма входа */
+.login-form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+    margin-bottom: 1.5rem;
+}
+
+.login-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.login-links a {
+    color: #ff6b6b;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.login-links a:hover {
+    color: #ff4757;
+    text-decoration: underline;
+}
+
+/* Форма регистрации */
+.register-form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-form {
+    margin-bottom: 1.5rem;
+}
+
+.register-links {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.register-links a {
+    color: #ff6b6b;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.register-links a:hover {
+    color: #ff4757;
+    text-decoration: underline;
+}
+
+/* Сообщения об ошибках */
+.form-error {
+    color: #ff4757;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+    min-height: 1.2rem;
+}
+
+/* Стили для авторизованного пользователя в хедере */
+.header__action-btn.logged-in {
+    position: relative;
+}
+
+.header__action-btn.logged-in::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: #4cd137;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+/* Стили для истории заказов */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.order-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.order-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+}
+
+.order-card__id {
+    font-weight: 600;
+}
+
+.order-card__date {
+    color: #777;
+}
+
+.order-card__status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.order-card__status.pending {
+    background-color: #ffeaa7;
+    color: #fdcb6e;
+}
+
+.order-card__status.processing {
+    background-color: #81ecec;
+    color: #00cec9;
+}
+
+.order-card__status.shipped {
+    background-color: #a29bfe;
+    color: #6c5ce7;
+}
+
+.order-card__status.delivered {
+    background-color: #55efc4;
+    color: #00b894;
+}
+
+.order-card__status.cancelled {
+    background-color: #fab1a0;
+    color: #e17055;
+}
+
+.order-card__content {
+    padding: 1rem;
+}
+
+.order-card__items {
+    margin-bottom: 1.5rem;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item__image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 1rem;
+}
+
+.order-item__details h4 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+}
+
+.order-item__details p {
+    margin: 0;
+    color: #777;
+}
+
+.order-card__summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.order-card__delivery h4,
+.order-card__payment h4,
+.order-card__total h4 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+}
+
+.order-card__delivery p,
+.order-card__payment p {
+    margin: 0 0 0.25rem;
+    color: #777;
+}
+
+.order-card__total-price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ff6b6b;
+}
+
+.order-card__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+}
+
+/* Стили для адресов доставки */
+.addresses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.address-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    position: relative;
+}
+
+.address-card.default {
+    border: 2px solid #ff6b6b;
+}
+
+.address-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.address-card__header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.address-card__default-badge {
+    background-color: #ff6b6b;
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.address-card__content {
+    margin-bottom: 1.5rem;
+}
+
+.address-card__content p {
+    margin: 0 0 0.5rem;
+    color: #555;
+}
+
+.address-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .login-form-container,
+    .register-form-container {
+        padding: 1.5rem;
+    }
+    
+    .login-links,
+    .register-links {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    
+    .order-card__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .order-card__summary {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-card__actions {
+        flex-direction: column;
+    }
+    
+    .addresses-list {
+        grid-template-columns: 1fr;
+    }
+}

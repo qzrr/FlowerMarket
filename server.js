@@ -63,22 +63,24 @@ app.get("/api/products/search", (req, res, next) => {
   if (searchQuery.length < 3) {
     return res
       .status(400)
-      .json({ error: "Поисковый запрос должен содержать минимум 3 символа" });
+      .json({error: "Поисковый запрос должен содержать минимум 3 символа"});
   }
 
   db.all(
     `
-    SELECT p.*,
-           GROUP_CONCAT(DISTINCT i.image_url) AS images,
-           GROUP_CONCAT(DISTINCT c.item) AS composition,
-           GROUP_CONCAT(DISTINCT s.name || '|' || s.price) AS sizes
-    FROM products p
-      LEFT JOIN images i ON p.id = i.product_id
-      LEFT JOIN compositions c ON p.id = c.product_id
-      LEFT JOIN sizes s ON p.id = s.product_id
-    WHERE LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ? OR LOWER(p.categoryName) LIKE ?
-    GROUP BY p.id
-    ORDER BY p.name
+      SELECT p.*,
+             GROUP_CONCAT(DISTINCT i.image_url)              AS images,
+             GROUP_CONCAT(DISTINCT c.item)                   AS composition,
+             GROUP_CONCAT(DISTINCT s.name || '|' || s.price) AS sizes
+      FROM products p
+             LEFT JOIN images i ON p.id = i.product_id
+             LEFT JOIN compositions c ON p.id = c.product_id
+             LEFT JOIN sizes s ON p.id = s.product_id
+      WHERE LOWER(p.name) LIKE ?
+         OR LOWER(p.description) LIKE ?
+         OR LOWER(p.categoryName) LIKE ?
+      GROUP BY p.id
+      ORDER BY p.name
     `,
     [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`],
     (err, rows) => {
@@ -89,9 +91,9 @@ app.get("/api/products/search", (req, res, next) => {
         composition: row.composition ? row.composition.split(",") : [],
         sizes: row.sizes
           ? row.sizes.split(",").map((size) => {
-              const [name, price] = size.split("|");
-              return { name, price: parseInt(price) };
-            })
+            const [name, price] = size.split("|");
+            return {name, price: parseInt(price)};
+          })
           : [],
       }));
       res.json(products);
@@ -102,7 +104,7 @@ app.get("/api/products/search", (req, res, next) => {
 app.get("/api/products/:id", async (req, res, next) => {
   try {
     const product = await Database.getProductById(req.params.id);
-    if (!product) return res.status(404).json({ error: "Продукт не найден" });
+    if (!product) return res.status(404).json({error: "Продукт не найден"});
     res.json(product);
   } catch (error) {
     next(error);
@@ -153,7 +155,7 @@ app.get("/", (req, res) => {
 // Универсальный обработчик ошибок
 app.use((err, req, res, next) => {
   console.error("Ошибка:", err);
-  res.status(500).json({ error: "Внутренняя ошибка сервера" });
+  res.status(500).json({error: "Внутренняя ошибка сервера"});
 });
 
 // Старт сервера

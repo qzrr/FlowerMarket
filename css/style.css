@@ -2182,43 +2182,7 @@ address {
   margin-bottom: 1.5rem;
 }
 
-.faq-list {
-  margin-bottom: 5rem;
-}
 
-.faq-item {
-  margin-bottom: 1.5rem;
-}
-
-.faq-question {
-  background-color: var(--white);
-  padding: 1.5rem 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  font-weight: 600;
-  cursor: pointer;
-  position: relative;
-  transition: var(--transition);
-}
-
-.faq-question::after {
-  content: "+";
-  position: absolute;
-  right: 2rem;
-  font-size: 2rem;
-  transition: var(--transition);
-}
-
-.faq-item.active .faq-question::after {
-  transform: rotate(45deg);
-}
-
-.faq-answer {
-  padding: 0 2rem;
-  max-height: 0;
-  overflow: hidden;
-  transition: var(--transition);
-}
 
 /* Полезные стили для странички 404 */
 html,

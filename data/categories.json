@@ -1,0 +1,50 @@
+[
+  {
+    "id": "bouquets",
+    "name": "Букеты",
+    "image": "../img/category-bouquets.jpg",
+    "description": "Свежие букеты на любой вкус и бюджет",
+    "count": 24,
+    "featured": true
+  },
+  {
+    "id": "roses",
+    "name": "Розы",
+    "image": "../img/category-roses.jpg",
+    "description": "Классические и премиальные розы",
+    "count": 18,
+    "featured": true
+  },
+  {
+    "id": "compositions",
+    "name": "Композиции",
+    "image": "../img/category-compositions.jpg",
+    "description": "Уникальные цветочные композиции",
+    "count": 12,
+    "featured": true
+  },
+  {
+    "id": "plants",
+    "name": "Комнатные растения",
+    "image": "../img/category-plants.jpg",
+    "description": "Растения для дома и офиса",
+    "count": 15,
+    "featured": false
+  },
+  {
+    "id": "gifts",
+    "name": "Подарки",
+    "image": "../img/category-gifts.jpg",
+    "description": "Дополнения к букетам",
+    "count": 10,
+    "featured": false
+  },
+  {
+    "id": "wedding",
+    "name": "Свадебные букеты",
+    "image": "../img/category-wedding.jpg",
+    "description": "Букеты для особого дня",
+    "count": 8,
+    "featured": false
+  }
+]
