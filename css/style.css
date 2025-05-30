@@ -1122,6 +1122,39 @@ address {
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: start;
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-form-section {
+  padding: 3rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+}
+
+.contact-info-section {
+  padding: 3rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.social-links__grid {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.footer__contact {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  padding: 2rem;
+  color: var(--white);
+  background-color: var(--footer-bg);
 }
 
 .contact-form-section h2,
@@ -2484,7 +2517,7 @@ main.error-content {
 }
 
 .user-navigation a:hover {
-  background-color: rgba(var(--primary-color-rgb), 0.08);
+  background-color: rgba(var(--primary-color), 0.08);
   color: var(--primary-color);
 }
 

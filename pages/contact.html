@@ -12,214 +12,192 @@
 </head>
 
 <body>
-  <header class="header">
-    <!-- ... СОДЕРЖИМОЕ ШАПКИ ... -->
-    <div class="container header__container">
-      <a href="index.html" class="logo">Floww</a>
-      <nav class="nav header__nav">
-        <ul class="nav__list">
-          <li class="nav__item"><a href="index.html" class="nav__link">Главная</a></li>
-          <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
-          <li class="nav__item"><a href="index.html#delivery" class="nav__link">Доставка</a></li>
-          <li class="nav__item"><a href="index.html#about" class="nav__link">О нас</a></li>
-          <li class="nav__item"><a href="contact.html" class="nav__link active">Контакты</a></li>
-        </ul>
-      </nav>
-      <div class="header__actions">
-        <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
-            alt="Поиск"></button>
-        <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
-            alt="Аккаунт"></a>
-        <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img src="../assets/favorite.svg"
-            alt="Избранное"></a>
-        <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
-          <img src="../assets/cart.svg" alt="Корзина">
-          <span class="cart-count" data-cart-count>0</span>
-        </a>
-        <button class="burger-menu" aria-label="Открыть меню">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="contact-page">
-    <div class="container">
-      <h1 class="page-title">Контакты</h1>
-
-      <div class="contact-content">
-        <div class="contact-form-section">
-          <h2>Свяжитесь с нами</h2>
-          <p>У вас есть вопросы о наших продуктах или услугах? Заполните форму, и мы свяжемся с вами в ближайшее
-            время.</p>
-          <form id="contact-form" class="contact-form">
-            <div class="form-group">
-              <label for="name" class="form-label">Имя <span class="required">*</span></label>
-              <input type="text" id="name" name="name" class="form-input" required>
-              <span class="form-error" id="name-error"></span>
-            </div>
-            <div class="form-group">
-              <label for="email" class="form-label">Email <span class="required">*</span></label>
-              <input type="email" id="email" name="email" class="form-input" required>
-              <span class="form-error" id="email-error"></span>
-            </div>
-            <div class="form-group">
-              <label for="phone" class="form-label">Телефон</label>
-              <input type="tel" id="phone" name="phone" class="form-input" placeholder="+7 (___) ___-__-__">
-              <span class="form-error" id="phone-error"></span>
-            </div>
-            <div class="form-group">
-              <label for="subject" class="form-label">Тема</label>
-              <select id="subject" name="subject" class="form-select">
-                <option value="general">Общий вопрос</option>
-                <option value="order">Вопрос по заказу</option>
-                <option value="partnership">Сотрудничество</option>
-                <option value="complaint">Жалоба/претензия</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="message" class="form-label">Сообщение <span class="required">*</span></label>
-              <textarea id="message" name="message" rows="5" class="form-textarea" required></textarea>
-              <span class="form-error" id="message-error"></span>
-            </div>
-            <div class="form-group checkbox-group">
-              <label class="checkbox-label">
-                <input type="checkbox" id="consent" name="consent" required>
-                <span class="custom-checkbox"></span>
-                Я согласен на обработку персональных данных
-              </label>
-              <span class="form-error" id="consent-error"></span>
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn btn--primary">
-                <img src="../assets/send.svg" alt="" class="btn-icon"> Отправить сообщение
-              </button>
-            </div>
-            <div id="form-status" class="form-status" aria-live="polite"></div> <!-- Для сообщений об успехе/ошибке -->
-          </form>
-        </div>
-
-        <div class="contact-info-section">
-          <h2>Информация</h2>
-
-          <div class="contact-info-grid" id="contact-info">
-            <div class="contact-info-block">
-              <div class="contact-info-icon">
-                <img src="../assets/location.svg" alt="Местоположение" class="icon">
-              </div>
-              <div class="contact-info-content">
-                <h3>Адрес</h3>
-                <p>ул. Цветочная, 123, Москва, Россия</p>
-                <a href="https://maps.google.com?q=Цветочная+123+Москва" target="_blank" class="info-link">Открыть в
-                  Google Maps</a>
-              </div>
-            </div>
-
-            <div class="contact-info-block">
-              <div class="contact-info-icon">
-                <img src="../assets/phone.svg" alt="Телефон" class="icon">
-              </div>
-              <div class="contact-info-content">
-                <h3>Телефон</h3>
-                <p><a href="tel:+71234567890" class="info-link">+7 (123) 456-78-90</a></p>
-              </div>
-            </div>
-
-            <div class="contact-info-block">
-              <div class="contact-info-icon">
-                <img src="../assets/email.svg" alt="Email" class="icon">
-              </div>
-              <div class="contact-info-content">
-                <h3>Email</h3>
-                <p><a href="mailto:info@flowerparadise.ru" class="info-link">info@flowerparadise.ru</a></p>
-              </div>
-            </div>
-
-            <div class="contact-info-block">
-              <div class="contact-info-icon">
-                <img src="../assets/clock.svg" alt="Время работы" class="icon">
-              </div>
-              <div class="contact-info-content">
-                <h3>Часы работы</h3>
-                <p>Пн-Пт: 9:00 - 20:00<br>Сб-Вс: 10:00 - 18:00</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="social-links">
-            <h3>Мы в соцсетях</h3>
-            <div class="social-links__grid">
-              <a href="#" class="social-link" aria-label="Facebook">
-                <img src="../assets/facebook.svg" alt="Facebook" class="social-icon">
-              </a>
-              <a href="#" class="social-link" aria-label="Instagram">
-                <img src="../assets/instagram.svg" alt="Instagram" class="social-icon">
-              </a>
-              <a href="#" class="social-link" aria-label="VK">
-                <img src="../assets/vk.svg" alt="VK" class="social-icon">
-              </a>
-            </div>
-          </div>
-
-          <div class="contact-map">
-            <h3>Как нас найти</h3>
-            <div class="map-container">
-              <!-- Здесь будет iframe с картой или контейнер для API карт -->
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.397087877394!2d37.62598631592852!3d55.75639998055643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2z0JzQvtGB0LrQvtCy0YHQutC40Lkg0JrRgNC10LzQu9GM!5e0!3m2!1sru!2sru!4v1625689321154!5m2!1sru!2sru"
-                width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
-                title="Карта расположения магазина"></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <!-- ... СОДЕРЖИМОЕ ПОДВАЛА ... -->
-  </footer>
-
-  <!-- Мобильное меню -->
-  <div class="mobile-menu">
-    <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
-    <nav class="mobile-menu__nav">
-      <ul>
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="catalog.html">Каталог</a></li>
-        <li><a href="index.html#delivery">Доставка</a></li>
-        <li><a href="index.html#about">О нас</a></li>
-        <li><a href="contact.html">Контакты</a></li>
+<header class="header">
+  <!-- ... СОДЕРЖИМОЕ ШАПКИ ... -->
+  <div class="container header__container">
+    <a href="index.html" class="logo">Floww</a>
+    <nav class="nav header__nav">
+      <ul class="nav__list">
+        <li class="nav__item"><a href="index.html" class="nav__link">Главная</a></li>
+        <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
+        <li class="nav__item"><a href="index.html#delivery" class="nav__link">Доставка</a></li>
+        <li class="nav__item"><a href="index.html#about" class="nav__link">О нас</a></li>
+        <li class="nav__item"><a href="contact.html" class="nav__link active">Контакты</a></li>
       </ul>
     </nav>
-    <div class="mobile-menu__actions">
-      <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
-      <!-- Другие действия если нужно -->
+    <div class="header__actions">
+      <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
+                                                                                  alt="Поиск"></button>
+      <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
+                                                                               alt="Аккаунт"></a>
+      <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img src="../assets/favorite.svg"
+                                                                                     alt="Избранное"></a>
+      <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
+        <img src="../assets/cart.svg" alt="Корзина">
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <button class="burger-menu" aria-label="Открыть меню">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
-  <div class="overlay"></div>
+</header>
 
-  <!-- Модальное окно поиска -->
-  <div class="search-modal" id="searchModal">
-    <div class="search-modal__content">
-      <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
-      <h2 class="search-modal__title">Поиск товаров</h2>
-      <form class="search-form" id="modalSearchForm">
-        <div class="search-input-container">
-          <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
-            aria-label="Поиск по каталогу" autofocus>
-          <button type="submit" class="btn btn-primary">Найти</button>
+<main class="contact-page">
+  <div class="container">
+    <h1 class="page-title">Контакты</h1>
+
+    <div class="contact-content">
+      <div class="contact-form-section">
+        <h2>Свяжитесь с нами</h2>
+        <p>У вас есть вопросы о наших продуктах или услугах? Заполните форму, и мы свяжемся с вами в ближайшее
+          время.</p>
+        <form id="contact-form" class="contact-form">
+          <div class="form-group">
+            <label for="name" class="form-label">Имя <span class="required">*</span></label>
+            <input type="text" id="name" name="name" class="form-input" required>
+            <span class="form-error" id="name-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-label">Email <span class="required">*</span></label>
+            <input type="email" id="email" name="email" class="form-input" required>
+            <span class="form-error" id="email-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="phone" class="form-label">Телефон</label>
+            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+7 (___) ___-__-__">
+            <span class="form-error" id="phone-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="subject" class="form-label">Тема</label>
+            <select id="subject" name="subject" class="form-select">
+              <option value="general">Общий вопрос</option>
+              <option value="order">Вопрос по заказу</option>
+              <option value="partnership">Сотрудничество</option>
+              <option value="complaint">Жалоба/претензия</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message" class="form-label">Сообщение <span class="required">*</span></label>
+            <textarea id="message" name="message" rows="5" class="form-textarea" required></textarea>
+            <span class="form-error" id="message-error"></span>
+          </div>
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="consent" name="consent" required>
+              <span class="custom-checkbox"></span>
+              Я согласен на обработку персональных данных
+            </label>
+            <span class="form-error" id="consent-error"></span>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary">Отправить сообщение</button>
+          </div>
+          <div id="form-status" class="form-status" aria-live="polite"></div> <!-- Для сообщений об успехе/ошибке -->
+        </form>
+      </div>
+
+      <div class="contact-info-section">
+        <h2>Информация</h2>
+
+        <div class="contact-info-grid" id="contact-info">
+          <div class="contact-info-block">
+
+            <div class="contact-info-content">
+              <h3>Адрес</h3>
+              <p>ул. Цветочная, 123, Москва, Россия</p>
+              <a href="https://maps.google.com?q=Цветочная+123+Москва" target="_blank" class="info-link">Открыть в
+                Google Maps</a>
+            </div>
+          </div>
+
+          <div class="contact-info-block">
+            <div class="contact-info-content">
+              <h3>Телефон</h3>
+              <p><a href="tel:+71234567890" class="info-link">+7 (123) 456-78-90</a></p>
+            </div>
+          </div>
+          <div class="contact-info-block">
+            <div class="contact-info-content">
+              <h3>Email</h3>
+              <p><a href="mailto:info@flowerparadise.ru" class="info-link">info@flowerparadise.ru</a></p>
+            </div>
+          </div>
+          <div class="contact-info-block">
+            <div class="contact-info-content">
+              <h3>Часы работы</h3>
+              <p>Пн-Пт: 9:00 - 20:00<br>Сб-Вс: 10:00 - 18:00</p>
+            </div>
+          </div>
         </div>
-      </form>
-      <div class="search-modal__results" id="modalSearchResults">
-        <!-- Результаты поиска будут добавлены здесь через JavaScript -->
-        <p class="search-hint">Введите запрос для поиска по каталогу</p>
+
+        <div class="social-links">
+          <h3>Мы в соцсетях</h3>
+          <div class="social-links__grid">
+            <a href="#" class="social-link" aria-label="Facebook">
+              <img src="../assets/Facebook.svg" alt="Facebook" class="social-icon">
+            </a>
+            <a href="#" class="social-link" aria-label="Instagram">
+              <img src="../assets/Instagram.svg" alt="Instagram" class="social-icon">
+            </a>
+            <a href="#" class="social-link" aria-label="VK">
+              <img src="../assets/icons8-vk.svg" alt="VK" class="social-icon">
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</main>
 
-  <script src="../js/cart.js"></script>
-  <script src="../js/main.js" type="module"></script>
+<footer class="footer__bottom footer__contact">
+  <p>© 2025 Floww. Все права защищены.</p>
+  <nav class>
+    <a href="#">Политика конфиденциальности</a>
+    <a href="#">Условия использования</a>
+  </nav>
+</footer>
+
+<!-- Мобильное меню -->
+<div class="mobile-menu">
+  <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
+  <nav class="mobile-menu__nav">
+    <ul>
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="catalog.html">Каталог</a></li>
+      <li><a href="index.html#delivery">Доставка</a></li>
+      <li><a href="index.html#about">О нас</a></li>
+      <li><a href="contact.html">Контакты</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__actions">
+    <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
+    <!-- Другие действия если нужно -->
+  </div>
+</div>
+<div class="overlay"></div>
+
+<!-- Модальное окно поиска -->
+<div class="search-modal" id="searchModal">
+  <div class="search-modal__content">
+    <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
+    <h2 class="search-modal__title">Поиск товаров</h2>
+    <form class="search-form" id="modalSearchForm">
+      <div class="search-input-container">
+        <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
+               aria-label="Поиск по каталогу" autofocus>
+        <button type="submit" class="btn btn-primary">Найти</button>
+      </div>
+    </form>
+    <div class="search-modal__results" id="modalSearchResults">
+      <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+      <p class="search-hint">Введите запрос для поиска по каталогу</p>
+    </div>
+  </div>
+</div>
+
+<script src="../js/cart.js"></script>
+<script src="../js/main.js" type="module"></script>
 </body>
 
 </html>

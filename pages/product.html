@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Подробное описание букета | Цветочный Рай - магазин свежих цветов">
     <meta name="keywords" content="букет, цветы, заказать букет, доставка цветов">
-    <title>Букет - Цветочный Рай</title>
+    <title>Букет - Floww</title>
+    <link rel="stylesheet" href="../css/product.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
 </head>
@@ -44,20 +45,9 @@
 
     <main class="product-page">
         <div class="container">
-            <div class="breadcrumbs">
-                <ul class="breadcrumbs__list">
-                    <li class="breadcrumbs__item"><a href="index.html" class="breadcrumbs__link">Главная</a></li>
-                    <li class="breadcrumbs__item"><a href="catalog.html" class="breadcrumbs__link">Каталог</a></li>
-                    <li class="breadcrumbs__item"><a href="catalog.html?category=bouquets" class="breadcrumbs__link"
-                            id="product-category">Букеты</a></li>
-                    <li class="breadcrumbs__item breadcrumbs__item--current" id="product-breadcrumb-name">Название
-                        букета</li>
-                </ul>
-            </div>
-
             <div class="product" id="product-details">
                 <div class="product__gallery">
-                    <div class="product__main-image">
+                    <div class="product__main-image" id = "product-main-image-container">
                         <img src="../img/placeholder-large.jpg" alt="Букет Нежность" id="product-main-image"
                             class="product__image">
                         <span class="product__discount" id="product-discount"></span>
@@ -92,13 +82,6 @@
 
                     <div class="product__options">
                         <div class="product__option">
-                            <label for="product-size" class="product__option-label">Размер:</label>
-                            <div class="product__size-buttons">
-                                <button class="product__size-btn active" data-price="2500"
-                                    data-size="small">Маленький</button>
-                                <button class="product__size-btn" data-price="3500" data-size="medium">Средний</button>
-                                <button class="product__size-btn" data-price="4500" data-size="large">Большой</button>
-                            </div>
                         </div>
                         <div class="product__option">
                             <label for="product-quantity" class="product__option-label">Количество:</label>
@@ -300,9 +283,9 @@
                     <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
                 </address>
                 <div class="footer__socials">
-                    <a href="#" aria-label="Facebook"><img src="../assets/facebook.svg" alt="Facebook"></a>
-                    <a href="#" aria-label="Instagram"><img src="../assets/instagram.svg" alt="Instagram"></a>
-                    <a href="#" aria-label="VK"><img src="../assets/vk.svg" alt="VK"></a>
+                    <a href="#" aria-label="Facebook"><img src="../assets/FacebookDark.svg" alt="Facebook"></a>
+                    <a href="#" aria-label="Instagram"><img src="../assets/InstagramDark.svg" alt="Instagram"></a>
+                    <a href="#" aria-label="VK"><img src="../assets/icons8-vk%20(1).svg" alt="VK"></a>
                 </div>
             </div>
         </div>
