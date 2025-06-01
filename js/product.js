@@ -1,787 +1,298 @@
-/**
- * Product.js - Модуль для работы с данными о продуктах из JSON базы данных
- * Обеспечивает загрузку и отображение информации о продукте на странице product.html
- */
+// js/product.js
+(function () {
+  let currentProduct = null;
+  let currentProductId = null;
 
-class ProductManager {
-    constructor() {
-        // Путь к JSON файлу с данными
-        this.jsonDbPath = '../data/products.json';
-        
-        // Кэш загруженных данных
-        this.productsCache = null;
-        this.categoriesCache = null;
-        this.reviewsCache = null;
-        
-        // Текущий продукт
-        this.currentProduct = null;
-        this.currentProductId = null;
-        
-        // DOM элементы
-        this.productDetailsContainer = document.getElementById('product-details');
-        this.relatedProductsContainer = document.getElementById('related-products-container');
-        this.reviewsContainer = document.getElementById('reviews-container');
-        
-        // Инициализация
-        this.init();
+  async function initProductPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    currentProductId = parseInt(urlParams.get('id'));
+    const loadingEl = document.getElementById('product-page-loading'); // ID индикатора загрузки
+
+    if (!currentProductId) {
+      showErrorPage('Информация о товаре не найдена.');
+      return;
     }
-    
-    /**
-     * Инициализация модуля
-     */
-    async init() {
-        try {
-            // Получаем ID продукта из URL
-            this.currentProductId = this.getProductIdFromUrl();
-            
-            if (!this.currentProductId) {
-                console.error('ID продукта не найден в URL');
-                this.showErrorMessage('Продукт не найден');
-                return;
-            }
-            
-            // Загружаем данные
-            await this.loadData();
-            
-            // Отображаем информацию о продукте
-            this.renderProductDetails();
-            
-            // Отображаем отзывы
-            this.renderReviews();
-            
-            // Отображаем связанные товары
-            this.renderRelatedProducts();
-            
-            // Устанавливаем обработчики событий
-            this.setupEventListeners();
-            
-        } catch (error) {
-            console.error('Ошибка инициализации ProductManager:', error);
-            this.showErrorMessage('Произошла ошибка при загрузке данных о продукте');
-        }
+    if (loadingEl) loadingEl.style.display = 'block';
+
+    try {
+      currentProduct = await API.getProductById(currentProductId);
+      if (!currentProduct) {
+        showErrorPage('Товар не найден.');
+        return;
+      }
+
+      renderProductDetails();
+      await renderProductReviews();
+      await renderRelatedProducts();
+      setupProductPageEventListeners();
+      updateMainWishlistButtonState();
+
+    } catch (error) {
+      console.error('Ошибка загрузки страницы продукта:', error);
+      showErrorPage('Не удалось загрузить информацию о товаре.');
+    } finally {
+      if (loadingEl) loadingEl.style.display = 'none';
     }
-    
-    /**
-     * Получение ID продукта из URL
-     * @returns {number|null} ID продукта или null, если не найден
-     */
-    getProductIdFromUrl() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
-        return id ? parseInt(id) : null;
+  }
+
+  function renderProductDetails() {
+    document.title = `${currentProduct.name} | Flowwow`;
+    document.getElementById('product-page-title').textContent = currentProduct.name; // ID для заголовка
+    document.getElementById('product-page-price').textContent = formatPrice(currentProduct.price);
+
+    const oldPriceEl = document.getElementById('product-page-old-price');
+    const discountBadgeEl = document.getElementById('product-page-discount-badge');
+    if (currentProduct.oldPrice && currentProduct.oldPrice > currentProduct.price) {
+      if (oldPriceEl) {
+        oldPriceEl.textContent = formatPrice(currentProduct.oldPrice);
+        oldPriceEl.style.display = 'inline';
+      }
+      if (discountBadgeEl && currentProduct.discount) {
+        discountBadgeEl.textContent = `-${currentProduct.discount}%`;
+        discountBadgeEl.style.display = 'inline-block';
+      } else if (discountBadgeEl) {
+        discountBadgeEl.style.display = 'none';
+      }
+    } else {
+      if (oldPriceEl) oldPriceEl.style.display = 'none';
+      if (discountBadgeEl) discountBadgeEl.style.display = 'none';
     }
-    
-    /**
-     * Загрузка данных из JSON файлов
-     */
-    async loadData() {
-        try {
-            // Загружаем все продукты, если еще не загружены
-            if (!this.productsCache) {
-                const productsResponse = await fetch(this.jsonDbPath);
-                if (!productsResponse.ok) {
-                    throw new Error(`Ошибка загрузки данных о продуктах: ${productsResponse.status}`);
-                }
-                this.productsCache = await productsResponse.json();
-            }
-            
-            // Находим текущий продукт по ID
-            this.currentProduct = this.productsCache.find(product => product.id === this.currentProductId);
-            
-            if (!this.currentProduct) {
-                throw new Error(`Продукт с ID ${this.currentProductId} не найден`);
-            }
-            
-            // Загружаем отзывы для текущего продукта
-            this.reviewsCache = this.currentProduct.reviews || [];
-            
-            // Загружаем категории, если нужно
-            if (!this.categoriesCache) {
-                const categoriesResponse = await fetch('../data/categories.json');
-                if (categoriesResponse.ok) {
-                    this.categoriesCache = await categoriesResponse.json();
-                }
-            }
-            
-        } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
-            throw error;
-        }
-    }
-    
-    /**
-     * Отображение информации о продукте
-     */
-    renderProductDetails() {
-        if (!this.currentProduct) return;
-        
-        // Заголовок страницы
-        document.title = `${this.currentProduct.name} - Floww`;
-        
-        // Основная информация о продукте
-        document.getElementById('product-title').textContent = this.currentProduct.name;
-        document.getElementById('product-price').textContent = `${this.currentProduct.price} ₽`;
-        document.getElementById('product-description').innerHTML = `<p>${this.currentProduct.description}</p>`;
-        document.getElementById('product-sku').textContent = this.currentProduct.sku;
-        document.getElementById('product-category-meta').textContent = this.currentProduct.categoryName;
-        
-        // Старая цена и скидка
-        const oldPriceElement = document.getElementById('product-old-price');
-        const discountElement = document.getElementById('product-discount');
-        
-        if (this.currentProduct.oldPrice && this.currentProduct.oldPrice > this.currentProduct.price) {
-            oldPriceElement.textContent = `${this.currentProduct.oldPrice} ₽`;
-            oldPriceElement.style.display = 'block';
-            
-            if (this.currentProduct.discount) {
-                discountElement.textContent = `-${this.currentProduct.discount}%`;
-                discountElement.style.display = 'block';
-            } else {
-                discountElement.style.display = 'none';
-            }
-        } else {
-            oldPriceElement.style.display = 'none';
-            discountElement.style.display = 'none';
-        }
-        
-        // Рейтинг
-        const ratingElement = document.getElementById('product-rating');
-        if (ratingElement) {
-            ratingElement.innerHTML = this.generateRatingStars(this.currentProduct.rating);
-        }
-        
-        // Галерея изображений
-        this.renderProductGallery();
-        
-        // Состав продукта (вкладка "Состав")
-        const specsTabContent = document.getElementById('tab-specs');
-        if (specsTabContent && this.currentProduct.composition && this.currentProduct.composition.length > 0) {
-            const compositionList = document.createElement('ul');
-            compositionList.className = 'product__specs-list';
-            
-            this.currentProduct.composition.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = item;
-                compositionList.appendChild(li);
-            });
-            
-            specsTabContent.innerHTML = '';
-            specsTabContent.appendChild(compositionList);
-        }
-        
-        // Описание продукта (вкладка "Описание")
-        const descTabContent = document.getElementById('tab-description');
-        if (descTabContent && this.currentProduct.details) {
-            descTabContent.innerHTML = `<p>${this.currentProduct.details}</p>`;
-        }
-        
-        // Наличие товара
-        const availabilityElement = document.querySelector('.product__availability');
-        if (availabilityElement) {
-            if (this.currentProduct.inStock) {
-                availabilityElement.innerHTML = '<span class="product__in-stock">В наличии</span>';
-            } else {
-                availabilityElement.innerHTML = '<span class="product__out-stock">Нет в наличии</span>';
-            }
-        }
-    }
-    
-    /**
-     * Отображение галереи изображений продукта
-     */
-    renderProductGallery() {
-        const mainImageContainer = document.getElementById('product-main-image-container');
-        const mainImage = document.getElementById('product-main-image');
-        const thumbnailsContainer = document.getElementById('product-thumbnails');
-        
-        if (!mainImage || !thumbnailsContainer || !this.currentProduct.images || this.currentProduct.images.length === 0) {
-            return;
-        }
-        
-        // Устанавливаем основное изображение
-        mainImage.src = this.currentProduct.images[0];
-        mainImage.alt = this.currentProduct.name;
-        
-        // Очищаем и заполняем миниатюры
-        thumbnailsContainer.innerHTML = '';
-        
-        this.currentProduct.images.forEach((image, index) => {
-            const button = document.createElement('button');
-            button.className = `product__thumbnail ${index === 0 ? 'active' : ''}`;
-            button.setAttribute('data-image', image);
-            
-            const img = document.createElement('img');
-            img.src = image.replace('.jpg', '-thumb.jpg').replace('.png', '-thumb.png');
-            img.alt = `${this.currentProduct.name} - фото ${index + 1}`;
-            
-            button.appendChild(img);
-            thumbnailsContainer.appendChild(button);
-            
-            // Добавляем обработчик события для переключения изображений
-            button.addEventListener('click', () => {
-                mainImage.src = image;
-                
-                // Обновляем активную миниатюру
-                document.querySelectorAll('.product__thumbnail').forEach(thumb => {
-                    thumb.classList.remove('active');
-                });
-                button.classList.add('active');
-            });
+
+    document.getElementById('product-page-description-short').innerHTML = `<p>${currentProduct.description}</p>`;
+
+    // Галерея
+    const mainImgEl = document.getElementById('product-main-image');
+    const thumbnailsContainerEl = document.getElementById('product-thumbnails-container');
+    const productImages = currentProduct.images || (currentProduct.image ? [currentProduct.image] : []);
+
+    if (mainImgEl && productImages.length > 0) {
+      mainImgEl.src = productImages[0];
+      mainImgEl.alt = currentProduct.name;
+      if (thumbnailsContainerEl) {
+        thumbnailsContainerEl.innerHTML = productImages.map((imgSrc, index) => `
+                <button class="product__thumbnail ${index === 0 ? 'active' : ''}" data-image-src="${imgSrc}">
+                    <img src="${imgSrc}" alt="Миниатюра ${currentProduct.name} ${index + 1}">
+                </button>
+            `).join('');
+        thumbnailsContainerEl.querySelectorAll('.product__thumbnail').forEach(thumb => {
+          thumb.addEventListener('click', function () {
+            mainImgEl.src = this.dataset.imageSrc;
+            thumbnailsContainerEl.querySelector('.active')?.classList.remove('active');
+            this.classList.add('active');
+          });
         });
+      }
+    } else if (mainImgEl) { // Если нет изображений, ставим плейсхолдер
+      mainImgEl.src = window.IMAGE_PLACEHOLDERS.PRODUCT;
+      mainImgEl.alt = "Изображение отсутствует";
+      if (thumbnailsContainerEl) thumbnailsContainerEl.innerHTML = '';
     }
-    
-    /**
-     * Отображение отзывов о продукте
-     */
-    renderReviews() {
-        if (!this.reviewsContainer) return;
-        
-        // Очищаем контейнер отзывов
-        this.reviewsContainer.innerHTML = '';
-        
-        // Если отзывов нет
-        if (!this.reviewsCache || this.reviewsCache.length === 0) {
-            this.reviewsContainer.innerHTML = '<p class="no-reviews">Отзывов пока нет. Будьте первым, кто оставит отзыв!</p>';
-            
-            // Обновляем счетчик отзывов
-            const reviewsCountElement = document.getElementById('reviews-count');
-            if (reviewsCountElement) {
-                reviewsCountElement.textContent = '0';
-            }
-            
-            return;
-        }
-        
-        // Обновляем счетчик отзывов
-        const reviewsCountElement = document.getElementById('reviews-count');
-        if (reviewsCountElement) {
-            reviewsCountElement.textContent = this.reviewsCache.length.toString();
-        }
-        
-        // Отображаем каждый отзыв
-        this.reviewsCache.forEach(review => {
-            const reviewCard = document.createElement('div');
-            reviewCard.className = 'review-card';
-            
-            const authorDiv = document.createElement('div');
-            authorDiv.className = 'review-card__author';
-            
-            const avatar = document.createElement('img');
-            avatar.className = 'review-card__avatar';
-            avatar.src = review.avatar || '../img/avatar-default.jpg';
-            avatar.alt = review.name;
-            
-            const authorInfo = document.createElement('div');
-            authorInfo.innerHTML = `
-                <strong>${review.name}</strong>
-                <div class="review-card__rating">${this.generateRatingStars(review.rating)}</div>
-                <div class="review-card__date">${review.date}</div>
-            `;
-            
-            authorDiv.appendChild(avatar);
-            authorDiv.appendChild(authorInfo);
-            
-            const reviewText = document.createElement('p');
-            reviewText.textContent = review.text;
-            
-            reviewCard.appendChild(authorDiv);
-            reviewCard.appendChild(reviewText);
-            
-            this.reviewsContainer.appendChild(reviewCard);
-        });
-        
-        // Обновляем сводную информацию о рейтинге
-        this.updateReviewsSummary();
+
+    // Вкладки
+    const descTabContent = document.getElementById('tab-panel-description'); // ID для контента вкладок
+    const compTabContent = document.getElementById('tab-panel-composition');
+
+    if (descTabContent) descTabContent.innerHTML = `<p>${currentProduct.details || currentProduct.description}</p>`;
+    if (compTabContent) {
+      if (currentProduct.composition && currentProduct.composition.length > 0) {
+        compTabContent.innerHTML = '<ul>' + currentProduct.composition.map(item => `<li>${item}</li>`).join('') + '</ul>';
+      } else {
+        compTabContent.innerHTML = '<p>Информация о составе отсутствует.</p>';
+      }
     }
-    
-    /**
-     * Обновление сводной информации о рейтинге
-     */
-    updateReviewsSummary() {
-        if (!this.reviewsCache || this.reviewsCache.length === 0) return;
-        
-        // Вычисляем средний рейтинг
-        const totalRating = this.reviewsCache.reduce((sum, review) => sum + review.rating, 0);
-        const averageRating = totalRating / this.reviewsCache.length;
-        
-        // Обновляем отображение среднего рейтинга
-        const reviewsStarsElement = document.querySelector('.product__reviews-stars');
-        const reviewsCountElement = document.querySelector('.product__reviews-count');
-        const reviewsTotalElement = document.querySelector('.product__reviews-total');
-        
-        if (reviewsStarsElement) {
-            reviewsStarsElement.innerHTML = this.generateRatingStars(averageRating);
-        }
-        
-        if (reviewsCountElement) {
-            reviewsCountElement.textContent = `${averageRating.toFixed(1)} из 5`;
-        }
-        
-        if (reviewsTotalElement) {
-            reviewsTotalElement.textContent = `На основе ${this.reviewsCache.length} отзывов`;
-        }
+
+    // Рейтинг и кол-во отзывов под названием товара
+    const ratingStarsDisplay = document.getElementById('product-header-rating-stars');
+    const reviewsCountDisplay = document.getElementById('product-header-reviews-count');
+    if (currentProduct.rating && ratingStarsDisplay) {
+      ratingStarsDisplay.innerHTML = window.Display.generateRatingStarsHTML(currentProduct.rating);
     }
-    
-    /**
-     * Отображение связанных товаров
-     */
-    renderRelatedProducts() {
-        if (!this.relatedProductsContainer || !this.productsCache) return;
-        
-        // Очищаем контейнер
-        this.relatedProductsContainer.innerHTML = '';
-        
-        // Находим товары из той же категории, исключая текущий
-        const relatedProducts = this.productsCache
-            .filter(product => 
-                product.category === this.currentProduct.category && 
-                product.id !== this.currentProduct.id
-            )
-            .slice(0, 4); // Ограничиваем до 4 товаров
-        
-        // Если связанных товаров нет
-        if (relatedProducts.length === 0) {
-            // Берем любые популярные товары
-            const popularProducts = this.productsCache
-                .filter(product => product.popular && product.id !== this.currentProduct.id)
-                .slice(0, 4);
-                
-            if (popularProducts.length > 0) {
-                this.renderProductCards(popularProducts);
-            } else {
-                this.relatedProductsContainer.innerHTML = '<p>Нет рекомендуемых товаров</p>';
-            }
-        } else {
-            this.renderProductCards(relatedProducts);
-        }
+    if (reviewsCountDisplay) {
+      const reviewsLength = currentProduct.reviews ? currentProduct.reviews.length : (currentProduct.reviewsCount || 0);
+      reviewsCountDisplay.textContent = `(${reviewsLength} ${getReviewPlural(reviewsLength)})`;
     }
-    
-    /**
-     * Отображение карточек товаров
-     * @param {Array} products - Массив товаров для отображения
-     */
-    renderProductCards(products) {
-        products.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            
-            // Формируем URL для страницы товара
-            const productUrl = `product.html?id=${product.id}`;
-            
-            // Определяем, есть ли скидка
-            const hasDiscount = product.oldPrice && product.oldPrice > product.price;
-            
-            card.innerHTML = `
-                <a href="${productUrl}" class="product-card__image-container">
-                    <img src="${product.image}" alt="${product.name}" class="product-card__image">
-                    ${hasDiscount ? `<span class="product-card__discount">-${product.discount}%</span>` : ''}
-                </a>
-                <div class="product-card__content">
-                    <h3 class="product-card__title">
-                        <a href="${productUrl}">${product.name}</a>
-                    </h3>
-                    <div class="product-card__rating">${this.generateRatingStars(product.rating)}</div>
-                    <div class="product-card__price-block">
-                        <div class="product-card__price">${product.price} ₽</div>
-                        ${hasDiscount ? `<div class="product-card__old-price">${product.oldPrice} ₽</div>` : ''}
-                    </div>
-                    <div class="product-card__actions">
-                        <button class="btn btn--primary btn--sm add-to-cart-btn" data-product-id="${product.id}">
-                            В корзину
-                        </button>
-                        <button class="btn btn--outline btn--sm add-to-wishlist-btn" data-product-id="${product.id}">
-                            <img src="../assets/heart.svg" alt="В избранное">
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            this.relatedProductsContainer.appendChild(card);
-        });
-    }
-    
-    /**
-     * Генерация HTML для отображения рейтинга звездами
-     * @param {number} rating - Рейтинг от 0 до 5
-     * @returns {string} HTML-код со звездами
-     */
-    generateRatingStars(rating) {
-        const fullStars = Math.floor(rating);
-        const halfStar = rating % 1 >= 0.5;
-        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-        
-        let starsHtml = '';
-        
-        // Полные звезды
-        for (let i = 0; i < fullStars; i++) {
-            starsHtml += '★';
-        }
-        
-        // Половина звезды
-        if (halfStar) {
-            starsHtml += '⯨';
-        }
-        
-        // Пустые звезды
-        for (let i = 0; i < emptyStars; i++) {
-            starsHtml += '☆';
-        }
-        
-        return starsHtml;
-    }
-    
-    /**
-     * Установка обработчиков событий
-     */
-    setupEventListeners() {
-        // Обработчик для кнопки "Добавить в корзину"
-        const addToCartBtn = document.getElementById('add-to-cart');
-        if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', () => this.addToCart());
-        }
-        
-        // Обработчик для кнопки "Добавить в избранное"
-        const addToWishlistBtn = document.getElementById('add-to-wishlist');
-        if (addToWishlistBtn) {
-            addToWishlistBtn.addEventListener('click', () => this.addToWishlist());
-        }
-        
-        // Обработчики для кнопок изменения количества
-        const quantityMinusBtn = document.getElementById('quantity-minus');
-        const quantityPlusBtn = document.getElementById('quantity-plus');
-        const quantityInput = document.getElementById('product-quantity');
-        
-        if (quantityMinusBtn && quantityInput) {
-            quantityMinusBtn.addEventListener('click', () => {
-                const currentValue = parseInt(quantityInput.value);
-                if (currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
-                }
-            });
-        }
-        
-        if (quantityPlusBtn && quantityInput) {
-            quantityPlusBtn.addEventListener('click', () => {
-                const currentValue = parseInt(quantityInput.value);
-                if (currentValue < 99) {
-                    quantityInput.value = currentValue + 1;
-                }
-            });
-        }
-        
-        // Обработчики для вкладок
-        const tabButtons = document.querySelectorAll('.product__tab-btn');
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Удаляем активный класс у всех кнопок и панелей
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.product__tab-panel').forEach(panel => {
-                    panel.classList.remove('active');
-                });
-                
-                // Добавляем активный класс текущей кнопке
-                button.classList.add('active');
-                
-                // Активируем соответствующую панель
-                const tabId = button.getAttribute('data-tab');
-                document.getElementById(`tab-${tabId}`).classList.add('active');
-            });
-        });
-        
-        // Обработчик для кнопки "Написать отзыв"
-        const writeReviewBtn = document.getElementById('write-review-btn');
-        const reviewModal = document.getElementById('review-modal');
-        const closeModalBtn = reviewModal?.querySelector('.modal__close');
-        const overlay = document.querySelector('.overlay');
-        
-        if (writeReviewBtn && reviewModal) {
-            writeReviewBtn.addEventListener('click', () => {
-                reviewModal.classList.add('active');
-                if (overlay) overlay.classList.add('active');
-            });
-        }
-        
-        if (closeModalBtn) {
-            closeModalBtn.addEventListener('click', () => {
-                reviewModal.classList.remove('active');
-                if (overlay) overlay.classList.remove('active');
-            });
-        }
-        
-        // Обработчик для формы отзыва
-        const reviewForm = document.getElementById('review-form');
-        if (reviewForm) {
-            reviewForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.submitReview();
-            });
-        }
-        
-        // Обработчики для выбора рейтинга
-        const ratingButtons = document.querySelectorAll('.rating-btn');
-        const ratingInput = document.getElementById('review-rating');
-        
-        if (ratingButtons.length && ratingInput) {
-            ratingButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const rating = parseInt(button.getAttribute('data-rating'));
-                    ratingInput.value = rating;
-                    
-                    // Обновляем визуальное отображение
-                    ratingButtons.forEach((btn, index) => {
-                        if (index < rating) {
-                            btn.classList.add('active');
-                        } else {
-                            btn.classList.remove('active');
-                        }
-                    });
-                });
-            });
-        }
-        
-        // Обработчики для связанных товаров
-        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const productId = parseInt(button.getAttribute('data-product-id'));
-                this.addToCart(productId);
-            });
-        });
-        
-        document.querySelectorAll('.add-to-wishlist-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const productId = parseInt(button.getAttribute('data-product-id'));
-                this.addToWishlist(productId);
-            });
-        });
-    }
-    
-    /**
-     * Добавление товара в корзину
-     * @param {number} productId - ID товара (если не указан, используется текущий товар)
-     */
-    addToCart(productId = null) {
-        const id = productId || this.currentProductId;
-        const quantity = productId ? 1 : parseInt(document.getElementById('product-quantity').value || 1);
-        
-        // Находим товар
-        const product = this.productsCache.find(p => p.id === id);
-        if (!product) return;
-        
-        // Получаем текущую корзину из localStorage
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        
-        // Проверяем, есть ли уже этот товар в корзине
-        const existingItemIndex = cart.findIndex(item => item.id === id);
-        
-        if (existingItemIndex >= 0) {
-            // Если товар уже в корзине, увеличиваем количество
-            cart[existingItemIndex].quantity += quantity;
-        } else {
-            // Если товара нет в корзине, добавляем его
-            cart.push({
-                id: id,
-                name: product.name,
-                price: product.price,
-                image: product.image,
-                quantity: quantity
-            });
-        }
-        
-        // Сохраняем обновленную корзину
-        localStorage.setItem('cart', JSON.stringify(cart));
-        
-        // Обновляем счетчик товаров в корзине
-        this.updateCartCount();
-        
-        // Показываем уведомление
-        this.showNotification('Товар добавлен в корзину');
-    }
-    
-    /**
-     * Добавление товара в избранное
-     * @param {number} productId - ID товара (если не указан, используется текущий товар)
-     */
-    addToWishlist(productId = null) {
-        const id = productId || this.currentProductId;
-        
-        // Находим товар
-        const product = this.productsCache.find(p => p.id === id);
-        if (!product) return;
-        
-        // Получаем текущий список избранного из localStorage
-        let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        
-        // Проверяем, есть ли уже этот товар в избранном
-        const existingItemIndex = wishlist.findIndex(item => item.id === id);
-        
-        if (existingItemIndex >= 0) {
-            // Если товар уже в избранном, удаляем его
-            wishlist.splice(existingItemIndex, 1);
-            this.showNotification('Товар удален из избранного');
-        } else {
-            // Если товара нет в избранном, добавляем его
-            wishlist.push({
-                id: id,
-                name: product.name,
-                price: product.price,
-                image: product.image
-            });
-            this.showNotification('Товар добавлен в избранное');
-        }
-        
-        // Сохраняем обновленный список избранного
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        
-        // Обновляем визуальное отображение кнопки избранного
-        this.updateWishlistButton();
-    }
-    
-    /**
-     * Обновление счетчика товаров в корзине
-     */
-    updateCartCount() {
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        
-        // Обновляем все элементы с классом data-cart-count
-        document.querySelectorAll('[data-cart-count]').forEach(element => {
-            element.textContent = totalItems.toString();
-        });
-    }
-    
-    /**
-     * Обновление визуального отображения кнопки избранного
-     */
-    updateWishlistButton() {
-        const wishlistBtn = document.getElementById('add-to-wishlist');
-        if (!wishlistBtn) return;
-        
-        const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        const isInWishlist = wishlist.some(item => item.id === this.currentProductId);
-        
-        if (isInWishlist) {
-            wishlistBtn.classList.add('active');
-        } else {
-            wishlistBtn.classList.remove('active');
-        }
-    }
-    
-    /**
-     * Отправка нового отзыва
-     */
-    submitReview() {
-        const nameInput = document.getElementById('review-name');
-        const ratingInput = document.getElementById('review-rating');
-        const textInput = document.getElementById('review-text');
-        
-        if (!nameInput || !ratingInput || !textInput) return;
-        
-        const name = nameInput.value.trim();
-        const rating = parseInt(ratingInput.value);
-        const text = textInput.value.trim();
-        
-        if (!name || !text || isNaN(rating)) {
-            this.showNotification('Пожалуйста, заполните все поля формы', 'error');
-            return;
-        }
-        
-        // Создаем новый отзыв
-        const newReview = {
-            productId: this.currentProductId,
-            name: name,
-            avatar: '../img/avatar-default.jpg',
-            date: new Date().toLocaleDateString('ru-RU'),
-            rating: rating,
-            text: text
-        };
-        
-        // Добавляем отзыв в кэш
-        if (!this.reviewsCache) {
-            this.reviewsCache = [];
-        }
-        this.reviewsCache.unshift(newReview);
-        
-        // Сохраняем отзыв в localStorage для демонстрации
-        // В реальном приложении здесь был бы запрос к API для сохранения в базе данных
-        const allReviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-        allReviews.push(newReview);
-        localStorage.setItem('reviews', JSON.stringify(allReviews));
-        
-        // Обновляем отображение отзывов
-        this.renderReviews();
-        
-        // Закрываем модальное окно
-        const reviewModal = document.getElementById('review-modal');
-        const overlay = document.querySelector('.overlay');
-        
-        if (reviewModal) {
-            reviewModal.classList.remove('active');
-        }
-        
-        if (overlay) {
-            overlay.classList.remove('active');
-        }
-        
-        // Сбрасываем форму
-        document.getElementById('review-form').reset();
-        
-        // Показываем уведомление
-        this.showNotification('Спасибо за ваш отзыв!');
-    }
-    
-    /**
-     * Отображение уведомления
-     * @param {string} message - Текст уведомления
-     * @param {string} type - Тип уведомления ('success', 'error', 'info')
-     */
-    showNotification(message, type = 'success') {
-        // Проверяем, существует ли уже контейнер для уведомлений
-        let notificationContainer = document.querySelector('.notification-container');
-        
-        if (!notificationContainer) {
-            // Создаем контейнер, если его нет
-            notificationContainer = document.createElement('div');
-            notificationContainer.className = 'notification-container';
-            document.body.appendChild(notificationContainer);
-        }
-        
-        // Создаем уведомление
-        const notification = document.createElement('div');
-        notification.className = `notification notification--${type}`;
-        notification.textContent = message;
-        
-        // Добавляем уведомление в контейнер
-        notificationContainer.appendChild(notification);
-        
-        // Удаляем уведомление через 3 секунды
-        setTimeout(() => {
-            notification.classList.add('notification--hide');
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 3000);
-    }
-    
-    /**
-     * Отображение сообщения об ошибке
-     * @param {string} message - Текст сообщения об ошибке
-     */
-    showErrorMessage(message) {
-        if (!this.productDetailsContainer) return;
-        
-        this.productDetailsContainer.innerHTML = `
-            <div class="error-message">
-                <h2>Ошибка</h2>
-                <p>${message}</p>
-                <a href="catalog.html" class="btn btn--primary">Перейти в каталог</a>
+  }
+
+  async function renderProductReviews() {
+    const reviewsContainer = document.getElementById('tab-panel-reviews'); // ID для контента вкладки отзывов
+    const reviewsSectionTitle = document.getElementById('reviews-section-title'); // Заголовок секции "Отзывы (N)"
+    if (!reviewsContainer) return;
+
+    try {
+      // Используем отзывы, вложенные в товар, если они есть, иначе запрашиваем по API
+      const reviews = currentProduct.reviews && currentProduct.reviews.length > 0
+        ? currentProduct.reviews
+        : await API.getReviewsByProductId(currentProductId);
+
+      if (reviewsSectionTitle) {
+        reviewsSectionTitle.textContent = `Отзывы (${reviews ? reviews.length : 0})`;
+      }
+
+      if (reviews && reviews.length > 0) {
+        reviewsContainer.innerHTML = reviews.map(review => `
+          <div class="review-card">
+            <div class="review-card__header">
+              <img src="${review.avatar || window.IMAGE_PLACEHOLDERS.AVATAR_DEFAULT}" alt="${review.author || review.name}" class="review-card__avatar">
+              <div class="review-card__author-info">
+                <strong class="review-card__author-name">${review.author || review.name}</strong>
+                <div class="review-card__date">${new Date(review.dateObj || review.date).toLocaleDateString('ru-RU')}</div>
+              </div>
             </div>
-        `;
+            <div class="review-card__rating">${window.Display.generateRatingStarsHTML(review.rating)}</div>
+            <p class="review-card__text">${review.text}</p>
+          </div>
+        `).join('');
+      } else {
+        reviewsContainer.innerHTML = '<p>Отзывов о товаре пока нет. Будьте первым!</p>';
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки отзывов для товара:', error);
+      reviewsContainer.innerHTML = '<p class="error-message">Не удалось загрузить отзывы.</p>';
     }
-}
+  }
 
-// Создаем экземпляр класса при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
-    const productManager = new ProductManager();
-});
+  async function renderRelatedProducts() {
+    const relatedContainer = document.getElementById('related-products-section-container'); // ID контейнера для похожих товаров
+    if (!relatedContainer || !currentProduct || !currentProduct.category) return; // Нужна категория для поиска похожих
+
+    relatedContainer.innerHTML = '<div class="loading-spinner">Загрузка похожих товаров...</div>';
+    try {
+      let related = await API.getProductsByCategory(currentProduct.category); // category - это slug
+      related = related.filter(p => p.id !== currentProductId).slice(0, 4);
+
+      if (related.length === 0 && currentProduct.popular) { // Если нет в той же категории, ищем популярные (кроме текущего)
+        const popular = await API.getPopularProducts();
+        related = popular.filter(p => p.id !== currentProductId).slice(0, 4);
+      }
+
+      if (related.length > 0) {
+        relatedContainer.innerHTML = `<h3>Похожие товары</h3><div class="product-grid">` +
+          related.map(window.createProductCardHTML).join('') +
+          `</div>`;
+        if (window.Search && Search.setupProductCardActionsForContainer) {
+          Search.setupProductCardActionsForContainer(relatedContainer.querySelector('.product-grid'));
+        }
+      } else {
+        relatedContainer.innerHTML = '<h3>Похожие товары</h3><p>Похожие товары не найдены.</p>';
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки похожих товаров:', error);
+      relatedContainer.innerHTML = '<h3>Похожие товары</h3><p class="error-message">Не удалось загрузить.</p>';
+    }
+  }
+
+  function setupProductPageEventListeners() {
+    const addToCartBtn = document.getElementById('product-page-add-to-cart-btn');
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', () => {
+        if (currentProduct) {
+          const quantityInput = document.getElementById('product-quantity-input');
+          const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+          if (quantity > 0) window.Cart.addToCart(currentProduct.id, quantity, currentProduct);
+          else showNotification("Выберите количество товара", true);
+        }
+      });
+    }
+
+    const quantityInput = document.getElementById('product-quantity-input');
+    const plusBtn = document.getElementById('product-quantity-plus');
+    const minusBtn = document.getElementById('product-quantity-minus');
+
+    if (plusBtn && quantityInput) {
+      plusBtn.addEventListener('click', () => {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+      });
+    }
+    if (minusBtn && quantityInput) {
+      minusBtn.addEventListener('click', () => {
+        let val = parseInt(quantityInput.value);
+        if (val > 1) quantityInput.value = val - 1;
+      });
+    }
+
+    // Вкладки
+    const tabButtons = document.querySelectorAll('.product-tabs__nav-btn'); // Кнопки навигации вкладок
+    const tabPanels = document.querySelectorAll('.product-tabs__panel'); // Панели контента вкладок
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanels.forEach(panel => panel.classList.remove('active'));
+        this.classList.add('active');
+        const targetPanelId = this.getAttribute('data-tab-target'); // e.g., "description", "composition", "reviews"
+        document.getElementById(`tab-panel-${targetPanelId}`)?.classList.add('active');
+      });
+    });
+    // Активируем первую вкладку по умолчанию
+    if (tabButtons.length > 0 && tabPanels.length > 0) {
+      tabButtons[0].classList.add('active');
+      const firstPanelId = tabButtons[0].getAttribute('data-tab-target');
+      document.getElementById(`tab-panel-${firstPanelId}`)?.classList.add('active');
+    }
+
+
+    const wishlistBtn = document.getElementById('product-page-wishlist-btn'); // Главная кнопка избранного
+    if (wishlistBtn) {
+      wishlistBtn.addEventListener('click', function () {
+        if (!currentProduct) return;
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const productId = currentProduct.id;
+        const index = wishlist.indexOf(productId);
+        const heartIcon = this.querySelector('img');
+
+        if (index > -1) {
+          wishlist.splice(index, 1);
+          this.classList.remove('active');
+          if (heartIcon) heartIcon.src = window.ASSET_PATHS.HEART_SVG;
+          showNotification('Удалено из избранного');
+        } else {
+          wishlist.push(productId);
+          this.classList.add('active');
+          if (heartIcon) heartIcon.src = window.ASSET_PATHS.HEART_FILLED_SVG;
+          showNotification('Добавлено в избранное');
+        }
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      });
+    }
+  }
+
+  function updateMainWishlistButtonState() {
+    const wishlistBtn = document.getElementById('product-page-wishlist-btn');
+    if (!wishlistBtn || !currentProduct) return;
+    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    const heartIcon = wishlistBtn.querySelector('img');
+    if (wishlist.includes(currentProduct.id)) {
+      wishlistBtn.classList.add('active');
+      if (heartIcon) heartIcon.src = window.ASSET_PATHS.HEART_FILLED_SVG;
+    } else {
+      wishlistBtn.classList.remove('active');
+      if (heartIcon) heartIcon.src = window.ASSET_PATHS.HEART_SVG;
+    }
+  }
+
+  function getReviewPlural(count) {
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+    if (lastDigit === 1 && lastTwoDigits !== 11) return "отзыв";
+    if (lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 10 || lastTwoDigits >= 20)) return "отзыва";
+    return "отзывов";
+  }
+
+  function showErrorPage(message) {
+    const mainContentContainer = document.querySelector('.product-page-container, main'); // Основной контейнер страницы
+    const loadingEl = document.getElementById('product-page-loading');
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (mainContentContainer) {
+      mainContentContainer.innerHTML =
+        `<div class="container error-page-message">
+           <h2>Ошибка</h2>
+           <p>${message}</p>
+           <a href="index.html" class="btn btn-primary">На главную</a>
+         </div>`;
+    }
+  }
+
+  // Инициализация, если мы на странице товара
+  if (document.querySelector('.product-page-container')) { // Проверка по уникальному классу контейнера страницы
+    document.addEventListener('DOMContentLoaded', initProductPage);
+  }
+})();

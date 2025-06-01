@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Каталог цветов и букетов в Цветочном Раю - широкий выбор свежих цветов">
-  <meta name="keywords" content="цветы, букеты, розы, каталог цветов, купить цветы">
-  <title>Каталог - Цветочный Рай</title>
+  <meta name="description" content="Каталог цветов и букетов в Floww - широкий выбор свежих цветов для любого повода.">
+  <meta name="keywords" content="цветы, букеты, розы, каталог цветов, купить цветы, доставка цветов, Floww">
+  <title>Каталог - Floww</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
 </head>
@@ -27,9 +27,10 @@
     <div class="header__actions">
       <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
                                                                                   alt="Поиск"></button>
-      <button class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg" alt="Аккаунт"></button>
-      <button class="header__action-btn" aria-label="Избранное"><img src="../assets/heart.svg"
-                                                                     alt="Избранное"></button>
+      <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
+                                                                               alt="Аккаунт"></a>
+      <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img src="../assets/favorite.svg"
+                                                                                     alt="Избранное"></a>
       <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
         <img src="../assets/cart.svg" alt="Корзина">
         <span class="cart-count" data-cart-count>0</span>
@@ -43,49 +44,53 @@
 
 <main class="catalog-page">
   <div class="container">
-
     <h1 class="page-title">Каталог цветов</h1>
 
     <div class="catalog__filters-wrapper">
       <div class="catalog__controls">
-        <input type="search" id="catalog-search" placeholder="Поиск по каталогу..." class="search-input">
-        <button class="filter-btn mobile-filter-btn" id="toggle-filters" aria-label="Фильтры">☰ Фильтры</button>
+        <input type="search" id="catalog-search-input" placeholder="Поиск в каталоге..."
+               class="search-input catalog-page__search-input">
+        <button class="filter-btn mobile-filter-btn" id="toggle-filters-mobile-btn" aria-label="Фильтры">
+          <img src="../assets/filter-icon.svg" alt="" class="filter-btn__icon"> <!-- Иконка для кнопки фильтров -->
+          Фильтры
+        </button>
       </div>
 
-      <div class="catalog__filters" id="filters-panel">
+      <aside class="catalog__filters" id="filters-panel-mobile">
+        <!-- Панель фильтров (может быть скрыта на мобильных) -->
         <div class="filter-group">
           <h3 class="filter-group__title">Категории</h3>
-          <select id="category-filter" aria-label="Фильтр по категориям">
+          <select id="category-filter" class="form-select" aria-label="Фильтр по категориям">
             <option value="all">Все категории</option>
-            <!-- Категории будут добавлены JS -->
+            <!-- Опции категорий будут добавлены JS -->
           </select>
         </div>
 
         <div class="filter-group">
-          <h3 class="filter-group__title">Цена</h3>
+          <h3 class="filter-group__title">Цена, ₽</h3>
           <div class="price-filter">
-            <input type="number" id="price-min" placeholder="От" min="0" class="price-input">
-            <span>—</span>
-            <input type="number" id="price-max" placeholder="До" min="0" class="price-input">
+            <input type="number" id="price-min" placeholder="От" min="0" class="form-input price-input">
+            <span class="price-filter__separator">—</span>
+            <input type="number" id="price-max" placeholder="До" min="0" class="form-input price-input">
           </div>
         </div>
 
         <div class="filter-group">
           <h3 class="filter-group__title">Сортировка</h3>
-          <select id="sort-filter" aria-label="Сортировка">
-            <option value="default">По умолчанию</option>
-            <option value="price_asc">По цене (возр)</option>
-            <option value="price_desc">По цене (убыв)</option>
+          <select id="sort-filter" class="form-select" aria-label="Сортировка">
+            <option value="popular">По популярности</option>
+            <option value="price_asc">По цене (сначала дешевле)</option>
+            <option value="price_desc">По цене (сначала дороже)</option>
             <option value="name_asc">По названию (А-Я)</option>
             <option value="name_desc">По названию (Я-А)</option>
           </select>
         </div>
 
         <div class="filter-group">
-          <h3 class="filter-group__title">Скидки</h3>
+          <!-- <h3 class="filter-group__title">Дополнительно</h3> -->
           <div class="checkbox-filter">
             <label class="checkbox-label">
-              <input type="checkbox" id="discount-filter">
+              <input type="checkbox" id="discount-filter" class="form-checkbox">
               <span class="custom-checkbox"></span>
               Только со скидкой
             </label>
@@ -93,33 +98,28 @@
         </div>
 
         <div class="filter-actions">
-          <button class="btn btn--secondary" id="apply-filters">Применить</button>
-          <button class="btn btn--outline" id="reset-filters">Сбросить</button>
+          <button class="btn btn-primary btn-block" id="apply-filters-btn">Применить фильтры</button>
+          <button class="btn btn-outline btn-block" id="reset-filters-btn">Сбросить все</button>
         </div>
-      </div>
+      </aside>
     </div>
 
     <div class="catalog__results">
       <div class="catalog__summary">
-        <p>Найдено товаров: <span id="products-count">0</span></p>
+        <p><span id="products-count">0 товаров</span></p>
       </div>
 
+      <div id="catalog-loading-indicator" class="loading-indicator"
+           style="display: none; text-align: center; padding: 20px;">
+        <div class="spinner"></div> <!-- Простой спиннер, стилизуйте в CSS -->
+        Загрузка товаров...
+      </div>
       <div class="catalog__grid product-grid" id="catalog-products-container">
-        <!-- Товары каталога будут загружены из JSON -->
+        <!-- Плейсхолдеры для визуализации загрузки (можно удалить, если есть хороший индикатор) -->
+        <!--
         <div class="product-card-placeholder"></div>
         <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
-        <div class="product-card-placeholder"></div>
+        -->
       </div>
     </div>
   </div>
@@ -137,39 +137,34 @@
       <ul class="footer__list">
         <li><a href="index.html">Главная</a></li>
         <li><a href="catalog.html">Каталог</a></li>
-        <li><a href="index.html#delivery">Доставка</a></li>
-        <li><a href="index.html#about">О нас</a></li>
+        <li><a href="delivery.html">Доставка</a></li>
+        <li><a href="about.html">О нас</a></li>
         <li><a href="contact.html">Контакты</a></li>
       </ul>
     </div>
     <div class="footer__column">
       <h4 class="footer__title">Категории</h4>
-      <ul class="footer__list" id="footer-categories">
-        <!-- Категории будут загружены из JSON -->
-        <li><a href="catalog.html?category=bouquets">Букеты</a></li>
-        <li><a href="catalog.html?category=roses">Розы</a></li>
-        <li><a href="catalog.html?category=plants">Комнатные растения</a></li>
-        <li><a href="catalog.html?category=gifts">Подарки</a></li>
-        <li><a href="catalog.html?category=wedding">Свадебные букеты</a></li>
+      <ul class="footer__list" id="footer-categories-list">
+        <!-- Категории будут загружены JavaScript -->
       </ul>
     </div>
     <div class="footer__column">
       <h4 class="footer__title">Контакты</h4>
       <address class="footer__contact-info">
-        <p>ул. Баумана, 123<br>Казань, Россия</p>
-        <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
-        <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
+        <p>ул. Цветочная, 10<br>Москва, Россия</p>
+        <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+        <p>Email: <a href="mailto:hello@floww.com">hello@floww.com</a></p>
       </address>
       <div class="footer__socials">
-        <a href="#" aria-label="Facebook"><img src="../assets/FacebookDark.svg" alt="Facebook"></a>
-        <a href="#" aria-label="Instagram"><img src="../assets/InstagramDark.svg" alt="Instagram"></a>
-        <a href="#" aria-label="VK"><img src="../assets/icons8-vk (1).svg" alt="VK"></a>
+        <a href="#" aria-label="Facebook"><img src="../assets/facebook.svg" alt="Facebook"></a>
+        <a href="#" aria-label="Instagram"><img src="../assets/instagram.svg" alt="Instagram"></a>
+        <a href="#" aria-label="VK"><img src="../assets/vk.svg" alt="VK"></a>
       </div>
     </div>
   </div>
   <div class="footer__bottom">
     <div class="container footer__bottom-container">
-      <p>© 2025 Floww. Все права защищены.</p>
+      <p>© 2024 Floww. Все права защищены.</p>
       <nav>
         <a href="#">Политика конфиденциальности</a>
         <a href="#">Условия использования</a>
@@ -185,40 +180,50 @@
     <ul>
       <li><a href="index.html">Главная</a></li>
       <li><a href="catalog.html">Каталог</a></li>
-      <li><a href="index.html#delivery">Доставка</a></li>
-      <li><a href="index.html#about">О нас</a></li>
+      <li><a href="delivery.html">Доставка</a></li>
+      <li><a href="about.html">О нас</a></li>
       <li><a href="contact.html">Контакты</a></li>
     </ul>
   </nav>
   <div class="mobile-menu__actions">
     <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
-    <!-- Другие действия если нужно -->
   </div>
 </div>
-<div class="overlay"></div>
+<div class="overlay"></div> <!-- Оверлей для мобильного меню и модалок -->
 
 <!-- Модальное окно поиска -->
 <div class="search-modal" id="searchModal">
   <div class="search-modal__content">
-    <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
+    <button class="search-modal__close" id="closeSearchModalBtn" aria-label="Закрыть поиск"></button>
     <h2 class="search-modal__title">Поиск товаров</h2>
     <form class="search-form" id="modalSearchForm">
       <div class="search-input-container">
-        <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
+        <input type="search" id="modalSearchInput" placeholder="Название товара или артикул..."
                aria-label="Поиск по каталогу" autofocus>
         <button type="submit" class="btn btn-primary">Найти</button>
       </div>
     </form>
-    <div class="search-modal__results" id="modalSearchResults">
-      <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+    <div class="search-modal__results" id="modalSearchResultsContainer">
       <p class="search-hint">Введите запрос для поиска по каталогу</p>
     </div>
   </div>
 </div>
 
-<script src="../js/cart.js"></script>
-<script src="../js/catalog.js"></script>
-<script src="../js/main.js" type="module"></script>
-</body>
+<!-- Подключение скриптов -->
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/templates.js"></script>
 
+<script src="../js/cart.js"></script>
+<script src="../js/auth.js"></script>
+
+<script src="../js/menu.js"></script>
+<script src="../js/search.js"></script> <!-- Важен для setupProductCardActionsForContainer -->
+
+<script src="../js/display.js"></script> <!-- Для футера -->
+
+<script src="../js/catalog.js"></script> <!-- Специфичный для этой страницы -->
+
+<script src="../js/app.js"></script>
+</body>
 </html>

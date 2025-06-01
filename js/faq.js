@@ -1,20 +1,30 @@
+// js/faq.js
 document.addEventListener('DOMContentLoaded', function () {
-  // Находим все FAQ элементы
   const faqItems = document.querySelectorAll('.faq-item');
 
-  console.log("FAQ.js script loaded and running.", faqItems.length);
-  // Добавляем обработчик события для каждого вопроса
+  if (faqItems.length === 0) {
+    // console.log("FAQ.js: Элементы .faq-item не найдены на странице.");
+    return;
+  }
+
   faqItems.forEach(item => {
     const question = item.querySelector('.faq-question');
+    const answer = item.querySelector('.faq-answer'); // Для управления высотой, если нужно
 
     if (question) {
       question.addEventListener('click', () => {
-        // Проверяем, активен ли текущий элемент
+        const isActive = item.classList.contains('active');
+        // Можно закрывать другие открытые ответы, если нужно поведение аккордеона
         item.classList.toggle('active');
-        console.log('Clicked:', question.textContent);
+
+        if (answer) {
+          if (item.classList.contains('active')) {
+            answer.style.maxHeight = answer.scrollHeight + "px";
+          } else {
+            answer.style.maxHeight = null;
+          }
+        }
       });
     }
   });
 });
-
-

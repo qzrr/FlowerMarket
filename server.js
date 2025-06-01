@@ -1,164 +1,132 @@
+// server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const sqlite3 = require("sqlite3");
 const path = require("path");
+
+const Database = require("./data/db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const db = new sqlite3.Database("./flowers.db", (err) => {
-  if (err) console.error("Ошибка подключения к БД:", err.message);
-  else console.log("Подключено к SQLite");
-});
-
-// Middleware
 app.use(cors());
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false })); // Настройте CSP для продакшена
 app.use(express.json());
 app.use(morgan("dev"));
 
-// Статика
+// Статика: пути от корня проекта
 app.use("/css", express.static(path.join(__dirname, "css")));
 app.use("/js", express.static(path.join(__dirname, "js")));
-app.use("/img", express.static(path.join(__dirname, "img")));
-app.use("/assets", express.static(path.join(__dirname, "assets")));
-app.use(express.static(path.join(__dirname, "pages"))); // fallback
+app.use("/img", express.static(path.join(__dirname, "img"))); // Для /img/products/..., /img/categories/...
+app.use("/assets", express.static(path.join(__dirname, "assets"))); // Для /assets/heart.svg и т.д.
 
-const Database = require("./data/db");
+// Обслуживание HTML файлов из папки pages/ ИЛИ из корня
+app.use(express.static(path.join(__dirname, "pages"))); // Если страницы в /pages/
+// app.use(express.static(path.join(__dirname))); // Если index.html и др. в корне
 
-//API маршруты
+// API маршруты
 app.get("/api/products", async (req, res, next) => {
   try {
     const products = await Database.getProducts();
     res.json(products);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
 app.get("/api/products/popular", async (req, res, next) => {
   try {
     const products = await Database.getPopularProducts();
     res.json(products);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
 app.get("/api/products/category/:category", async (req, res, next) => {
   try {
     const products = await Database.getProductsByCategory(req.params.category);
     res.json(products);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
-app.get("/api/products/search", (req, res, next) => {
-  const searchQuery = req.query.q?.toLowerCase() || "";
-
-  if (searchQuery.length < 3) {
-    return res
-      .status(400)
-      .json({error: "Поисковый запрос должен содержать минимум 3 символа"});
-  }
-
-  db.all(
-    `
-      SELECT p.*,
-             GROUP_CONCAT(DISTINCT i.image_url)              AS images,
-             GROUP_CONCAT(DISTINCT c.item)                   AS composition,
-             GROUP_CONCAT(DISTINCT s.name || '|' || s.price) AS sizes
-      FROM products p
-             LEFT JOIN images i ON p.id = i.product_id
-             LEFT JOIN compositions c ON p.id = c.product_id
-             LEFT JOIN sizes s ON p.id = s.product_id
-      WHERE LOWER(p.name) LIKE ?
-         OR LOWER(p.description) LIKE ?
-         OR LOWER(p.categoryName) LIKE ?
-      GROUP BY p.id
-      ORDER BY p.name
-    `,
-    [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`],
-    (err, rows) => {
-      if (err) return next(err);
-      const products = rows.map((row) => ({
-        ...row,
-        images: row.images ? row.images.split(",") : [],
-        composition: row.composition ? row.composition.split(",") : [],
-        sizes: row.sizes
-          ? row.sizes.split(",").map((size) => {
-            const [name, price] = size.split("|");
-            return {name, price: parseInt(price)};
-          })
-          : [],
-      }));
-      res.json(products);
+app.get("/api/products/search", async (req, res, next) => {
+  try {
+    const searchQuery = req.query.q || "";
+    if (searchQuery.length > 0 && searchQuery.length < 3) { // Пустой запрос может быть валидным
+      return res.status(400).json({ error: "Поисковый запрос должен содержать минимум 3 символа" });
     }
-  );
+    const products = await Database.searchProducts(searchQuery);
+    res.json(products);
+  } catch (error) { next(error); }
 });
 
 app.get("/api/products/:id", async (req, res, next) => {
   try {
     const product = await Database.getProductById(req.params.id);
-    if (!product) return res.status(404).json({error: "Продукт не найден"});
+    if (!product) return res.status(404).json({ error: "Продукт не найден" });
     res.json(product);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
 app.get("/api/categories", async (req, res, next) => {
   try {
     const categories = await Database.getCategories();
     res.json(categories);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
 app.get("/api/promos", async (req, res, next) => {
   try {
     const promos = await Database.getPromos();
     res.json(promos);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
-app.get("/api/reviews", async (req, res, next) => {
+app.get("/api/reviews", async (req, res, next) => { // Общие отзывы
   try {
     const reviews = await Database.getReviews();
     res.json(reviews);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
 app.get("/api/reviews/product/:productId", async (req, res, next) => {
   try {
     const reviews = await Database.getReviewsByProductId(req.params.productId);
     res.json(reviews);
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 });
 
-// Стартовая страница
+app.get("/api/users", async (req, res, next) => {
+  try {
+    const users = await Database.getUsers();
+    res.json(users);
+  } catch (error) { next(error); }
+});
+
+// Отдача index.html для корневого маршрута
 app.get("/", (req, res) => {
-  res.send("Добро пожаловать в API цветочного магазина!");
+  const indexPathPages = path.join(__dirname, "pages", "index.html");
+  const indexPathRoot = path.join(__dirname, "index.html");
+
+  res.sendFile(indexPathPages, (err) => {
+    if (err) { // Если не нашли в pages/
+      res.sendFile(indexPathRoot, (errRoot) => {
+        if (errRoot) { // Если не нашли и в корне
+          res.status(404).send("Главная страница (index.html) не найдена.");
+        }
+      });
+    }
+  });
 });
 
-// Универсальный обработчик ошибок
+// Обработчик ошибок
 app.use((err, req, res, next) => {
-  console.error("Ошибка:", err);
-  res.status(500).json({error: "Внутренняя ошибка сервера"});
+  console.error("Ошибка сервера:", err.stack || err.message || err);
+  res.status(err.status || 500).json({
+    error: err.message || "Внутренняя ошибка сервера",
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
 });
 
-// Старт сервера
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}`);
 });

@@ -1,439 +1,183 @@
-/**
- * Catalog.js - Модуль для работы с каталогом товаров
- * Обеспечивает загрузку и отображение всех товаров из JSON базы данных
- */
+// js/catalog.js
+(function () {
+  let productsOnPageCache = [];
+  let categoriesCache = [];
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Инициализация каталога
-    initCatalog();
-});
+  async function initCatalog() {
+    const loadingEl = document.getElementById('catalog-loading-indicator');
+    const pageTitleEl = document.querySelector('.page-title');
+    const productsContainerEl = document.getElementById('catalog-products-container');
 
-/**
- * Инициализация каталога
- */
-async function initCatalog() {
+    if (loadingEl) loadingEl.style.display = 'block';
+    if (productsContainerEl) productsContainerEl.innerHTML = '';
+
     try {
-        // Загружаем категории для фильтра
-        const categories = await loadCategories();
-        populateCategoryFilter(categories);
-        
-        // Загружаем все товары из JSON
-        const products = await loadAllProducts();
-        
-        // Проверяем, есть ли параметр категории в URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryParam = urlParams.get('category');
-        
-        // Фильтруем товары по категории, если указана
-        let filteredProducts = products;
-        if (categoryParam && categoryParam !== 'all') {
-            filteredProducts = products.filter(product => product.category === categoryParam);
-            
-            // Обновляем заголовок страницы
-            const categoryName = categories.find(cat => cat.id === categoryParam)?.name || 'Все товары';
-            document.querySelector('.page-title').textContent = categoryName;
-        }
-        
-        // Отображаем товары
-        displayCatalogProducts(filteredProducts);
-        
-        // Настраиваем фильтры и сортировку
-        setupFilters(products);
-        
-    } catch (error) {
-        console.error('Ошибка инициализации каталога:', error);
-        showErrorMessage('Не удалось загрузить каталог товаров. Пожалуйста, попробуйте позже.');
-    }
-}
+      categoriesCache = await API.getCategories();
+      populateCategoryFilter(categoriesCache);
 
-/**
- * Загрузка всех товаров из JSON
- * @returns {Promise<Array>} Массив товаров
- */
-async function loadAllProducts() {
-    try {
-        const response = await fetch('../data/products.json');
-        if (!response.ok) {
-            throw new Error(`HTTP ошибка! Статус: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Ошибка загрузки товаров:', error);
-        // Возвращаем пустой массив в случае ошибки
-        return [];
-    }
-}
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryParam = urlParams.get('category');
+      const searchParam = urlParams.get('search');
 
-/**
- * Загрузка категорий из JSON
- * @returns {Promise<Array>} Массив категорий
- */
-async function loadCategories() {
-    try {
-        const response = await fetch('../data/categories.json');
-        if (!response.ok) {
-            throw new Error(`HTTP ошибка! Статус: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Ошибка загрузки категорий:', error);
-        // Возвращаем пустой массив в случае ошибки
-        return [];
-    }
-}
+      if (searchParam) {
+        if (pageTitleEl) pageTitleEl.textContent = `Поиск: "${searchParam}"`;
+        productsOnPageCache = await API.searchProducts(searchParam);
+      } else if (categoryParam && categoryParam !== 'all') {
+        const category = categoriesCache.find(c => (c.id && String(c.id) === categoryParam) || (c.slug && c.slug === categoryParam));
+        if (pageTitleEl) pageTitleEl.textContent = category ? category.name : 'Каталог';
+        productsOnPageCache = await API.getProductsByCategory(categoryParam);
+      } else {
+        if (pageTitleEl) pageTitleEl.textContent = 'Все товары';
+        productsOnPageCache = await API.getProducts();
+      }
 
-/**
- * Отображение товаров в каталоге
- * @param {Array} products Массив товаров для отображения
- */
-function displayCatalogProducts(products) {
+      displayCatalogProducts(productsOnPageCache);
+      setupFilterAndSortControls();
+      if (window.Search && Search.setupProductCardActionsForContainer && productsContainerEl) {
+        Search.setupProductCardActionsForContainer(productsContainerEl);
+      }
+
+    } catch (error) {
+      console.error('Ошибка инициализации каталога:', error);
+      if (productsContainerEl) productsContainerEl.innerHTML = '<p class="catalog-empty error-message">Ошибка загрузки товаров.</p>';
+      showNotification('Ошибка загрузки каталога.', true);
+    } finally {
+      if (loadingEl) loadingEl.style.display = 'none';
+    }
+  }
+
+  function displayCatalogProducts(products) {
     const container = document.getElementById('catalog-products-container');
-    const countElement = document.getElementById('products-count');
-    
+    const countEl = document.getElementById('products-count');
     if (!container) return;
-    
-    if (products.length === 0) {
-        container.innerHTML = '<p class="catalog-empty">Товары не найдены</p>';
-        if (countElement) countElement.textContent = '0';
-        return;
+
+    if (!products || products.length === 0) {
+      container.innerHTML = '<p class="catalog-empty">Товары не найдены. Попробуйте изменить фильтры.</p>';
+      if (countEl) countEl.textContent = '0 товаров';
+      return;
     }
-    
-    // Создаем HTML для каждого товара
-    const productsHTML = products.map(product => createProductCardHTML(product)).join('');
-    container.innerHTML = productsHTML;
-    
-    // Обновляем счетчик товаров
-    if (countElement) {
-        countElement.textContent = products.length;
+    container.innerHTML = products.map(window.createProductCardHTML).join('');
+    if (countEl) {
+      let plural = products.length === 1 ? "товар" : (products.length >= 2 && products.length <= 4 ? "товара" : "товаров");
+      if (products.length % 100 >= 11 && products.length % 100 <= 14) plural = "товаров"; // для 11-14
+      else {
+        const lastDigit = products.length % 10;
+        if (lastDigit === 1) plural = "товар";
+        else if (lastDigit >= 2 && lastDigit <= 4) plural = "товара";
+      }
+      countEl.textContent = `${products.length} ${plural}`;
     }
-    
-    // Инициализируем кнопки добавления в корзину
-    setupAddToCartButtons();
-}
+  }
 
-/**
- * Создание HTML для карточки товара
- * @param {Object} product Данные товара
- * @returns {string} HTML-код карточки товара
- */
-function createProductCardHTML(product) {
-    const oldPriceHTML = product.oldPrice
-        ? `<span class="old-price">${formatPrice(product.oldPrice)}</span>`
-        : '';
-    
-    const discountHTML = product.discount
-        ? `<div class="product-card__discount">-${product.discount}%</div>`
-        : '';
-    
-    return `
-        <div class="product-card" data-product-id="${product.id}">
-            <div class="product-card__image-wrapper">
-                <a href="product.html?id=${product.id}">
-                    ${discountHTML}
-                    <img src="${product.image}" alt="${product.name}" class="product-card__image">
-                </a>
-            </div>
-            <div class="product-card__content">
-                <span class="product-card__category">${product.categoryName || 'Букет'}</span>
-                <h3 class="product-card__name">
-                    <a href="product.html?id=${product.id}">${product.name}</a>
-                </h3>
-                <div class="product-card__price">
-                    ${formatPrice(product.price)} ${oldPriceHTML}
-                </div>
-                <div class="product-card__bottom-actions">
-                    <button class="product-card__icon-btn add-to-wishlist" aria-label="Добавить в избранное">
-                        <img src="../assets/heart.svg" alt="В избранное">
-                    </button>
-                    <button class="product-card__icon-btn add-to-cart-btn" data-product-id="${product.id}" aria-label="Добавить в корзину">
-                        <img src="../assets/cart.svg" alt="В корзину">
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-/**
- * Форматирование цены
- * @param {number} price Цена
- * @returns {string} Отформатированная цена
- */
-function formatPrice(price) {
-    return `${price.toLocaleString('ru-RU')} ₽`;
-}
-
-/**
- * Заполнение фильтра категорий
- * @param {Array} categories Массив категорий
- */
-function populateCategoryFilter(categories) {
+  function populateCategoryFilter(categories) {
     const select = document.getElementById('category-filter');
     if (!select || !categories || categories.length === 0) return;
-    
-    const options = categories.map(category =>
-        `<option value="${category.id}">${category.name}</option>`
-    ).join('');
-    
+    const options = categories.map(cat => `<option value="${cat.id || cat.slug}">${cat.name}</option>`).join('');
     select.innerHTML = '<option value="all">Все категории</option>' + options;
-    
-    // Устанавливаем выбранную категорию из URL
     const urlParams = new URLSearchParams(window.location.search);
     const categoryParam = urlParams.get('category');
-    if (categoryParam) {
-        select.value = categoryParam;
-    }
-}
+    if (categoryParam) select.value = categoryParam;
+  }
 
-/**
- * Настройка фильтров и сортировки
- * @param {Array} allProducts Полный массив товаров
- */
-function setupFilters(allProducts) {
-    const categoryFilter = document.getElementById('category-filter');
-    const priceMinInput = document.getElementById('price-min');
-    const priceMaxInput = document.getElementById('price-max');
-    const sortFilter = document.getElementById('sort-filter');
-    const discountFilter = document.getElementById('discount-filter');
-    const applyFiltersBtn = document.getElementById('apply-filters');
-    const resetFiltersBtn = document.getElementById('reset-filters');
-    const searchInput = document.getElementById('catalog-search');
-    
-    // Сохраняем оригинальные данные для фильтрации
-    window.catalogProductsData = [...allProducts];
-    
-    // Обработчик применения фильтров
-    if (applyFiltersBtn) {
-        applyFiltersBtn.addEventListener('click', () => {
-            applyFilters();
-        });
-    }
-    
-    // Обработчик сброса фильтров
-    if (resetFiltersBtn) {
-        resetFiltersBtn.addEventListener('click', () => {
-            resetFilters();
-        });
-    }
-    
-    // Обработчик поиска
-    if (searchInput) {
-        searchInput.addEventListener('input', () => {
-            applyFilters();
-        });
-    }
-    
-    // Функция применения фильтров
-    function applyFilters() {
-        let filtered = [...window.catalogProductsData];
-        
-        // Фильтр по категории
-        if (categoryFilter && categoryFilter.value !== 'all') {
-            filtered = filtered.filter(product => product.category === categoryFilter.value);
-        }
-        
-        // Фильтр по цене
-        if (priceMinInput && priceMinInput.value) {
-            const minPrice = parseInt(priceMinInput.value);
-            filtered = filtered.filter(product => product.price >= minPrice);
-        }
-        
-        if (priceMaxInput && priceMaxInput.value) {
-            const maxPrice = parseInt(priceMaxInput.value);
-            filtered = filtered.filter(product => product.price <= maxPrice);
-        }
-        
-        // Фильтр по скидке
-        if (discountFilter && discountFilter.checked) {
-            filtered = filtered.filter(product => product.discount && product.discount > 0);
-        }
-        
-        // Поиск по названию
-        if (searchInput && searchInput.value.trim()) {
-            const searchQuery = searchInput.value.trim().toLowerCase();
-            filtered = filtered.filter(product => 
-                product.name.toLowerCase().includes(searchQuery) || 
-                (product.description && product.description.toLowerCase().includes(searchQuery))
-            );
-        }
-        
-        // Сортировка
-        if (sortFilter) {
-            switch (sortFilter.value) {
-                case 'price_asc':
-                    filtered.sort((a, b) => a.price - b.price);
-                    break;
-                case 'price_desc':
-                    filtered.sort((a, b) => b.price - a.price);
-                    break;
-                case 'name_asc':
-                    filtered.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-                case 'name_desc':
-                    filtered.sort((a, b) => b.name.localeCompare(a.name));
-                    break;
-                // По умолчанию сортировка не применяется
-            }
-        }
-        
-        // Отображаем отфильтрованные товары
-        displayCatalogProducts(filtered);
-    }
-    
-    // Функция сброса фильтров
-    function resetFilters() {
-        if (categoryFilter) categoryFilter.value = 'all';
-        if (priceMinInput) priceMinInput.value = '';
-        if (priceMaxInput) priceMaxInput.value = '';
-        if (sortFilter) sortFilter.value = 'default';
-        if (discountFilter) discountFilter.checked = false;
-        if (searchInput) searchInput.value = '';
-        
-        // Отображаем все товары
-        displayCatalogProducts(window.catalogProductsData);
-    }
-    
-    // Инициализация мобильного переключателя фильтров
-    const toggleFiltersBtn = document.getElementById('toggle-filters');
-    const filtersPanel = document.getElementById('filters-panel');
-    
-    if (toggleFiltersBtn && filtersPanel) {
-        toggleFiltersBtn.addEventListener('click', () => {
-            filtersPanel.classList.toggle('active');
-            toggleFiltersBtn.classList.toggle('active');
-        });
-    }
-}
+  function setupFilterAndSortControls() {
+    const controls = {
+      category: document.getElementById('category-filter'),
+      priceMin: document.getElementById('price-min'),
+      priceMax: document.getElementById('price-max'),
+      sort: document.getElementById('sort-filter'),
+      discount: document.getElementById('discount-filter'),
+      search: document.getElementById('catalog-search-input'), // Поиск в фильтрах
+      applyBtn: document.getElementById('apply-filters-btn'),
+      resetBtn: document.getElementById('reset-filters-btn'),
+      toggleFiltersBtn: document.getElementById('toggle-filters-mobile-btn'), // Кнопка для мобильных фильтров
+      filtersPanel: document.getElementById('filters-panel-mobile') // Сама панель фильтров
+    };
 
-/**
- * Инициализация кнопок добавления в корзину
- */
-function setupAddToCartButtons() {
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', async function() {
-            const productId = parseInt(this.dataset.productId);
-            if (!productId) return;
-            
-            try {
-                // Добавляем индикатор загрузки
-                this.classList.add('loading');
-                this.disabled = true;
-                
-                // Получаем данные о продукте
-                const product = window.catalogProductsData.find(p => p.id === productId);
-                
-                if (product) {
-                    // Если функция addToCart доступна (из cart.js)
-                    if (typeof addToCart === 'function') {
-                        addToCart(productId, 1, product);
-                        showNotification(`"${product.name}" добавлен в корзину`);
-                    } else {
-                        // Если функция недоступна, сохраняем в localStorage
-                        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-                        
-                        // Проверяем, есть ли уже этот товар в корзине
-                        const existingItemIndex = cart.findIndex(item => item.id === productId);
-                        
-                        if (existingItemIndex >= 0) {
-                            // Если товар уже в корзине, увеличиваем количество
-                            cart[existingItemIndex].quantity += 1;
-                        } else {
-                            // Если товара нет в корзине, добавляем его
-                            cart.push({
-                                id: productId,
-                                name: product.name,
-                                price: product.price,
-                                image: product.image,
-                                quantity: 1
-                            });
-                        }
-                        
-                        // Сохраняем обновленную корзину
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        
-                        // Обновляем счетчик товаров в корзине
-                        updateCartCount();
-                        
-                        showNotification(`"${product.name}" добавлен в корзину`);
-                    }
-                }
-            } catch (error) {
-                console.error('Ошибка при добавлении товара в корзину:', error);
-                showNotification('Не удалось добавить товар в корзину', true);
-            } finally {
-                // Убираем индикатор загрузки
-                this.classList.remove('loading');
-                this.disabled = false;
-            }
-        });
+    const applyFilters = () => {
+      let filtered = [...productsOnPageCache]; // Фильтруем уже загруженные на страницу товары
+
+      if (controls.priceMin?.value) filtered = filtered.filter(p => p.price >= parseFloat(controls.priceMin.value));
+      if (controls.priceMax?.value) filtered = filtered.filter(p => p.price <= parseFloat(controls.priceMax.value));
+      if (controls.discount?.checked) filtered = filtered.filter(p => (p.oldPrice && p.oldPrice > p.price) || p.discount);
+      if (controls.search?.value.trim()) {
+        const query = controls.search.value.trim().toLowerCase();
+        filtered = filtered.filter(p =>
+          p.name.toLowerCase().includes(query) ||
+          (p.description && p.description.toLowerCase().includes(query)) ||
+          (p.categoryName && p.categoryName.toLowerCase().includes(query))
+        );
+      }
+      if (controls.sort?.value) {
+        const sortVal = controls.sort.value;
+        if (sortVal === 'price_asc') filtered.sort((a, b) => a.price - b.price);
+        else if (sortVal === 'price_desc') filtered.sort((a, b) => b.price - a.price);
+        else if (sortVal === 'name_asc') filtered.sort((a, b) => a.name.localeCompare(b.name));
+        else if (sortVal === 'name_desc') filtered.sort((a, b) => b.name.localeCompare(a.name));
+        else if (sortVal === 'popular') filtered.sort((a, b) => (b.popular ? 1 : 0) - (a.popular ? 1 : 0) || a.id - b.id);
+      }
+      displayCatalogProducts(filtered);
+      const productsContainerEl = document.getElementById('catalog-products-container');
+      if (window.Search && Search.setupProductCardActionsForContainer && productsContainerEl) {
+        Search.setupProductCardActionsForContainer(productsContainerEl);
+      }
+    };
+
+    if (controls.applyBtn) controls.applyBtn.addEventListener('click', applyFilters);
+    if (controls.search) controls.search.addEventListener('input', debounce(applyFilters, 400));
+
+    ['sort', 'discount'].forEach(key => { // Категорию обрабатываем отдельно (перезагрузка страницы)
+      if (controls[key]) controls[key].addEventListener('change', applyFilters);
     });
-}
-
-/**
- * Обновление счетчика товаров в корзине
- */
-function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
-    // Обновляем все элементы с классом data-cart-count
-    document.querySelectorAll('[data-cart-count]').forEach(element => {
-        element.textContent = totalItems.toString();
-    });
-}
-
-/**
- * Отображение уведомления
- * @param {string} message Текст уведомления
- * @param {boolean} isError Флаг ошибки
- */
-function showNotification(message, isError = false) {
-    // Проверяем, существует ли уже контейнер для уведомлений
-    let notificationContainer = document.querySelector('.notification-container');
-    
-    if (!notificationContainer) {
-        // Создаем контейнер, если его нет
-        notificationContainer = document.createElement('div');
-        notificationContainer.className = 'notification-container';
-        document.body.appendChild(notificationContainer);
+    if (controls.category) {
+      controls.category.addEventListener('change', () => {
+        const newCategory = controls.category.value;
+        // Перенаправляем на новую страницу каталога с выбранной категорией
+        const searchParams = new URLSearchParams(window.location.search);
+        if (newCategory === 'all') searchParams.delete('category');
+        else searchParams.set('category', newCategory);
+        window.location.search = searchParams.toString();
+      });
     }
-    
-    // Создаем уведомление
-    const notification = document.createElement('div');
-    notification.className = `notification ${isError ? 'notification--error' : 'notification--success'}`;
-    notification.textContent = message;
-    
-    // Добавляем уведомление в контейнер
-    notificationContainer.appendChild(notification);
-    
-    // Удаляем уведомление через 3 секунды
-    setTimeout(() => {
-        notification.classList.add('notification--hide');
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 3000);
-}
 
-/**
- * Отображение сообщения об ошибке
- * @param {string} message Текст сообщения
- */
-function showErrorMessage(message) {
-    const container = document.getElementById('catalog-products-container');
-    if (!container) return;
-    
-    container.innerHTML = `
-        <div class="error-message">
-            <h2>Ошибка</h2>
-            <p>${message}</p>
-            <button class="btn btn--primary" onclick="location.reload()">Попробовать снова</button>
-        </div>
-    `;
-    
-    // Обновляем счетчик товаров
-    const countElement = document.getElementById('products-count');
-    if (countElement) {
-        countElement.textContent = '0';
+    if (controls.resetBtn) {
+      controls.resetBtn.addEventListener('click', () => {
+        if (controls.category) controls.category.value = 'all'; // Сброс категории
+        if (controls.priceMin) controls.priceMin.value = '';
+        if (controls.priceMax) controls.priceMax.value = '';
+        if (controls.sort) controls.sort.value = 'default'; // или 'popular'
+        if (controls.discount) controls.discount.checked = false;
+        if (controls.search) controls.search.value = '';
+        // При сбросе, если была выбрана категория, нужно остаться на ней, но без доп. фильтров
+        // или если "все" - то показать все. Проще всего переинициализировать.
+        const currentCategory = new URLSearchParams(window.location.search).get('category');
+        if (currentCategory && currentCategory !== 'all' && controls.category.value === 'all') {
+          // Если сбросили на "все категории", а в URL была категория, убираем ее из URL
+          const searchParams = new URLSearchParams(window.location.search);
+          searchParams.delete('category');
+          window.location.search = searchParams.toString();
+        } else {
+          initCatalog(); // Перезагрузка данных для текущей основной категории (или всех)
+        }
+      });
     }
-}
+
+    if (controls.toggleFiltersBtn && controls.filtersPanel) {
+      controls.toggleFiltersBtn.addEventListener('click', () => {
+        controls.filtersPanel.classList.toggle('active');
+        controls.toggleFiltersBtn.classList.toggle('active');
+        document.body.classList.toggle('filters-panel-open', controls.filtersPanel.classList.contains('active'));
+      });
+    }
+  }
+
+  // Экспортируем, если нужно вызывать извне (например, при поиске с главной)
+  window.CatalogPage = {
+    init: initCatalog,
+    getCurrentProducts: () => productsOnPageCache // Для доступа к текущим отфильтрованным продуктам
+  };
+
+  // Авто-инициализация, если это страница каталога
+  if (document.getElementById('catalog-products-container')) {
+    document.addEventListener('DOMContentLoaded', initCatalog);
+  }
+})();

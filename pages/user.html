@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Личный кабинет - Цветочный Рай">
-  <meta name="keywords" content="личный кабинет, профиль, заказы, цветочный магазин">
-  <title>Личный кабинет - Цветочный Рай</title>
+  <meta name="description" content="Личный кабинет пользователя - Floww. Управляйте профилем, заказами и избранным.">
+  <meta name="keywords" content="личный кабинет, профиль, мои заказы, избранное, Floww, цветочный магазин">
+  <title>Личный кабинет - Floww</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/auth.css">
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
@@ -15,7 +15,7 @@
 <body>
 <header class="header">
   <div class="container header__container">
-    <a href="index.html" class="logo">Floww</a>
+    <a href="index.html" class="logo">Floww</a> <!-- Путь к главной, если user.html в pages/ -->
     <nav class="nav header__nav">
       <ul class="nav__list">
         <li class="nav__item"><a href="index.html" class="nav__link">Главная</a></li>
@@ -37,9 +37,7 @@
         <span class="cart-count" data-cart-count>0</span>
       </a>
       <button class="burger-menu" aria-label="Открыть меню">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </div>
@@ -48,108 +46,137 @@
 <main class="user-page">
   <div class="container">
     <h1 class="page-title">Личный кабинет</h1>
+
     <div class="user-dashboard">
-      <aside class="user-sidebar">
-        <div class="user-profile">
-          <div class="user-avatar">
-            <img src="../assets/account_circle.svg" alt="Аватар пользователя" id="user-avatar">
+      <div class="user-header">
+        <h2 class="user-header__title">Добро пожаловать в личный кабинет</h2>
+        <p class="user-header__subtitle">Управляйте своим профилем, заказами и избранным</p>
+        <button class="btn btn-primary" id="login-btn">Войти</button>
+        <button class="btn btn-secondary" id="register-btn">Зарегистрироваться</button>
+      </div> <!-- Исправлено: Теперь этот тег правильно закрывает div user-header -->
+
+      <aside class="user-sidebar" id="user-sidebar-nav" style="display: none">
+        <!-- Изначально скрыт, если не авторизован -->
+        <div class="user-profile-info">
+          <div class="user-avatar-wrapper">
+            <img src="../assets/account_circle.svg" alt="Аватар пользователя" id="user-profile-avatar">
           </div>
-          <h2 id="user-name">Гость</h2>
+          <h2 id="user-profile-name" class="user-profile__name">Гость</h2>
         </div>
         <nav class="user-navigation">
           <ul>
-            <li><a href="#" class="active" data-tab="profile">Профиль</a></li>
-            <li><a href="#" data-tab="orders">История заказов</a></li>
-            <li><a href="#" data-tab="favorites">Избранное</a></li>
-            <li><a href="#" data-tab="addresses">Адреса доставки</a></li>
-            <li><a href="#" data-tab="settings">Настройки</a></li>
+            <li><a href="#profile" class="user-sidebar__link active" data-tab="profile">Профиль</a></li>
+            <li><a href="#orders" class="user-sidebar__link" data-tab="orders">История заказов</a></li>
+            <li><a href="#favorites" class="user-sidebar__link" data-tab="favorites">Избранное</a></li>
+            <li><a href="#addresses" class="user-sidebar__link" data-tab="addresses">Адреса доставки</a></li>
+            <li><a href="#settings" class="user-sidebar__link" data-tab="settings">Настройки</a></li>
           </ul>
         </nav>
       </aside>
 
-      <div class="user-content">
-        <!-- Профиль -->
-        <section class="user-tab active" id="profile">
-          <h2>Мой профиль</h2>
-          <form class="user-form" id="profile-form">
-            <div class="form-group">
-              <label for="user-fullname">ФИО</label>
-              <input type="text" id="user-fullname" name="fullname"
-                     placeholder="Введите ваше полное имя">
-            </div>
-            <div class="form-group">
-              <label for="user-email">Email</label>
-              <input type="email" id="user-email" name="email" placeholder="Введите ваш email">
-            </div>
-            <div class="form-group">
-              <label for="user-phone">Телефон</label>
-              <input type="tel" id="user-phone" name="phone" placeholder="+7 (___) ___-__-__">
-            </div>
-            <div class="form-group">
-              <label for="user-birthday">Дата рождения</label>
-              <input type="date" id="user-birthday" name="birthday">
-            </div>
-            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-          </form>
-        </section>
+      <div class="user-content user-page__content">
+        <!-- Контейнеры для форм входа/регистрации -->
+        <div id="login-form-wrapper" class="auth-form-container" style="display:none;">
+          <!-- JS создаст форму входа здесь -->
+        </div>
+        <div id="register-form-wrapper" class="auth-form-container" style="display:none;">
+          <!-- JS создаст форму регистрации здесь -->
+        </div>
 
-        <!-- История заказов -->
-        <section class="user-tab" id="orders">
-          <h2>История заказов</h2>
-          <div class="orders-empty-state">
-            <p>У вас пока нет заказов.</p>
-            <a href="catalog.html" class="btn btn-primary">Перейти в каталог</a>
-          </div>
-        </section>
+        <!-- Контент вкладок личного кабинета -->
+        <div class="user-tabs-content" id="user-tabs-container" style="display:none;"> <!-- Изначально скрыт -->
+          <section class="user-tab active" id="profile">
+            <h2>Мой профиль</h2>
+            <form class="user-form" id="profile-form">
+              <div class="form-group">
+                <label for="user-fullname">ФИО</label>
+                <input type="text" id="user-fullname" name="fullname" class="form-input"
+                       placeholder="Введите ваше полное имя">
+              </div>
+              <div class="form-group">
+                <label for="user-email">Email (нельзя изменить)</label>
+                <input type="email" id="user-email" name="email" class="form-input" placeholder="Ваш email"
+                       readonly>
+              </div>
+              <div class="form-group">
+                <label for="user-phone">Телефон</label>
+                <input type="tel" id="user-phone" name="phone" class="form-input" placeholder="+7 (___) ___-__-__">
+              </div>
+              <div class="form-group">
+                <label for="user-birthday">Дата рождения</label>
+                <input type="date" id="user-birthday" name="birthday" class="form-input">
+              </div>
+              <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            </form>
+          </section>
 
-        <!-- Избранное -->
-        <section class="user-tab" id="favorites">
-          <h2>Избранное</h2>
-          <div class="favorites-container product-grid">
-            <!-- Избранное будет загружено через JavaScript -->
-          </div>
-        </section>
+          <section class="user-tab" id="orders">
+            <h2>История заказов</h2>
+            <div class="orders-list-container" id="orders-list-container">
+              <div class="empty-state">
+                <p>У вас пока нет заказов.</p>
+                <a href="catalog.html" class="btn btn-primary">Перейти в каталог</a>
+              </div>
+            </div>
+          </section>
 
-        <!-- Адреса доставки -->
-        <section class="user-tab" id="addresses">
-          <h2>Мои адреса доставки</h2>
-          <div class="address-empty-state">
-            <p>У вас пока нет сохраненных адресов.</p>
-          </div>
-          <button class="btn btn-primary add-address-btn">Добавить новый адрес</button>
-        </section>
+          <section class="user-tab" id="favorites">
+            <h2>Избранное</h2>
+            <div id="favorites-list-container" class="product-grid">
+              <div class="empty-state" style="display:none;">
+                <p>В избранном пока нет товаров.</p>
+                <a href="catalog.html" class="btn btn-primary">В каталог</a>
+              </div>
+            </div>
+          </section>
 
-        <!-- Настройки -->
-        <section class="user-tab" id="settings">
-          <h2>Настройки аккаунта</h2>
-          <form class="user-form" id="settings-form">
-            <div class="form-group">
-              <label for="change-password">Новый пароль</label>
-              <input type="password" id="change-password" name="new-password"
-                     placeholder="Введите новый пароль">
+          <section class="user-tab" id="addresses">
+            <h2>Мои адреса доставки</h2>
+            <div class="address-list-container" id="address-list-container">
+              <div class="empty-state">
+                <p>У вас пока нет сохраненных адресов.</p>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="confirm-password">Подтверждение пароля</label>
-              <input type="password" id="confirm-password" name="confirm-password"
-                     placeholder="Подтвердите новый пароль">
-            </div>
-            <div class="form-group checkbox-group">
-              <input type="checkbox" id="notification-email" name="notification-email" checked>
-              <label for="notification-email">Получать уведомления о заказах по email</label>
-            </div>
-            <div class="form-group checkbox-group">
-              <input type="checkbox" id="notification-sms" name="notification-sms" checked>
-              <label for="notification-sms">Получать SMS-уведомления</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Сохранить настройки</button>
-          </form>
+            <button class="btn btn-primary add-address-btn" id="add-new-address-btn">Добавить новый адрес</button>
+          </section>
 
-          <div class="logout-section">
-            <button class="btn btn-secondary" id="logout-btn">Выйти из аккаунта</button>
-          </div>
-        </section>
-      </div>
-    </div>
+          <section class="user-tab" id="settings">
+            <h2>Настройки аккаунта</h2>
+            <form class="user-form" id="settings-form">
+              <fieldset>
+                <legend>Смена пароля</legend>
+                <div class="form-group">
+                  <label for="change-password">Новый пароль</label>
+                  <input type="password" id="change-password" name="new-password" class="form-input"
+                         placeholder="Оставьте пустым, если не хотите менять">
+                </div>
+                <div class="form-group">
+                  <label for="confirm-password">Подтверждение пароля</label>
+                  <input type="password" id="confirm-password" name="confirm-password" class="form-input"
+                         placeholder="Повторите новый пароль">
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Уведомления</legend>
+                <div class="form-group checkbox-group">
+                  <input type="checkbox" id="notification-email" name="notification-email" class="form-checkbox"
+                         checked>
+                  <label for="notification-email">Получать уведомления о заказах по email</label>
+                </div>
+                <div class="form-group checkbox-group">
+                  <input type="checkbox" id="notification-sms" name="notification-sms" class="form-checkbox">
+                  <label for="notification-sms">Получать SMS-уведомления о статусе заказа</label>
+                </div>
+              </fieldset>
+              <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+            </form>
+            <div class="logout-section">
+              <button class="btn btn-outline" id="logout-btn">Выйти из аккаунта</button>
+            </div>
+          </section>
+        </div> <!-- /user-tabs-content -->
+      </div> <!-- /user-content user-page__content -->
+    </div> <!-- /user-dashboard -->
   </div>
 </main>
 
@@ -172,27 +199,27 @@
     </div>
     <div class="footer__column">
       <h4 class="footer__title">Категории</h4>
-      <ul class="footer__list" id="footer-categories">
+      <ul class="footer__list" id="footer-categories-list">
         <!-- Категории будут добавлены через JavaScript -->
       </ul>
     </div>
     <div class="footer__column">
       <h4 class="footer__title">Контакты</h4>
-      <div class="footer__contact-info">
-        <p>Адрес: г. Москва, ул. Цветочная, д. 123</p>
+      <address class="footer__contact-info">
+        <p>ул. Цветочная, 10<br>Москва, Россия</p>
         <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
-        <p>Email: <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a></p>
-      </div>
+        <p>Email: <a href="mailto:hello@floww.com">hello@floww.com</a></p>
+      </address>
       <div class="footer__socials">
-        <a href="#" aria-label="Мы во ВКонтакте"><img src="../assets/icons8-vk%20(1).svg" alt="ВКонтакте"></a>
-        <a href="#" aria-label="Мы в Telegram"><img src="../assets/InstagramDark.svg" alt="Telegram"></a>
-        <a href="#" aria-label="Наш канал на YouTube"><img src="../assets/FacebookDark.svg" alt="YouTube"></a>
+        <a href="#" aria-label="Facebook"><img src="../assets/FacebookDark.svg" alt="Facebook"></a>
+        <a href="#" aria-label="Instagram"><img src="../assets/InstagramDark.svg" alt="Instagram"></a>
+        <a href="#" aria-label="VK"><img src="../assets/icons8-vk%20(1).svg" alt="VK"></a>
       </div>
     </div>
   </div>
   <div class="footer__bottom">
     <div class="container footer__bottom-container">
-      <p>© 2023 Цветочный Рай. Все права защищены.</p>
+      <p>© 2024 Floww. Все права защищены.</p>
       <nav>
         <a href="#">Политика конфиденциальности</a>
         <a href="#">Условия использования</a>
@@ -222,26 +249,35 @@
 <!-- Модальное окно поиска -->
 <div class="search-modal" id="searchModal">
   <div class="search-modal__content">
-    <button class="search-modal__close" id="closeSearchModal" aria-label="Закрыть поиск"></button>
+    <button class="search-modal__close" id="closeSearchModalBtn" aria-label="Закрыть поиск"></button>
     <h2 class="search-modal__title">Поиск товаров</h2>
     <form class="search-form" id="modalSearchForm">
       <div class="search-input-container">
-        <input type="search" id="modalSearchQuery" placeholder="Введите запрос для поиска..."
+        <input type="search" id="modalSearchInput" placeholder="Название товара или артикул..."
                aria-label="Поиск по каталогу" autofocus>
         <button type="submit" class="btn btn-primary">Найти</button>
       </div>
     </form>
-    <div class="search-modal__results" id="modalSearchResults">
-      <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+    <div class="search-modal__results" id="modalSearchResultsContainer">
       <p class="search-hint">Введите запрос для поиска по каталогу</p>
     </div>
   </div>
 </div>
 
-<script src="../js/cart.js"></script>
-<script src="../js/auth.js"></script>
-<script src="../js/main.js" type="module"></script>
-<script src="../js/user.js" type="module"></script>
-</body>
+<!-- Подключение скриптов -->
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/templates.js"></script>
 
+<script src="../js/cart.js"></script>
+<!-- userPageHandler.js будет содержать логику auth.js и user.js -->
+<script src="../js/userPageHandler.js"></script>
+
+<script src="../js/menu.js"></script>
+<script src="../js/search.js"></script>
+
+<script src="../js/display.js"></script> <!-- Для футера -->
+
+<script src="../js/app.js"></script>
+</body>
 </html>

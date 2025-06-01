@@ -1,228 +1,282 @@
-// JavaScript для страницы личного кабинета
+// js/auth.js
+(function () {
+  let allUsersCache = []; // Кэш пользователей с "сервера" (users.json)
 
-document.addEventListener('DOMContentLoaded', () => {
-    initUserTabs();
-    setupUserProfile();
-    loadFavorites();
-});
+  async function loadUsersFromServer() {
+    if (allUsersCache.length > 0) return allUsersCache;
+    try {
+      allUsersCache = await API.getUsers(); // Используем API.js
+      return allUsersCache;
+    } catch (error) {
+      console.error('Ошибка загрузки пользователей с сервера:', error);
+      showNotification('Не удалось загрузить данные пользователей. Функционал входа/регистрации может быть ограничен.', true);
+      return [];
+    }
+  }
 
-// Инициализация вкладок в личном кабинете
-function initUserTabs() {
-    const tabLinks = document.querySelectorAll('.user-navigation a');
-    const tabs = document.querySelectorAll('.user-tab');
+  function getCurrentUser() {
+    const userData = localStorage.getItem('currentUser');
+    return userData ? JSON.parse(userData) : null;
+  }
 
-    tabLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
+  function updateAuthUI(user) {
+    const userIcon = document.querySelector('.header__action-btn[aria-label="Аккаунт"]');
+    if (userIcon) {
+      userIcon.classList.toggle('logged-in', !!user);
+      userIcon.title = user ? `Профиль: ${user.fullname}` : 'Войти или зарегистрироваться';
+    }
 
-            // Удаляем активный класс со всех ссылок
-            tabLinks.forEach(item => item.classList.remove('active'));
+    const isUserPage = window.location.pathname.includes('user.html') || window.location.pathname.includes('profile.html');
+    if (isUserPage) {
+      const userNameDisplay = document.getElementById('user-profile-name');
+      const userAvatarDisplay = document.getElementById('user-profile-avatar');
+      const userTabsContent = document.querySelector('.user-tabs-content');
+      const userSidebar = document.querySelector('.user-sidebar');
 
-            // Добавляем активный класс к текущей ссылке
-            link.classList.add('active');
 
-            // Получаем id вкладки, которую нужно показать
-            const tabId = link.getAttribute('data-tab');
+      if (user) { // Пользователь авторизован
+        if (userNameDisplay) userNameDisplay.textContent = user.fullname;
+        if (userAvatarDisplay && user.avatar) userAvatarDisplay.src = user.avatar;
+        else if (userAvatarDisplay) userAvatarDisplay.src = window.IMAGE_PLACEHOLDERS.AVATAR_DEFAULT;
 
-            // Скрываем все вкладки
-            tabs.forEach(tab => tab.classList.remove('active'));
+        hideAuthForms();
+        if (userTabsContent) userTabsContent.style.display = ''; // Показываем контент вкладок
+        if (userSidebar) userSidebar.style.display = ''; // Показываем сайдбар
 
-            // Показываем выбранную вкладку
-            document.getElementById(tabId).classList.add('active');
-        });
-    });
-}
-
-// Настройка профиля пользователя
-function setupUserProfile() {
-    const profileForm = document.getElementById('profile-form');
-
-    if (!profileForm) return;
-
-    profileForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        // Получаем данные из формы
-        const userData = {
-            fullname: document.getElementById('user-fullname').value,
-            email: document.getElementById('user-email').value,
-            phone: document.getElementById('user-phone').value,
-            birthday: document.getElementById('user-birthday').value
-        };
-
-        // Сохраняем данные в localStorage
-        localStorage.setItem('userData', JSON.stringify(userData));
-
-        // Обновляем отображаемое имя пользователя
-        if (userData.fullname) {
-            document.getElementById('user-name').textContent = userData.fullname;
+        // Инициализация страницы пользователя (вкладки, данные форм и т.д.)
+        if (typeof window.UserPage !== 'undefined' && typeof window.UserPage.initialize === 'function') {
+          window.UserPage.initialize(user);
         }
+      } else { // Пользователь НЕ авторизован
+        if (userNameDisplay) userNameDisplay.textContent = 'Гость';
+        if (userAvatarDisplay) userAvatarDisplay.src = window.IMAGE_PLACEHOLDERS.AVATAR_DEFAULT;
 
-        // Показываем уведомление об успешном сохранении
-        showUserNotification('Профиль успешно сохранен');
-    });
-
-    // Загружаем сохраненные данные пользователя, если они есть
-    const savedUserData = localStorage.getItem('userData');
-    if (savedUserData) {
-        const userData = JSON.parse(savedUserData);
-
-        // Заполняем форму сохраненными данными
-        if (userData.fullname) {
-            document.getElementById('user-fullname').value = userData.fullname;
-            document.getElementById('user-name').textContent = userData.fullname;
-        }
-        if (userData.email) document.getElementById('user-email').value = userData.email;
-        if (userData.phone) document.getElementById('user-phone').value = userData.phone;
-        if (userData.birthday) document.getElementById('user-birthday').value = userData.birthday;
+        if (userTabsContent) userTabsContent.style.display = 'none'; // Скрываем контент вкладок
+        if (userSidebar) userSidebar.style.display = 'none'; // Скрываем сайдбар
+        showLoginForm();
+      }
     }
+  }
 
-    // Настройка обработчика формы настроек
-    const settingsForm = document.getElementById('settings-form');
-    if (settingsForm) {
-        settingsForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+  function showLoginForm() {
+    const userPageContent = document.querySelector('.user-page__content');
+    if (!userPageContent && (window.location.pathname.includes('user.html') || window.location.pathname.includes('profile.html'))) return;
 
-            const newPassword = document.getElementById('change-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-
-            if (newPassword && newPassword !== confirmPassword) {
-                showUserNotification('Пароли не совпадают', true);
-                return;
-            }
-
-            // Сохраняем настройки
-            const settings = {
-                emailNotifications: document.getElementById('notification-email').checked,
-                smsNotifications: document.getElementById('notification-sms').checked
-            };
-
-            localStorage.setItem('userSettings', JSON.stringify(settings));
-
-            if (newPassword) {
-                // В реальном приложении здесь была бы отправка запроса на изменение пароля
-                localStorage.setItem('userPassword', newPassword); // Для демонстрации
-
-                // Очищаем поля пароля
-                document.getElementById('change-password').value = '';
-                document.getElementById('confirm-password').value = '';
-            }
-
-            showUserNotification('Настройки успешно сохранены');
-        });
+    hideAuthForms(); // Сначала скрыть все формы
+    let loginFormWrapper = document.getElementById('login-form-wrapper');
+    if (!loginFormWrapper && userPageContent) {
+      loginFormWrapper = createAuthFormHTML('login');
+      userPageContent.appendChild(loginFormWrapper);
+      attachFormListeners('login');
+    } else if (loginFormWrapper) {
+      loginFormWrapper.style.display = 'block';
     }
+  }
 
-    // Настройка кнопки выхода
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            // В реальном приложении здесь был бы выход из аккаунта
-            document.getElementById('user-name').textContent = 'Гость';
-            showUserNotification('Вы вышли из аккаунта');
+  function showRegisterForm() {
+    const userPageContent = document.querySelector('.user-page__content');
+    if (!userPageContent && (window.location.pathname.includes('user.html') || window.location.pathname.includes('profile.html'))) return;
 
-            // Очищаем форму профиля
-            if (profileForm) profileForm.reset();
-        });
+    hideAuthForms(); // Сначала скрыть все формы
+    let registerFormWrapper = document.getElementById('register-form-wrapper');
+    if (!registerFormWrapper && userPageContent) {
+      registerFormWrapper = createAuthFormHTML('register');
+      userPageContent.appendChild(registerFormWrapper);
+      attachFormListeners('register');
+    } else if (registerFormWrapper) {
+      registerFormWrapper.style.display = 'block';
     }
-}
+  }
 
-// Загрузка избранных товаров
-function loadFavorites() {
-    const favoritesContainer = document.querySelector('#favorites .favorites-container');
-    if (!favoritesContainer) return;
+  function hideAuthForms() {
+    const loginFormWrapper = document.getElementById('login-form-wrapper');
+    const registerFormWrapper = document.getElementById('register-form-wrapper');
+    if (loginFormWrapper) loginFormWrapper.style.display = 'none';
+    if (registerFormWrapper) registerFormWrapper.style.display = 'none';
+  }
 
-    // Получаем список избранных товаров из localStorage
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  function createAuthFormHTML(type) {
+    const formWrapper = document.createElement('div');
+    formWrapper.id = `${type}-form-wrapper`;
+    formWrapper.className = 'auth-form-container'; // Общий класс для стилизации
 
-    if (favorites.length === 0) {
-        // Если избранных товаров нет, показываем сообщение
-        favoritesContainer.innerHTML = `
-            <div class="empty-state">
-                <h3>В избранном пока нет товаров</h3>
-                <p>Добавляйте понравившиеся товары в избранное, чтобы вернуться к ним позже</p>
-                <a href="catalog.html" class="btn btn-primary">Перейти в каталог</a>
-            </div>
-        `;
-        return;
-    }
+    const isLogin = type === 'login';
+    const title = isLogin ? 'Вход в аккаунт' : 'Регистрация';
+    const submitButtonText = isLogin ? 'Войти' : 'Зарегистрироваться';
+    const switchLinkText = isLogin ? 'Нет аккаунта? <a href="#" data-auth-switch="register">Зарегистрироваться</a>'
+      : 'Уже есть аккаунт? <a href="#" data-auth-switch="login">Войти</a>';
 
-    // В реальном приложении здесь был бы запрос к API для получения данных о товарах
-    // Для демонстрации просто показываем список ID избранных товаров
-    const favoritesList = favorites.map(id => `
-        <div class="product-card">
-            <a href="product.html?id=${id}" class="product-card__image-link">
-                <img src="../img/products/bouquet1.jpg" alt="Товар ${id}" class="product-card__image">
-            </a>
-            <div class="product-card__actions">
-                <button class="product-card__action-btn remove-favorite" data-id="${id}" aria-label="Удалить из избранного">
-                    <img src="../assets/favorite.svg" alt="Удалить из избранного">
-                </button>
-                <button class="product-card__action-btn add-to-cart" data-id="${id}" aria-label="Добавить в корзину">
-                    <img src="../assets/cart.svg" alt="Добавить в корзину">
-                </button>
-            </div>
-            <div class="product-card__content">
-                <div class="product-card__category">Букеты</div>
-                <h3 class="product-card__name">
-                    <a href="product.html?id=${id}">Товар ${id}</a>
-                </h3>
-                <div class="product-card__price">5000 ₽</div>
-            </div>
+    let formFields = `
+      <div class="form-group">
+        <label for="${type}-email">Email</label>
+        <input type="email" id="${type}-email" name="email" class="form-input" required placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label for="${type}-password">Пароль ${!isLogin ? '(мин. 6 символов)' : ''}</label>
+        <input type="password" id="${type}-password" name="password" class="form-input" required ${!isLogin ? 'minlength="6"' : ''}>
+      </div>
+    `;
+
+    if (!isLogin) { // Дополнительные поля для регистрации
+      formFields = `
+        <div class="form-group">
+          <label for="${type}-fullname">Полное имя</label>
+          <input type="text" id="${type}-fullname" name="fullname" class="form-input" required placeholder="Иван Иванов">
         </div>
-    `).join('');
-
-    favoritesContainer.innerHTML = favoritesList;
-
-    // Добавляем обработчики для кнопок удаления из избранного
-    const removeButtons = favoritesContainer.querySelectorAll('.remove-favorite');
-    removeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const productId = button.getAttribute('data-id');
-            removeFromFavorites(productId);
-            button.closest('.product-card').remove();
-
-            // Если все товары удалены, показываем сообщение
-            if (favoritesContainer.children.length === 0) {
-                loadFavorites(); // Перезагружаем список избранного (покажет пустое состояние)
-            }
-        });
-    });
-}
-
-// Удаление товара из избранного
-function removeFromFavorites(productId) {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const updatedFavorites = favorites.filter(id => id != productId);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-
-    showUserNotification('Товар удален из избранного');
-}
-
-// Показ уведомления в личном кабинете
-function showUserNotification(message, isError = false) {
-    // Проверяем, существует ли уже уведомление
-    let notification = document.querySelector('.user-notification');
-
-    // Если нет, создаем новое
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.className = 'user-notification';
-        document.body.appendChild(notification);
+      ` + formFields + `
+        <div class="form-group">
+          <label for="${type}-confirm-password">Повторите пароль</label>
+          <input type="password" id="${type}-confirm-password" name="confirmPassword" class="form-input" required>
+        </div>
+      `;
     }
 
-    // Устанавливаем класс ошибки при необходимости
-    notification.className = isError
-        ? 'user-notification user-notification--error'
-        : 'user-notification';
+    formWrapper.innerHTML = `
+      <div class="auth-form">
+        <h2>${title}</h2>
+        <form id="${type}-form-actual">
+          ${formFields}
+          <div class="form-error" id="${type}-error-message"></div>
+          <button type="submit" class="btn btn-primary btn-block">${submitButtonText}</button>
+        </form>
+        <p class="auth-switch">${switchLinkText}</p>
+      </div>
+    `;
+    return formWrapper;
+  }
 
-    // Устанавливаем текст уведомления
-    notification.textContent = message;
+  function attachFormListeners(type) {
+    const form = document.getElementById(`${type}-form-actual`);
+    if (form) {
+      form.addEventListener('submit', type === 'login' ? handleLoginSubmit : handleRegisterFormSubmit);
+    }
+    const switchLink = document.querySelector(`#${type}-form-wrapper [data-auth-switch]`);
+    if (switchLink) {
+      switchLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const switchTo = e.target.dataset.authSwitch;
+        if (switchTo === 'register') showRegisterForm();
+        else showLoginForm();
+      });
+    }
+  }
 
-    // Показываем уведомление
-    notification.classList.add('active');
+  async function handleLoginSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errorMsgEl = document.getElementById('login-error-message');
+    if (errorMsgEl) errorMsgEl.textContent = '';
 
-    // Скрываем через 3 секунды
-    setTimeout(() => {
-        notification.classList.remove('active');
-    }, 3000);
-}
+    if (!email || !password) {
+      if (errorMsgEl) errorMsgEl.textContent = 'Пожалуйста, заполните все поля.';
+      return;
+    }
+
+    const users = await loadUsersFromServer();
+    const user = users.find(u => u.email === email && u.password === password); // ВНИМАНИЕ: Простая проверка пароля!
+
+    if (user) {
+      const userDataToStore = {...user};
+      delete userDataToStore.password; // Никогда не храните пароль в localStorage
+      localStorage.setItem('currentUser', JSON.stringify(userDataToStore));
+      updateAuthUI(userDataToStore); // Обновит UI, скроет формы, покажет контент ЛК
+      showNotification('Вы успешно вошли!');
+    } else {
+      if (errorMsgEl) errorMsgEl.textContent = 'Неверный email или пароль.';
+    }
+  }
+
+  async function handleRegisterFormSubmit(e) {
+    e.preventDefault();
+    const fullname = document.getElementById('register-fullname').value.trim();
+    const email = document.getElementById('register-email').value.trim();
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('register-confirm-password').value;
+    const errorMsgEl = document.getElementById('register-error-message');
+    if (errorMsgEl) errorMsgEl.textContent = '';
+
+    if (!fullname || !email || !password || !confirmPassword) {
+      if (errorMsgEl) errorMsgEl.textContent = 'Пожалуйста, заполните все обязательные поля.';
+      return;
+    }
+    if (password !== confirmPassword) {
+      if (errorMsgEl) errorMsgEl.textContent = 'Пароли не совпадают.';
+      return;
+    }
+    if (password.length < 6) {
+      if (errorMsgEl) errorMsgEl.textContent = 'Пароль должен быть не менее 6 символов.';
+      return;
+    }
+
+    const users = await loadUsersFromServer();
+    if (users.some(u => u.email === email)) {
+      if (errorMsgEl) errorMsgEl.textContent = 'Пользователь с таким email уже существует.';
+      return;
+    }
+
+    // Демо-регистрация:
+    // В реальном приложении здесь был бы POST запрос к API для регистрации нового пользователя.
+    // Сервер бы добавил пользователя в users.json (или реальную БД) и вернул бы данные пользователя (или токен).
+    const newUser = {
+      id: String(Date.now()), // Простое ID для демо
+      fullname,
+      email,
+      // password: password, // НЕ храним пароль так, если бы это была реальная регистрация. Хэшировать на сервере!
+      avatar: window.IMAGE_PLACEHOLDERS.AVATAR_DEFAULT,
+      favorites: [], orders: [], addresses: [],
+      settings: {emailNotifications: true, smsNotifications: false}
+    };
+
+    console.warn("ДЕМО-РЕГИСТРАЦИЯ: Новый пользователь НЕ сохраняется на сервере (в users.json).", newUser);
+    // Для демо, чтобы можно было сразу залогиниться (пароль не хэширован):
+    // allUsersCache.push({ ...newUser, password: password });
+    // Это добавит пользователя в локальный кэш, но не в файл users.json
+
+    // Сразу "логиним" нового пользователя для демо
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    updateAuthUI(newUser); // Обновит UI, скроет формы, покажет контент ЛК
+    showNotification('Регистрация успешна! Вы вошли в аккаунт.');
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('currentUser');
+    // allUsersCache = []; // Можно сбросить кэш, чтобы при следующем входе он загрузился заново
+    updateAuthUI(null); // Обновит UI, покажет формы входа
+    showNotification('Вы вышли из аккаунта.');
+    // Если мы на странице профиля, то формы входа/регистрации уже должны быть показаны через updateAuthUI
+  }
+
+  function initAuthListeners() {
+    const userIconBtn = document.querySelector('.header__action-btn[aria-label="Аккаунт"]');
+    if (userIconBtn) {
+      userIconBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetUserPage = 'user.html'; // или profile.html
+        if (!window.location.pathname.endsWith(targetUserPage)) {
+          window.location.href = targetUserPage;
+        } else {
+          // Если уже на странице профиля, и не авторизован, auth.js должен был показать формы.
+          // Если авторизован, ничего не делаем.
+          if (!getCurrentUser()) {
+            showLoginForm(); // Убедимся, что форма логина показана
+          }
+        }
+      });
+    }
+    // Кнопка выхода из аккаунта обрабатывается в user.js, так как она находится на странице профиля.
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadUsersFromServer(); // Предзагружаем пользователей
+    updateAuthUI(getCurrentUser()); // Первичная настройка UI в зависимости от статуса авторизации
+    initAuthListeners();
+  });
+
+  window.Auth = {
+    getCurrentUser,
+    isLoggedIn: () => !!getCurrentUser(),
+    handleLogout, // Экспортируем для использования в user.js
+    updateUI: updateAuthUI // Для возможного принудительного обновления UI извне
+  };
+})();
