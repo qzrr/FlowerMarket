@@ -119,29 +119,46 @@
     if (!reviewsContainer) return;
 
     try {
-      // Используем отзывы, вложенные в товар, если они есть, иначе запрашиваем по API
-      const reviews = currentProduct.reviews && currentProduct.reviews.length > 0
-        ? currentProduct.reviews
-        : await API.getReviewsByProductId(currentProductId);
+      let reviews;
+
+      // Используем отзывы, вложенные в товар, если они есть и актуальны
+      if (currentProduct.reviews && Array.isArray(currentProduct.reviews) && currentProduct.reviews.length > 0) {
+        reviews = currentProduct.reviews;
+        console.log("Используем отзывы из кэша продукта");
+      } else {
+        // Иначе запрашиваем по API с отключенным кэшированием для получения свежих данных
+        console.log("Запрашиваем отзывы через API");
+        reviews = await API.getReviewsByProductId(currentProductId, false);
+      }
 
       if (reviewsSectionTitle) {
         reviewsSectionTitle.textContent = `Отзывы (${reviews ? reviews.length : 0})`;
       }
 
       if (reviews && reviews.length > 0) {
-        reviewsContainer.innerHTML = reviews.map(review => `
+        reviewsContainer.innerHTML = reviews.map(review => {
+          // Обработка даты с проверкой формата
+          let displayDate;
+          try {
+            displayDate = new Date(review.dateObj || review.date).toLocaleDateString('ru-RU');
+          } catch (e) {
+            displayDate = review.date || 'Дата не указана';
+          }
+
+          return `
           <div class="review-card">
             <div class="review-card__header">
               <img src="${review.avatar || window.IMAGE_PLACEHOLDERS.AVATAR_DEFAULT}" alt="${review.author || review.name}" class="review-card__avatar">
               <div class="review-card__author-info">
                 <strong class="review-card__author-name">${review.author || review.name}</strong>
-                <div class="review-card__date">${new Date(review.dateObj || review.date).toLocaleDateString('ru-RU')}</div>
+                <div class="review-card__date">${displayDate}</div>
               </div>
             </div>
             <div class="review-card__rating">${window.Display.generateRatingStarsHTML(review.rating)}</div>
             <p class="review-card__text">${review.text}</p>
           </div>
-        `).join('');
+        `;
+        }).join('');
       } else {
         reviewsContainer.innerHTML = '<p>Отзывов о товаре пока нет. Будьте первым!</p>';
       }
@@ -153,15 +170,30 @@
 
   async function renderRelatedProducts() {
     const relatedContainer = document.getElementById('related-products-section-container'); // ID контейнера для похожих товаров
-    if (!relatedContainer || !currentProduct || !currentProduct.category) return; // Нужна категория для поиска похожих
+    if (!relatedContainer || !currentProduct) return;
+
+    // Проверяем наличие категории для поиска похожих
+    if (!currentProduct.category && !currentProduct.categoryId && !currentProduct.categoryName) {
+      console.warn("Не удалось определить категорию товара для поиска похожих");
+      relatedContainer.innerHTML = '<h3>Похожие товары</h3><p>Похожие товары не найдены.</p>';
+      return;
+    }
 
     relatedContainer.innerHTML = '<div class="loading-spinner">Загрузка похожих товаров...</div>';
     try {
-      let related = await API.getProductsByCategory(currentProduct.category); // category - это slug
-      related = related.filter(p => p.id !== currentProductId).slice(0, 4);
+      // Пробуем найти товары той же категории
+      let related = [];
 
-      if (related.length === 0 && currentProduct.popular) { // Если нет в той же категории, ищем популярные (кроме текущего)
-        const popular = await API.getPopularProducts();
+      if (currentProduct.category) {
+        // Используем API с отключенным кэшированием для получения свежих данных
+        related = await API.getProductsByCategory(currentProduct.category, false);
+        related = related.filter(p => p.id !== currentProductId).slice(0, 4);
+      }
+
+      // Если не нашли по категории или список пуст, пробуем найти популярные товары
+      if (related.length === 0) {
+        console.log("Не найдены товары в той же категории, ищем популярные");
+        const popular = await API.getPopularProducts(false);
         related = popular.filter(p => p.id !== currentProductId).slice(0, 4);
       }
 
@@ -180,6 +212,7 @@
       relatedContainer.innerHTML = '<h3>Похожие товары</h3><p class="error-message">Не удалось загрузить.</p>';
     }
   }
+
 
   function setupProductPageEventListeners() {
     const addToCartBtn = document.getElementById('product-page-add-to-cart-btn');

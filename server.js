@@ -22,6 +22,7 @@ app.use("/js", express.static(path.join(__dirname, "js")));
 app.use("/img", express.static(path.join(__dirname, "img"))); // Для /img/products/..., /img/categories/...
 app.use("/assets", express.static(path.join(__dirname, "assets"))); // Для /assets/heart.svg и т.д.
 
+app.use(express.static(path.join(__dirname)));
 // Обслуживание HTML файлов из папки pages/ ИЛИ из корня
 app.use(express.static(path.join(__dirname, "pages"))); // Если страницы в /pages/
 // app.use(express.static(path.join(__dirname))); // Если index.html и др. в корне
@@ -114,6 +115,16 @@ app.get("/", (req, res) => {
           res.status(404).send("Главная страница (index.html) не найдена.");
         }
       });
+    }
+  });
+});
+// Обработка прямых запросов к страницам в папке pages
+app.get("/pages/:page", (req, res) => {
+  const pagePath = path.join(__dirname, "pages", req.params.page);
+  res.sendFile(pagePath, (err) => {
+    if (err) {
+      console.error(`Ошибка при отправке файла ${pagePath}:`, err);
+      res.status(404).send(`Страница ${req.params.page} не найдена.`);
     }
   });
 });

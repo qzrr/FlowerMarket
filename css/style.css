@@ -669,10 +669,12 @@ main {
 
 /* Карточки товаров */
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  display: flex;
+  flex-wrap: nowrap;
   gap: 3rem;
   margin-top: 3rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
 }
 
 .product-card {

@@ -6,77 +6,139 @@ const FLOWERS_DB_PATH = path.join(__dirname, 'flowersData.json');
 const USERS_DB_PATH = path.join(__dirname, 'users.json');
 let flowersCache = null;
 let usersCache = null;
+let lastFlowersLoadTime = 0;
+let lastUsersLoadTime = 0;
+const CACHE_TTL = 60000; // Время жизни кэша в миллисекундах (1 минута)
 
-async function loadFlowersDb() {
-  if (flowersCache) return flowersCache;
-  try {
-    const rawData = await fs.readFile(FLOWERS_DB_PATH, 'utf-8');
-    flowersCache = JSON.parse(rawData);
-    // Дополнительная обработка дат, если нужно
-    if (flowersCache.promos) {
-      flowersCache.promos.forEach(promo => {
-        if (promo.expiryDate) promo.expiryDateObj = new Date(promo.expiryDate);
-      });
+async function loadFlowersDb(forceRefresh = false) {
+  const now = Date.now();
+  // Обновляем кэш, если он не существует, истек TTL или запрошено принудительное обновление
+  if (!flowersCache || forceRefresh || (now - lastFlowersLoadTime > CACHE_TTL)) {
+    try {
+      const rawData = await fs.readFile(FLOWERS_DB_PATH, 'utf-8');
+      const parsedData = JSON.parse(rawData);
+
+      // Проверяем структуру данных и создаем правильную структуру, если необходимо
+      flowersCache = {
+        products: Array.isArray(parsedData) ? parsedData : (parsedData.products || []),
+        categories: parsedData.categories || [],
+        promos: parsedData.promos || []
+      };
+
+      // Дополнительная обработка дат, если нужно
+      if (flowersCache.promos) {
+        flowersCache.promos.forEach(promo => {
+          if (promo.expiryDate) promo.expiryDateObj = new Date(promo.expiryDate);
+        });
+      }
+
+      lastFlowersLoadTime = now;
+      console.log("Данные товаров и категорий успешно загружены");
+    } catch (error) {
+      console.error("Ошибка загрузки flowersData.json:", error);
+      // Если кэш уже существует, используем его даже при ошибке загрузки
+      if (!flowersCache) {
+        flowersCache = { products: [], categories: [], promos: [] }; // Базовая структура при ошибке
+      }
     }
-    // Если отзывы вложены, они будут обработаны в getReviews/getReviewsByProductId
-    return flowersCache;
-  } catch (error) {
-    console.error("Ошибка загрузки flowersData.json:", error);
-    return { products: [], categories: [], promos: [] }; // Базовая структура при ошибке
   }
+  return flowersCache;
 }
 
-async function loadUsersDb() {
-  if (usersCache) return usersCache;
-  try {
-    const rawData = await fs.readFile(USERS_DB_PATH, 'utf-8');
-    usersCache = JSON.parse(rawData);
-    return usersCache;
-  } catch (error) {
-    console.error("Ошибка загрузки users.json:", error);
-    return [];
+async function loadUsersDb(forceRefresh = false) {
+  const now = Date.now();
+  // Обновляем кэш, если он не существует, истек TTL или запрошено принудительное обновление
+  if (!usersCache || forceRefresh || (now - lastUsersLoadTime > CACHE_TTL)) {
+    try {
+      const rawData = await fs.readFile(USERS_DB_PATH, 'utf-8');
+      usersCache = JSON.parse(rawData);
+      lastUsersLoadTime = now;
+      console.log("Данные пользователей успешно загружены");
+    } catch (error) {
+      console.error("Ошибка загрузки users.json:", error);
+      // Если кэш уже существует, используем его даже при ошибке загрузки
+      if (!usersCache) {
+        usersCache = [];
+      }
+    }
   }
+  return usersCache;
 }
 
 class Database {
-  static async getProducts() {
-    const db = await loadFlowersDb();
+  // Метод для принудительного обновления кэша
+  static async refreshCache() {
+    try {
+      await loadFlowersDb(true);
+      await loadUsersDb(true);
+      return true;
+    } catch (error) {
+      console.error("Ошибка при обновлении кэша:", error);
+      return false;
+    }
+  }
+
+  static async getProducts(forceRefresh = false) {
+    const db = await loadFlowersDb(forceRefresh);
     return db.products || [];
   }
 
-  static async getProductById(id) {
-    const db = await loadFlowersDb();
-    const productId = parseInt(id, 10);
+  static async getProductById(id, forceRefresh = false) {
+    const db = await loadFlowersDb(forceRefresh);
+    // Обработка разных типов id (строка или число)
+    const productId = isNaN(parseInt(id, 10)) ? id : parseInt(id, 10);
     return (db.products || []).find(p => p.id === productId);
   }
 
-  static async getProductsByCategory(categoryIdentifier) {
-    const db = await loadFlowersDb();
-    const lowerIdentifier = categoryIdentifier.toLowerCase();
+  static async getProductsByCategory(categoryIdentifier, forceRefresh = false) {
+    const db = await loadFlowersDb(forceRefresh);
+
+    if (!categoryIdentifier) {
+      console.error("Ошибка: categoryIdentifier не указан");
+      return [];
+    }
+
+    const lowerIdentifier = String(categoryIdentifier).toLowerCase();
+
+    // Сначала проверяем по id категории
+    if (!isNaN(parseInt(categoryIdentifier, 10))) {
+      const categoryId = parseInt(categoryIdentifier, 10);
+      const category = (db.categories || []).find(c => c.id === categoryId);
+      if (category) {
+        return (db.products || []).filter(p =>
+          (p.category && p.category.toLowerCase() === category.slug?.toLowerCase()) ||
+          (p.categoryId && p.categoryId === categoryId) ||
+          (p.categoryName && p.categoryName.toLowerCase() === category.name?.toLowerCase())
+        );
+      }
+    }
+
+    // Затем проверяем по slug или имени категории
     return (db.products || []).filter(p =>
       (p.category && p.category.toLowerCase() === lowerIdentifier) ||
-      (p.categoryName && p.categoryName.toLowerCase() === lowerIdentifier)
+      (p.categoryName && p.categoryName.toLowerCase() === lowerIdentifier) ||
+      (p.categorySlug && p.categorySlug.toLowerCase() === lowerIdentifier)
     );
   }
 
-  static async getPopularProducts() {
-    const db = await loadFlowersDb();
+  static async getPopularProducts(forceRefresh = false) {
+    const db = await loadFlowersDb(forceRefresh);
     return (db.products || []).filter(p => p.popular === true);
   }
 
-  static async getCategories() {
-    const db = await loadFlowersDb();
+  static async getCategories(forceRefresh = false) {
+    const db = await loadFlowersDb(forceRefresh);
     return db.categories || [];
   }
 
-  static async getPromos() {
-    const db = await loadFlowersDb();
+  static async getPromos(forceRefresh = false) {
+    const db = await loadFlowersDb(forceRefresh);
     const now = new Date();
     return (db.promos || []).filter(promo => promo.expiryDateObj && promo.expiryDateObj > now);
   }
 
-  static async getReviews() { // Агрегирует все отзывы из продуктов
-    const db = await loadFlowersDb();
+  static async getReviews(forceRefresh = false) { // Агрегирует все отзывы из продуктов
+    const db = await loadFlowersDb(forceRefresh);
     let allReviews = [];
     (db.products || []).forEach(product => {
       if (product.reviews && Array.isArray(product.reviews)) {
@@ -97,9 +159,9 @@ class Database {
     return allReviews.sort((a, b) => (b.dateObj || 0) - (a.dateObj || 0));
   }
 
-  static async getReviewsByProductId(productId) {
+  static async getReviewsByProductId(productId, forceRefresh = false) {
     const numProductId = parseInt(productId, 10);
-    const product = await this.getProductById(numProductId); // Используем уже существующий метод
+    const product = await this.getProductById(numProductId, forceRefresh); // Используем уже существующий метод
     if (product && product.reviews && Array.isArray(product.reviews)) {
       return product.reviews.map(review => {
         const reviewCopy = { ...review };
@@ -117,19 +179,31 @@ class Database {
     return [];
   }
 
-  static async searchProducts(query) {
-    const db = await loadFlowersDb();
+  static async searchProducts(query, forceRefresh = false) {
+    const db = await loadFlowersDb(forceRefresh);
+    if (!query || typeof query !== 'string') {
+      return db.products || [];
+    }
+
     const searchQuery = query.toLowerCase();
     if (!db.products) return [];
+
     return db.products.filter(product =>
-      Object.values(product).some(value =>
-        String(value).toLowerCase().includes(searchQuery)
-      ) || (product.composition && product.composition.some(item => item.toLowerCase().includes(searchQuery)))
+      Object.entries(product).some(([key, value]) => {
+        // Исключаем массивы и объекты из прямого поиска
+        if (typeof value === 'string' || typeof value === 'number') {
+          return String(value).toLowerCase().includes(searchQuery);
+        }
+        return false;
+      }) ||
+      // Отдельно проверяем массивы composition
+      (product.composition && Array.isArray(product.composition) &&
+        product.composition.some(item => String(item).toLowerCase().includes(searchQuery)))
     );
   }
 
-  static async getUsers() {
-    return await loadUsersDb();
+  static async getUsers(forceRefresh = false) {
+    return await loadUsersDb(forceRefresh);
   }
 }
 

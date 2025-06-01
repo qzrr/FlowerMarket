@@ -2,6 +2,9 @@
 (function () {
   let productsOnPageCache = [];
   let categoriesCache = [];
+  let lastCategoriesCacheTime = 0;
+  let lastProductsCacheTime = 0;
+  const CACHE_TTL = 60000; // Время жизни кэша в миллисекундах (1 минута)
 
   async function initCatalog() {
     const loadingEl = document.getElementById('catalog-loading-indicator');
@@ -12,23 +15,47 @@
     if (productsContainerEl) productsContainerEl.innerHTML = '';
 
     try {
-      categoriesCache = await API.getCategories();
+      // Проверяем, нужно ли обновить кэш категорий
+      const now = Date.now();
+      const shouldRefreshCategories = categoriesCache.length === 0 || (now - lastCategoriesCacheTime > CACHE_TTL);
+
+      // Загружаем категории с возможностью использования кэша
+      categoriesCache = await API.getCategories(!shouldRefreshCategories);
+      if (shouldRefreshCategories) {
+        lastCategoriesCacheTime = now;
+      }
+
       populateCategoryFilter(categoriesCache);
 
       const urlParams = new URLSearchParams(window.location.search);
       const categoryParam = urlParams.get('category');
       const searchParam = urlParams.get('search');
 
+      // Для поиска всегда используем свежие данные
       if (searchParam) {
         if (pageTitleEl) pageTitleEl.textContent = `Поиск: "${searchParam}"`;
-        productsOnPageCache = await API.searchProducts(searchParam);
-      } else if (categoryParam && categoryParam !== 'all') {
-        const category = categoriesCache.find(c => (c.id && String(c.id) === categoryParam) || (c.slug && c.slug === categoryParam));
-        if (pageTitleEl) pageTitleEl.textContent = category ? category.name : 'Каталог';
-        productsOnPageCache = await API.getProductsByCategory(categoryParam);
-      } else {
-        if (pageTitleEl) pageTitleEl.textContent = 'Все товары';
-        productsOnPageCache = await API.getProducts();
+        productsOnPageCache = await API.searchProducts(searchParam, false); // Не используем кэш для поиска
+      }
+      // Для категорий и всех товаров можем использовать кэш, если он не устарел
+      else {
+        const shouldRefreshProducts = productsOnPageCache.length === 0 || (now - lastProductsCacheTime > CACHE_TTL);
+
+        if (categoryParam && categoryParam !== 'all') {
+          const category = categoriesCache.find(c =>
+            (c.id && String(c.id) === categoryParam) ||
+            (c.slug && c.slug === categoryParam)
+          );
+
+          if (pageTitleEl) pageTitleEl.textContent = category ? category.name : 'Каталог';
+          productsOnPageCache = await API.getProductsByCategory(categoryParam, !shouldRefreshProducts);
+        } else {
+          if (pageTitleEl) pageTitleEl.textContent = 'Все товары';
+          productsOnPageCache = await API.getProducts(!shouldRefreshProducts);
+        }
+
+        if (shouldRefreshProducts) {
+          lastProductsCacheTime = now;
+        }
       }
 
       displayCatalogProducts(productsOnPageCache);

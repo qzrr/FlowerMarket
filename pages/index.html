@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta
     name="description"
     content="Floww - магазин свежих цветов и изысканных букетов с быстрой доставкой по городу. Закажите цветы онлайн!"
@@ -12,8 +12,8 @@
     content="цветы, букеты, доставка цветов, цветочный магазин, Floww, заказать цветы онлайн"
   />
   <title>Floww - Цветы и Букеты с Доставкой</title>
-  <link rel="stylesheet" href="../css/style.css" /> <!-- Путь от корня, если index.html в корне -->
-  <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../css/style.css"/> <!-- Путь от корня, если index.html в корне -->
+  <link rel="icon" href="../favicon.ico" type="image/x-icon"/>
 </head>
 
 <body>
@@ -26,7 +26,8 @@
           <a href="index.html" class="nav__link active">Главная</a>
         </li>
         <li class="nav__item">
-          <a href="../pages/catalog.html" class="nav__link">Каталог</a> <!-- Предполагаем, что другие страницы в /pages/ -->
+          <a href="../pages/catalog.html" class="nav__link">Каталог</a>
+          <!-- Предполагаем, что другие страницы в /pages/ -->
         </li>
         <li class="nav__item">
           <a href="../pages/delivery.html" class="nav__link">Доставка</a>
@@ -44,7 +45,7 @@
         class="header__action-btn js-search-toggle"
         aria-label="Поиск"
       >
-        <img src="../assets/search.svg" alt="Поиск" /> <!-- Путь от корня -->
+        <img src="../assets/search.svg" alt="Поиск"/> <!-- Путь от корня -->
       </button>
       <a href="../pages/user.html" class="header__action-btn" aria-label="Аккаунт"
       ><img src="../assets/user.svg" alt="Аккаунт"
@@ -60,7 +61,7 @@
         class="header__action-btn header__cart-btn"
         aria-label="Корзина"
       >
-        <img src="../assets/cart.svg" alt="Корзина" />
+        <img src="../assets/cart.svg" alt="Корзина"/>
         <span class="cart-count" data-cart-count>0</span>
       </a>
       <button class="burger-menu" aria-label="Открыть меню">
@@ -78,31 +79,30 @@
     <div class="hero__slider">
       <div
         class="hero__slide active"
-        style="background-image: url('img/картинка rose.png')"
+        style="background-image: url('../img/картинка rose.png')"
       >
-      <div class="container hero__slide-content">
-        <h2>Комнатные растения</h2>
-        <p>Создайте уютную атмосферу в вашем доме</p>
-        <a href="../pages/catalog.html?category=plants" class="btn"
-        >Выбрать растение</a
-        >
+        <div class="container hero__slide-content">
+          <h2>Комнатные растения</h2>
+          <p>Создайте уютную атмосферу в вашем доме</p>
+          <a href="../pages/catalog.html?category=plants" class="btn"
+          >Выбрать букет</a
+          >
+        </div>
       </div>
-    </div>
-    <div
-      class="hero__slide"
-      style="
-              background-image: url('img/pngtree-floral-flowers-bright-blank-background-image_2160290.jpg');
+      <div
+        class="hero__slide"
+        style="
+              background-image: url('../img/pngtree-floral-flowers-bright-blank-background-image_2160290.jpg');
             "
-    >
-      <div class="container hero__slide-content">
-        <h2>Свежие Букеты</h2>
-        <p>Доставка по городу в течение 2 часов</p>
-        <a href="../pages/catalog.html?category=bouquets" class="btn"
-        >Выбрать букет</a
-        >
+      >
+        <div class="container hero__slide-content">
+          <h2>Свежие Букеты</h2>
+          <p>Доставка по городу в течение 2 часов</p>
+          <a href="../pages/catalog.html?category=bouquets" class="btn"
+          >Выбрать букет</a
+          >
+        </div>
       </div>
-    </div>
-    <!-- Добавьте больше слайдов, если нужно -->
     </div>
     <div class="hero__controls">
       <button
@@ -136,12 +136,6 @@
   <section class="popular section">
     <div class="container">
       <h2 class="section__title">Популярные букеты</h2>
-      <!-- Опционально: Поиск по популярным товарам -->
-      <!--
-      <div class="popular-search__wrapper">
-        <input type="search" id="popular-search-input" class="search-input" placeholder="Найти среди популярных...">
-      </div>
-       -->
       <div class="product-grid" id="popular-products-container">
         <div class="loading-indicator">Загрузка популярных товаров...</div>
       </div>
@@ -173,7 +167,7 @@
       <div class="about__image">
         <img
           src="../img/image-10.jpg"
-        alt="Интерьер магазина Floww"
+          alt="Интерьер магазина Floww"
         />
       </div>
     </div>
@@ -186,28 +180,28 @@
       <div class="delivery__grid">
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/Shopping%20cart.svg" alt="Быстрая доставка" /> <!-- Замените на свои иконки -->
+            <img src="../assets/Shopping%20cart.svg" alt="Быстрая доставка"/> <!-- Замените на свои иконки -->
           </div>
           <h3>Быстрая доставка</h3>
           <p>Доставляем букеты в течение 2 часов по всему городу</p>
         </div>
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/Feather.svg" alt="Гарантия свежести" />
+            <img src="../assets/Feather.svg" alt="Гарантия свежести"/>
           </div>
           <h3>Гарантия свежести</h3>
           <p>Мы гарантируем, что ваши цветы будут стоять не менее 7 дней</p>
         </div>
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/Gift.svg" alt="Подарки" />
+            <img src="../assets/Gift.svg" alt="Подарки"/>
           </div>
           <h3>Подарки к заказу</h3>
           <p>При заказе от 5000₽ дарим открытку или сладкий комплимент</p>
         </div>
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/heart.svg" alt="Оплата" />
+            <img src="../assets/heart.svg" alt="Оплата"/>
           </div>
           <h3>Удобная оплата</h3>
           <p>Принимаем оплату картой, наличными или через онлайн-сервисы</p>
@@ -331,7 +325,7 @@
     <div class="footer__column">
       <h4 class="footer__title">Контакты</h4>
       <address class="footer__contact-info">
-        <p>ул. Цветочная, 10<br />Москва, Россия</p>
+        <p>ул. Цветочная, 10<br/>Москва, Россия</p>
         <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
         <p>
           Email:

@@ -1,17 +1,30 @@
 // js/auth.js
 (function () {
-  let allUsersCache = [];
+  let allUsersCache = []; // Кэш пользователей с "сервера" (users.json)
+  let lastCacheTime = 0;
+  const CACHE_TTL = 60000; // Время жизни кэша в миллисекундах (1 минута)
 
-  async function loadUsersFromServer() {
-    if (allUsersCache.length > 0) return allUsersCache;
-    try {
-      allUsersCache = await API.getUsers();
-      return allUsersCache;
-    } catch (error) {
-      console.error('Ошибка загрузки пользователей:', error);
-      showNotification('Не удалось загрузить данные пользователей.', true);
-      return [];
+  async function loadUsersFromServer(forceRefresh = false) {
+    const now = Date.now();
+    // Обновляем кэш, если он пуст, истек TTL или запрошено принудительное обновление
+    if (allUsersCache.length === 0 || forceRefresh || (now - lastCacheTime > CACHE_TTL)) {
+      try {
+        // Используем параметр useCache=false для API.getUsers(), чтобы получить свежие данные
+        allUsersCache = await API.getUsers(!forceRefresh);
+        lastCacheTime = now;
+        console.log("Данные пользователей успешно загружены");
+        return allUsersCache;
+      } catch (error) {
+        console.error('Ошибка загрузки пользователей с сервера:', error);
+        showNotification('Не удалось загрузить данные пользователей. Функционал входа/регистрации может быть ограничен.', true);
+        // Если кэш уже существует, используем его даже при ошибке загрузки
+        if (allUsersCache.length > 0) {
+          return allUsersCache;
+        }
+        return [];
+      }
     }
+    return allUsersCache;
   }
 
   function getCurrentUser() {
@@ -155,7 +168,8 @@
       return;
     }
 
-    const users = await loadUsersFromServer();
+    // Принудительно обновляем кэш пользователей перед проверкой
+    const users = await loadUsersFromServer(true);
     if (users.some(u => u.email === email)) {
       if (errorMsgEl) errorMsgEl.textContent = 'Email уже занят.';
       return;
@@ -168,7 +182,10 @@
     // В реальном мире: await API.registerUser({ fullname, email, password });
     // Для демо:
     console.warn("Демо-регистрация: новый пользователь не сохраняется на сервере.", newUser);
-    // allUsersCache.push({...newUser, password}); // Добавляем в кэш с паролем для возможности логина в этой сессии
+    // Добавляем в кэш с паролем для возможности логина в этой сессии
+    allUsersCache.push({...newUser, password});
+    lastCacheTime = Date.now(); // Обновляем время кэша
+
     localStorage.setItem('currentUser', JSON.stringify(newUser)); // Логиним сразу
     updateAuthUI(newUser);
     showNotification('Регистрация успешна!');
