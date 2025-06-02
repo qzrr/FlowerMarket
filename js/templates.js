@@ -6,20 +6,18 @@ const IMAGE_PLACEHOLDER_PRODUCT = '/img/placeholder-product.jpg';
 const ASSET_HEART_SVG = '/assets/heart.svg';
 const ASSET_HEART_FILLED_SVG = '/assets/heart.svg';
 const ASSET_CART_SVG = '/assets/cart.svg';
-const ASSET_TRASH_SVG = '/assets/trash.svg';
+const ASSET_TRASH_SVG = '/assets/delete.svg';
 const ASSET_AVATAR_DEFAULT = '/img/avatar-default.jpg';
 
 
 function createCategoryCardHTML(category) {
   const imageUrl = category.image || IMAGE_PLACEHOLDER_CATEGORY;
-  const description = category.description || 'Описание категории отсутствует.';
   return `
     <a href="catalog.html?category=${category.id || category.slug}" class="category-card">
       <div class="category-card__image-wrapper">
         <img src="${imageUrl}" alt="${category.name}" class="category-card__image">
       </div>
       <h3 class="category-card__name">${category.name}</h3>
-      <p class="category-card__description">${description}</p>
     </a>
   `;
 }

@@ -1,4 +1,4 @@
-// js/slider.js
+  // js/slider.js
 function initHeroSlider() {
   // Ищем главный контейнер слайдера. Если его нет на странице, функция ничего не делает.
   const sliderWrapper = document.getElementById('hero-slider-container');

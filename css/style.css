@@ -915,6 +915,205 @@ main {
 .mobile-filter-btn {
   display: none;
 }
+/* --- Стили для панели фильтров --- */
+.catalog__filters {
+  background-color: var(--light-bg);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  /* На десктопе может быть фиксированной ширины:
+  width: 280px;
+  flex-shrink: 0; /* Чтобы не сжималась, если используется flex */
+}
+
+.filter-group {
+  margin-bottom: 1.5rem; /* Отступ между группами фильтров */
+}
+.filter-group:last-of-type { /* Убираем отступ у последней группы перед кнопками */
+    margin-bottom: 1rem;
+}
+
+
+.filter-group__title {
+  font-size: 1.1em; /* Размер заголовка группы */
+  font-weight: 600; /* Жирнее */
+  color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Стили для select (выпадающих списков) */
+.form-select {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem; /* Паддинг справа для стрелки */
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1em;
+  font-family: inherit;
+  color: var(--text-color);
+  background-color: var(--white);
+  transition: var(--transition);
+  appearance: none; /* Убираем стандартную стрелку */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); /* Своя SVG стрелка */
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px; /* Размер стрелки */
+  cursor: pointer;
+}
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Стили для полей ввода цены */
+.price-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Отступ между полями "От" и "До" и тире */
+}
+
+.price-input { /* Класс для инпутов цены */
+  width: 100%; /* Растягиваются по доступной ширине в .price-filter */
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1em;
+  font-family: inherit;
+  color: var(--text-color);
+  background-color: var(--white);
+  transition: var(--transition);
+  box-sizing: border-box;
+  text-align: center; /* Можно центрировать текст "От" "До" */
+}
+.price-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.price-input::placeholder {
+  color: var(--lightest-text);
+}
+/* Убираем стрелки у number input для чистоты */
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.price-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+.price-filter__separator {
+  color: var(--light-text);
+  font-weight: 500;
+}
+
+/* Стили для чекбокса */
+.checkbox-filter {
+  margin-top: 0.5rem;
+}
+
+.checkbox-label {
+  display: flex; /* Используем flex для выравнивания кастомного чекбокса и текста */
+  align-items: center;
+  cursor: pointer;
+  font-size: 1em;
+  color: var(--text-color);
+  position: relative; /* Для позиционирования .custom-checkbox */
+  user-select: none; /* Чтобы текст не выделялся при клике */
+}
+
+.form-checkbox { /* Скрываем стандартный чекбокс */
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.custom-checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-right: 0.75rem; /* Отступ от текста */
+  transition: var(--transition);
+  background-color: var(--white);
+  position: relative; /* Для галочки */
+}
+
+.form-checkbox:checked + .custom-checkbox {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Галочка для кастомного чекбокса (SVG) */
+.form-checkbox:checked + .custom-checkbox::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.form-checkbox:focus + .custom-checkbox {
+  box-shadow: 0 0 0 3px var(--primary-light); /* Эффект фокуса */
+}
+
+
+/* Стили для кнопок действий в фильтрах */
+.filter-actions {
+  margin-top: 2rem; /* Отступ от последней группы фильтров */
+  display: flex;
+  flex-direction: column; /* Кнопки друг под другом */
+  gap: 0.75rem; /* Отступ между кнопками */
+}
+
+/* Общие стили для кнопок, если у вас их нет */
+.btn {
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: var(--transition);
+  border: 1px solid transparent; /* Базовая рамка */
+}
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+.btn-primary {
+  background-color: var(--secondary-color);
+  color: var(--white);
+  border-color: var(--secondary-color);
+}
+.btn-primary:hover {
+  background-color: var(--secondary-dark);
+  border-color: var(--secondary-dark);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.btn-outline:hover {
+  background-color: var(--primary-light); /* Легкий фон при наведении */
+  color: var(--primary-dark); /* Можно сделать текст темнее */
+}
 
 /* Разделы о нас и популярное */
 .popular__actions {
@@ -1176,6 +1375,7 @@ address {
 
 .contact-form .form-group {
   margin-bottom: 2.5rem;
+  
 }
 
 .contact-form label {
@@ -1520,7 +1720,100 @@ address {
   width: 100%;
   margin-top: 2.5rem;
 }
+.checkout-form-simple{  background-color: var(--light-bg); /* Используем ваш светлый фон */
+  padding: 1.5rem; /* Отступы можно задавать в rem или px */
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  margin-top: 1rem; /* Отступ от других элементов, если нужно */
+  box-shadow: var(--shadow-sm);
+}
+.checkout-form-simple h3 {
+  font-size: 1.4em;
+  color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color); /* Основной цвет для акцента */
+  display: inline-block;
+}
+#checkout-form .form-group {
+  margin-bottom: 1rem;
+}
+.form-label {
+  display: block;
+  margin-bottom: 0.3rem; /* Немного уменьшил отступ */
+  font-weight: 500; /* Можно сделать чуть жирнее, если нужно */
+  font-size: 0.9em;
+  color: var(--light-text); /* Используем ваш цвет для менее важного текста */
+}
 
+.form-label .required { /* Если вы добавляете звездочку через span */
+  color: var(--primary-dark); /* Используем темный оттенок основного цвета */
+  margin-left: 2px;
+  font-weight: bold;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem; /* Немного увеличенные паддинги для "воздуха" */
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1em;
+  font-family: inherit;
+  color: var(--text-color);
+  background-color: var(--white); /* Поля ввода обычно белые */
+  transition: var(--transition); /* Используем вашу переменную для transition */
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color); /* При фокусе основной цвет */
+  /* Можно добавить тень при фокусе, используя ваши переменные, если хотите */
+  box-shadow: 0 0 0 3px var(--primary-light); /* Тень из вашего --primary-light */
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--lightest-text); /* Самый светлый текст для плейсхолдеров */
+  opacity: 1;
+}
+
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.btn-checkout {
+  display: block;
+  width: 100%;
+  background-color: var(--secondary-color);
+  color: var(--white);
+  padding: 0.85rem 1rem; /* Паддинги для кнопки */
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1.05em;
+  font-weight: 500; /* Или 600, если хотите жирнее */
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  margin-top: 1rem;
+  box-shadow: var(--shadow-sm); /* Тень для кнопки */
+}
+
+.btn-checkout:hover {
+  background-color: var(--secondary-dark); /* Используем ваш темный оттенок при наведении */
+  box-shadow: var(--shadow-md); /* Более выраженная тень при наведении */
+}
+
+.btn-checkout:active {
+  background-color: var(--primary-dark); /* Можно оставить темный или сделать еще темнее */
+  transform: translateY(1px);
+  box-shadow: none; /* Убрать тень при нажатии */
+}
 /* --- Адаптивность (Примерные точки) --- */
 
 /* Медиа-запросы для планшетов */
