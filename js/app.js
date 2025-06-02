@@ -21,12 +21,12 @@ async function loadPageSpecificData() {
   const pageName = path.substring(path.lastIndexOf('/') + 1) || (path === '/' ? 'index.html' : '');
 
   // Загрузка категорий для футера (на всех страницах)
-  if (window.Display && Display.footerCategories) await Display.footerCategories();
+  if (window.Display && Display.displayFooterCategories) await Display.displayFooterCategories();
 
   if (pageName === 'index.html' || pageName === '') {
-    if (window.Display && Display.homepageCategories) await Display.homepageCategories();
-    if (window.Display && Display.popularProducts) await Display.popularProducts();
-    if (window.Display && Display.homepageReviews) await Display.homepageReviews();
+    if (window.Display && Display.displayHomepageCategories) await Display.displayHomepageCategories();
+    if (window.Display && Display.displayPopularProducts) await Display.displayPopularProducts();
+    if (window.Display && Display.displayHomepageReviews) await Display.displayHomepageReviews();
   }
 }
 
@@ -63,42 +63,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) {
       console.error('Ошибка загрузки популярных товаров:', error);
       popularProductsContainer.innerHTML = '<p class="error-message">Не удалось загрузить популярные товары.</p>';
-    }
-  }
-
-  // Загрузка категорий для главной страницы
-  const categoriesContainer = document.getElementById('categories-container');
-  if (categoriesContainer) {
-    try {
-      const categories = await API.getCategories(false);
-
-      if (categories && categories.length > 0) {
-        const featuredCategories = categories.filter(cat => cat.featured);
-
-        if (featuredCategories.length > 0) {
-          categoriesContainer.innerHTML = `
-            <div class="section-title">
-              <h2>Категории</h2>
-            </div>
-            <div class="categories-grid">
-              ${featuredCategories.map(category => `
-                <a href="/pages/catalog.html?category=${category.id}" class="category-card">
-                  <img src="${category.image}" alt="${category.name}" class="category-card__image">
-                  <div class="category-card__content">
-                    <h3 class="category-card__title">${category.name}</h3>
-                    <p class="category-card__description">${category.description}</p>
-                  </div>
-                </a>
-              `).join('')}
-            </div>
-          `;
-        } else {
-          categoriesContainer.innerHTML = '<p>Категории не найдены.</p>';
-        }
-      }
-    } catch (error) {
-      console.error('Ошибка загрузки категорий:', error);
-      categoriesContainer.innerHTML = '<p class="error-message">Не удалось загрузить категории.</p>';
     }
   }
 });

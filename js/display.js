@@ -2,22 +2,49 @@
 (function () {
   async function displayHomepageCategories() {
     const container = document.getElementById('categories-container');
-    if (!container) return;
+    if (!container) {
+      console.warn('Контейнер для категорий не найден.');
+      return;
+    }
     container.innerHTML = '<div class="loading-spinner">Загрузка...</div>';
     try {
+
       let categories = await API.getCategories();
+      console.log('[displayHomepageCategories categories] API.getCatigories() result:', categories);
+
       if (categories && categories.length > 0) {
-        const featured = categories.filter(cat => cat.featured === true || cat.featured === 1);
+
+        const featured = categories.filter(cat => categories.featured === true || categories.featured === 1);
+        console.log('[displayHomepageCategories] Filtered "featured" categories:', featured);
+
         const toDisplay = featured.length > 0 ? featured : categories.slice(0, 4); // Показать 4, если нет featured
+        console.log('[displayHomepageCategories] Categories "toDisplay":', toDisplay);
+
         container.innerHTML = toDisplay.map(window.createCategoryCardHTML).join('');
+
+        if (typeof window.createCategoryCardHTML !== 'function') {
+          console.error("window.createCategoryCardHTML is not a function!");
+          container.innerHTML = "<p class='error-message'>Ошибка: шаблон для категорий не найден.</p>";
+          return;
+        }
+
+        if (toDisplay.length > 0) {
+          container.innerHTML = toDisplay.map(window.createCategoryCardHTML).join('');
+        } else {
+          console.warn('[displayHomepageCategories] "toDisplay" is empty, showing "Рекомендуемые категории не найдены."');
+          container.innerHTML = '<p>Рекомендуемые категории не найдены.</p>';
+        }
+        
       } else {
+        console.warn('[displayHomepageCategories] "categories" is empty or not an array, showing "Категории не найдены."');
         container.innerHTML = '<p>Категории не найдены.</p>';
       }
     } catch (e) {
       container.innerHTML = '<p class="error-message">Ошибка загрузки категорий.</p>';
-      console.error(e);
+      console.error("Error in displayHomepageCategories:", e);
     }
   }
+
 
   async function displayFooterCategories() {
     const container = document.getElementById('footer-categories-list');
@@ -25,8 +52,8 @@
     try {
       const categories = await API.getCategories();
       if (categories && categories.length > 0) {
-        container.innerHTML = categories.map(cat =>
-          `<li><a href="catalog.html?category=${cat.id || cat.slug}">${cat.name}</a></li>`
+        container.innerHTML = categories.map(categories =>
+          `<li><a href="catalog.html?category=${categories.id || categories.slug}">${categories.name}</a></li>`
         ).join('');
       }
     } catch (e) {
@@ -102,7 +129,7 @@
   }
 
   window.Display = {
-    homepageCategories, footerCategories, popularProducts, homepageReviews, generateRatingStarsHTML
+    displayHomepageCategories, displayFooterCategories, displayPopularProducts, displayHomepageReviews, generateRatingStarsHTML
   };
 })();
 // Инициализация в app.js

@@ -7,11 +7,11 @@
     "price": 2500,
     "oldPrice": 3000,
     "discount": 17,
-    "image": "../img/placeholder-large.jpg",
+    "image": "../img/products/bouquet1.jpg",
     "images": [
-      "../img/placeholder-large.jpg",
-      "../img/placeholder-large2.jpg",
-      "../img/placeholder-large3.jpg"
+      "../img/products/bouquet1.jpg",
+      "../img/products/bouquet1-2.jpg",
+      "../img/products/bouquet1-3.jpg"
     ],
     "popular": true,
     "description": "Нежный букет для самых любимых. Созданный с любовью и заботой.",
@@ -74,11 +74,11 @@
     "price": 3200,
     "oldPrice": null,
     "discount": null,
-    "image": "../img/placeholder-large2.jpg",
+    "image": "../img/products/bouquet2.jpg",
     "images": [
-      "../img/placeholder-large2.jpg",
-      "../img/placeholder-large.jpg",
-      "../img/placeholder-large3.jpg"
+      "../img/products/bouquet2.jpg",
+      "../img/products/bouquet2-2.jpg",
+      "../img/products/bouquet2-3.jpg"
     ],
     "popular": true,
     "description": "Яркий летний букет из сезонных цветов. Подарит радость и хорошее настроение.",
@@ -125,16 +125,16 @@
   {
     "id": 3,
     "name": "Букет 'Классика'",
-    "category": "roses",
-    "categoryName": "Розы",
+    "category": "bouquets",
+    "categoryName": "Букеты",
     "price": 4000,
     "oldPrice": 4500,
     "discount": 11,
-    "image": "../img/placeholder-large3.jpg",
+    "image": "../img/products/bounque(1).jpg",
     "images": [
-      "../img/placeholder-large3.jpg",
-      "../img/placeholder-large.jpg",
-      "../img/placeholder-large2.jpg"
+      "../img/products/bounque(1).jpg",
+      "../img/products/bounque(2).jpg",
+      "../img/products/bounque(3).jpg"
     ],
     "popular": true,
     "description": "Классический букет из красных роз. Вечная классика для особых случаев.",
@@ -178,56 +178,102 @@
   },
   {
     "id": 4,
-    "name": "Композиция 'Тропики'",
-    "category": "compositions",
-    "categoryName": "Композиции",
-    "price": 5500,
-    "oldPrice": null,
-    "discount": null,
-    "image": "../img/placeholder-large.jpg",
+    "name": "Букет 'Классика'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 4000,
+    "oldPrice": 4500,
+    "discount": 11,
+    "image": "../img/products/roses2.jpg",
     "images": [
-      "../img/placeholder-large.jpg",
-      "../img/placeholder-large2.jpg"
+      "../img/products/roses2.jpg",
+      "../img/products/roses2-2.jpg",
+      "../img/products/roses2-3.jpg"
     ],
-    "popular": false,
-    "description": "Экзотическая композиция из тропических цветов и растений.",
-    "details": "Экзотическая композиция из тропических цветов и растений. Яркая и необычная, она станет прекрасным украшением вашего дома или офиса. Тропические цветы отличаются особой стойкостью и будут радовать вас долгое время.",
-    "sku": "FL-0004",
+    "popular": true,
+    "description": "Классический букет из красных роз. Вечная классика для особых случаев.",
+    "details": "Классический букет из красных роз. Вечная классика для особых случаев. Красные розы символизируют любовь и страсть, этот букет станет идеальным подарком для вашей второй половинки.",
+    "sku": "FL-0003",
     "inStock": true,
-    "rating": 4.7,
+    "rating": 5,
     "reviews": [
       {
-        "productId": 4,
-        "name": "Дмитрий Козлов",
-        "avatar": "../img/avatar2.jpg",
-        "date": "15.04.2025",
+        "productId": 3,
+        "name": "Ольга Смирнова",
+        "avatar": "../img/avatar3.jpg",
+        "date": "20.03.2025",
         "rating": 5,
-        "text": "Очень необычная и красивая композиция! Заказывал для офиса, все коллеги в восторге."
-      },
-      {
-        "productId": 4,
-        "name": "Наталья Морозова",
-        "avatar": "../img/avatar1.jpg",
-        "date": "10.04.2025",
-        "rating": 4,
-        "text": "Красивая композиция, но немного отличается от фото. В целом довольна."
+        "text": "Шикарный букет! Розы очень свежие и ароматные. Муж подарил на годовщину, я в восторге!"
       }
     ],
     "composition": [
-      "Стрелиция - 2 шт",
-      "Антуриум - 3 шт",
-      "Орхидея - 2 шт",
-      "Монстера - 3 листа",
-      "Декоративные элементы"
+      "Красные розы - 11 шт",
+      "Гипсофила - 2 веточки",
+      "Упаковка: премиум бумага, атласная лента"
+    ],
+    "sizes": [
+      {
+        "name": "11 роз",
+        "price": 4000
+      },
+      {
+        "name": "21 роза",
+        "price": 7000
+      },
+      {
+        "name": "35 роз",
+        "price": 10000
+      },
+      {
+        "name": "51 роза",
+        "price": 15000
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Букет 'Солнечный день'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bouquet3.jpg",
+    "images": [
+      "../img/products/bouquet3.jpg",
+      "../img/products/bouquet3-2.jpg",
+      "../img/products/bouquet3-3.jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
     ],
     "sizes": [
       {
         "name": "Стандарт",
-        "price": 5500
+        "price": 2800
       },
       {
-        "name": "Премиум",
-        "price": 7500
+        "name": "Большой",
+        "price": 4000
       }
     ]
   }
