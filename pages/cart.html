@@ -13,7 +13,6 @@
     />
     <title>Корзина - Floww</title>
     <link rel="stylesheet" href="../css/style.css" />
-    <!-- Предполагаем, что cart.html в /pages/ -->
     <link rel="icon" href="../favicon.ico" type="image/x-icon" />
   </head>
 
@@ -305,7 +304,6 @@
           id="closeSearchModalBtn"
           aria-label="Закрыть поиск"
         ></button>
-        <!-- Добавил Btn к ID -->
         <h2 class="search-modal__title">Поиск товаров</h2>
         <form class="search-form" id="modalSearchForm">
           <div class="search-input-container">
@@ -313,17 +311,13 @@
               type="search"
               id="modalSearchInput"
               placeholder="Название товара или артикул..."
-              <!--
-              Обновил
-              id
-              --
+              aria-label="Поиск по каталогу"
+              autofocus
             />
-            aria-label="Поиск по каталогу" autofocus>
             <button type="submit" class="btn btn--primary">Найти</button>
           </div>
         </form>
         <div class="search-modal__results" id="modalSearchResultsContainer">
-          <!-- Обновил ID -->
           <p class="search-hint">Введите запрос для поиска по каталогу</p>
         </div>
       </div>

@@ -325,7 +325,7 @@
       <div class="search-modal__content">
         <button
           class="search-modal__close"
-          id="closeSearchModal"
+          id="closeSearchModalBtn"
           aria-label="Закрыть поиск"
         ></button>
         <h2 class="search-modal__title">Поиск товаров</h2>
@@ -333,16 +333,15 @@
           <div class="search-input-container">
             <input
               type="search"
-              id="modalSearchQuery"
-              placeholder="Введите запрос для поиска..."
+              id="modalSearchInput"
+              placeholder="Название товара или артикул..."
               aria-label="Поиск по каталогу"
               autofocus
             />
             <button type="submit" class="btn btn--primary">Найти</button>
           </div>
         </form>
-        <div class="search-modal__results" id="modalSearchResults">
-          <!-- Результаты поиска будут добавлены здесь через JavaScript -->
+        <div class="search-modal__results" id="modalSearchResultsContainer">
           <p class="search-hint">Введите запрос для поиска по каталогу</p>
         </div>
       </div>
