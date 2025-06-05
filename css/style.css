@@ -308,6 +308,7 @@ main {
 }
 
 .header__cart-btn {
+  text-align: center;
   position: relative;
 }
 
@@ -929,10 +930,10 @@ main {
 .filter-group {
   margin-bottom: 1.5rem; /* Отступ между группами фильтров */
 }
-.filter-group:last-of-type { /* Убираем отступ у последней группы перед кнопками */
-    margin-bottom: 1rem;
+.filter-group:last-of-type {
+  /* Убираем отступ у последней группы перед кнопками */
+  margin-bottom: 1rem;
 }
-
 
 .filter-group__title {
   font-size: 1.1em; /* Размер заголовка группы */
@@ -977,7 +978,8 @@ main {
   gap: 0.5rem; /* Отступ между полями "От" и "До" и тире */
 }
 
-.price-input { /* Класс для инпутов цены */
+.price-input {
+  /* Класс для инпутов цены */
   width: 100%; /* Растягиваются по доступной ширине в .price-filter */
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-color);
@@ -1004,10 +1006,9 @@ main {
   -webkit-appearance: none;
   margin: 0;
 }
-.price-input[type=number] {
+.price-input[type="number"] {
   -moz-appearance: textfield;
 }
-
 
 .price-filter__separator {
   color: var(--light-text);
@@ -1029,7 +1030,8 @@ main {
   user-select: none; /* Чтобы текст не выделялся при клике */
 }
 
-.form-checkbox { /* Скрываем стандартный чекбокс */
+.form-checkbox {
+  /* Скрываем стандартный чекбокс */
   opacity: 0;
   width: 0;
   height: 0;
@@ -1055,7 +1057,7 @@ main {
 
 /* Галочка для кастомного чекбокса (SVG) */
 .form-checkbox:checked + .custom-checkbox::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 6px;
   top: 2px;
@@ -1069,7 +1071,6 @@ main {
 .form-checkbox:focus + .custom-checkbox {
   box-shadow: 0 0 0 3px var(--primary-light); /* Эффект фокуса */
 }
-
 
 /* Стили для кнопок действий в фильтрах */
 .filter-actions {
@@ -1375,7 +1376,6 @@ address {
 
 .contact-form .form-group {
   margin-bottom: 2.5rem;
-  
 }
 
 .contact-form label {
@@ -1720,7 +1720,8 @@ address {
   width: 100%;
   margin-top: 2.5rem;
 }
-.checkout-form-simple{  background-color: var(--light-bg); /* Используем ваш светлый фон */
+.checkout-form-simple {
+  background-color: var(--light-bg); /* Используем ваш светлый фон */
   padding: 1.5rem; /* Отступы можно задавать в rem или px */
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
@@ -1747,7 +1748,8 @@ address {
   color: var(--light-text); /* Используем ваш цвет для менее важного текста */
 }
 
-.form-label .required { /* Если вы добавляете звездочку через span */
+.form-label .required {
+  /* Если вы добавляете звездочку через span */
   color: var(--primary-dark); /* Используем темный оттенок основного цвета */
   margin-left: 2px;
   font-weight: bold;
@@ -1805,15 +1807,30 @@ address {
 }
 
 .btn-checkout:hover {
-  background-color: var(--secondary-dark); /* Используем ваш темный оттенок при наведении */
+  background-color: var(
+    --secondary-dark
+  ); /* Используем ваш темный оттенок при наведении */
   box-shadow: var(--shadow-md); /* Более выраженная тень при наведении */
 }
 
 .btn-checkout:active {
-  background-color: var(--primary-dark); /* Можно оставить темный или сделать еще темнее */
+  background-color: var(
+    --primary-dark
+  ); /* Можно оставить темный или сделать еще темнее */
   transform: translateY(1px);
   box-shadow: none; /* Убрать тень при нажатии */
 }
+
+.favorite-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* отступ между кнопками */
+  width: fit-content; /* делает ширину по содержимому */
+  padding: 16px;
+  margin: 20px auto 40px; /* сверху, по центру, снизу */
+  background-color: rgba(var(--border-color), 0.08); /* светлый фон (опционально) */
+}
+
 /* --- Адаптивность (Примерные точки) --- */
 
 /* Медиа-запросы для планшетов */
@@ -2483,8 +2500,6 @@ address {
   margin-bottom: 1.5rem;
 }
 
-
-
 /* Полезные стили для странички 404 */
 html,
 body.error-page {
@@ -2609,6 +2624,7 @@ main.error-content {
 }
 
 .search-modal__close:before {
+  background-color: var(--primary-color);
   transform: rotate(45deg);
 }
 
@@ -2907,6 +2923,17 @@ main.error-content {
 
 .user-notification--error {
   background-color: var(--error-color, #ff3b30);
+}
+
+.favorite-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.favorite-item-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 2rem;
 }
 
 @media (max-width: 1024px) {

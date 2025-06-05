@@ -1,219 +1,349 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Корзина покупок - Floww. Оформите заказ цветов с доставкой"
+    />
+    <meta
+      name="keywords"
+      content="корзина, заказ цветов, доставка цветов, оформление заказа"
+    />
+    <title>Корзина - Floww</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <!-- Предполагаем, что cart.html в /pages/ -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Корзина покупок - Floww. Оформите заказ цветов с доставкой">
-  <meta name="keywords" content="корзина, заказ цветов, доставка цветов, оформление заказа">
-  <title>Корзина - Floww</title>
-  <link rel="stylesheet" href="../css/style.css"> <!-- Предполагаем, что cart.html в /pages/ -->
-  <link rel="icon" href="../favicon.ico" type="image/x-icon">
-</head>
-
-<body>
-<header class="header">
-  <div class="container header__container">
-    <a href="index.html" class="logo">Floww</a>
-    <nav class="nav header__nav">
-      <ul class="nav__list">
-        <li class="nav__item"><a href="index.html" class="nav__link">Главная</a></li>
-        <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
-        <li class="nav__item"><a href="delivery.html" class="nav__link">Доставка</a></li>
-        <li class="nav__item"><a href="about.html" class="nav__link">О нас</a></li>
-        <li class="nav__item"><a href="contact.html" class="nav__link">Контакты</a></li>
-      </ul>
-    </nav>
-    <div class="header__actions">
-      <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
-                                                                                  alt="Поиск"></button>
-      <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
-                                                                               alt="Аккаунт"></a>
-      <a href="favorite.html" class="header__action-btn" aria-label="Избранное"><img src="../assets/favorite.svg"
-                                                                                     alt="Избранное"></a>
-      <a href="cart.html" class="header__action-btn header__cart-btn active" aria-label="Корзина"> <!-- 'active' класс если есть товары -->
-        <img src="../assets/cart.svg" alt="Корзина">
-        <span class="cart-count" data-cart-count>0</span>
-      </a>
-      <button class="burger-menu" aria-label="Открыть меню">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<main class="cart-page">
-  <div class="container">
-    <h1 class="page-title">Корзина</h1>
-
-    <div class="cart-content">
-      <div class="cart-items" id="cart-items-container">
-        <!-- Товары корзины будут добавлены JS -->
-        <p class="cart-empty-message" id="cart-empty-message" style="display: block;">Ваша корзина пуста. <a href="catalog.html">Перейти в
-          каталог</a></p>
-        <!-- Сообщение о пустой корзине будет управляться JS -->
+  <body>
+    <header class="header">
+      <div class="container header__container">
+        <a href="index.html" class="logo">Floww</a>
+        <nav class="nav header__nav">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link">Главная</a>
+            </li>
+            <li class="nav__item">
+              <a href="catalog.html" class="nav__link">Каталог</a>
+            </li>
+            <li class="nav__item">
+              <a href="delivery.html" class="nav__link">Доставка</a>
+            </li>
+            <li class="nav__item">
+              <a href="about.html" class="nav__link">О нас</a>
+            </li>
+            <li class="nav__item">
+              <a href="contact.html" class="nav__link">Контакты</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="header__actions">
+          <button
+            class="header__action-btn js-search-toggle"
+            aria-label="Поиск"
+          >
+            <img src="../assets/search.svg" alt="Поиск" />
+          </button>
+          <a href="user.html" class="header__action-btn" aria-label="Аккаунт"
+            ><img src="../assets/user.svg" alt="Аккаунт"
+          /></a>
+          <a
+            href="favorite.html"
+            class="header__action-btn"
+            aria-label="Избранное"
+            ><img src="../assets/favorite.svg" alt="Избранное"
+          /></a>
+          <a
+            href="cart.html"
+            class="header__action-btn header__cart-btn active"
+            aria-label="Корзина"
+          >
+            <!-- 'active' класс если есть товары -->
+            <img src="../assets/cart.svg" alt="Корзина" />
+            <span class="cart-count" data-cart-count>0</span>
+          </a>
+          <button class="burger-menu" aria-label="Открыть меню">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </div>
+    </header>
 
-      <div class="cart-summary" id="cart-summary-section" style="display: none;"> <!-- Скрыто пока корзина пуста -->
-        <h2>Сумма заказа</h2>
-        <div class="summary-row">
-          <span>Товары (<span id="summary-item-count">0</span>):</span>
-          <span id="summary-subtotal">0 ₽</span>
-        </div>
-        <div class="summary-row">
-          <span>Доставка:</span>
-          <span id="summary-delivery">0 ₽</span> <!-- Начальное значение, будет обновлено JS -->
-        </div>
-        <div class="summary-row summary-discount" id="summary-discount-row" style="display: none;"> <!-- ID обновлен -->
-          <span>Скидка по промокоду:</span>
-          <span id="summary-discount-amount">-0 ₽</span> <!-- ID обновлен -->
-        </div>
-        <hr>
-        <div class="summary-row summary-total">
-          <span>Итого:</span>
-          <strong id="summary-total">0 ₽</strong> <!-- Начальное значение, будет обновлено JS -->
-        </div>
-        <div class="promo-code">
-          <label for="promo-code-input">Промокод:</label> <!-- for обновлен -->
-          <div class="promo-code__input-group">
-            <input type="text" id="promo-code-input" placeholder="Введите промокод"> <!-- ID обновлен -->
-            <button class="btn btn--secondary btn--small" id="apply-promo-btn">Применить</button> <!-- ID обновлен -->
+    <main class="cart-page">
+      <div class="container">
+        <h1 class="page-title">Корзина</h1>
+
+        <div class="cart-content">
+          <!-- Товары корзины будут добавлены JS -->
+          <p
+            class="cart-empty-message"
+            id="cart-empty-message"
+            style="display: block"
+          >
+            Ваша корзина пуста. <a href="catalog.html">Перейти в каталог</a>
+          </p>
+
+          <div class="cart-items" id="cart-items-container">
+            <!-- Сообщение о пустой корзине будет управляться JS -->
           </div>
-          <span class="promo-status" id="promo-status-message"></span> <!-- ID обновлен, это для сообщений типа "Промокод применен" -->
-        </div>
 
-        <!-- Форма заказа прямо в корзине -->
-        <div class="checkout-form-simple">
-          <h3>Оформление заказа</h3>
-          <form id="checkout-form"> <!-- Добавил тег form для лучшей семантики и возможной валидации -->
-            <div class="form-group">
-              <label for="customer-name" class="form-label">Имя*</label>
-              <input type="text" id="customer-name" class="form-input" required>
+          <div
+            class="cart-summary"
+            id="cart-summary-section"
+            style="display: none"
+          >
+            <!-- Скрыто пока корзина пуста -->
+            <h2>Сумма заказа</h2>
+            <div class="summary-row">
+              <span>Товары (<span id="summary-item-count">0</span>):</span>
+              <span id="summary-subtotal">0 ₽</span>
             </div>
-            <div class="form-group">
-              <label for="customer-phone" class="form-label">Телефон*</label>
-              <input type="tel" id="customer-phone" class="form-input" required placeholder="+7 (___) ___-__-__">
+            <div class="summary-row">
+              <span>Доставка:</span>
+              <span id="summary-delivery">0 ₽</span>
+              <!-- Начальное значение, будет обновлено JS -->
             </div>
-            <div class="form-group">
-              <label for="customer-email" class="form-label">Email*</label>
-              <input type="email" id="customer-email" class="form-input" required>
+            <div
+              class="summary-row summary-discount"
+              id="summary-discount-row"
+              style="display: none"
+            >
+              <!-- ID обновлен -->
+              <span>Скидка по промокоду:</span>
+              <span id="summary-discount-amount">-0 ₽</span>
+              <!-- ID обновлен -->
             </div>
-            <div class="form-group">
-              <label for="delivery-address" class="form-label">Адрес доставки*</label>
-              <input type="text" id="delivery-address" class="form-input" required>
+            <hr />
+            <div class="summary-row summary-total">
+              <span>Итого:</span>
+              <strong id="summary-total">0 ₽</strong>
+              <!-- Начальное значение, будет обновлено JS -->
             </div>
-            <div class="form-group">
-              <label for="order-comment" class="form-label">Комментарий к заказу</label>
-              <textarea id="order-comment" class="form-textarea" rows="2"
-                        placeholder="Укажите важные детали для исполнения заказа"></textarea>
+            <div class="promo-code">
+              <label for="promo-code-input">Промокод:</label>
+              <!-- for обновлен -->
+              <div class="promo-code__input-group">
+                <input
+                  type="text"
+                  id="promo-code-input"
+                  placeholder="Введите промокод"
+                />
+                <!-- ID обновлен -->
+                <button
+                  class="btn btn--secondary btn--small"
+                  id="apply-promo-btn"
+                >
+                  Применить
+                </button>
+                <!-- ID обновлен -->
+              </div>
+              <span class="promo-status" id="promo-status-message"></span>
+              <!-- ID обновлен, это для сообщений типа "Промокод применен" -->
             </div>
-            <button type="submit" class="btn btn--large btn-checkout" id="checkout-btn">Оформить заказ</button> <!-- ID обновлен, type="submit" для формы -->
-          </form>
+
+            <!-- Форма заказа прямо в корзине -->
+            <div class="checkout-form-simple">
+              <h3>Оформление заказа</h3>
+              <form id="checkout-form">
+                <!-- Добавил тег form для лучшей семантики и возможной валидации -->
+                <div class="form-group">
+                  <label for="customer-name" class="form-label">Имя*</label>
+                  <input
+                    type="text"
+                    id="customer-name"
+                    class="form-input"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="customer-phone" class="form-label"
+                    >Телефон*</label
+                  >
+                  <input
+                    type="tel"
+                    id="customer-phone"
+                    class="form-input"
+                    required
+                    placeholder="+7 (___) ___-__-__"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="customer-email" class="form-label">Email*</label>
+                  <input
+                    type="email"
+                    id="customer-email"
+                    class="form-input"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="delivery-address" class="form-label"
+                    >Адрес доставки*</label
+                  >
+                  <input
+                    type="text"
+                    id="delivery-address"
+                    class="form-input"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="order-comment" class="form-label"
+                    >Комментарий к заказу</label
+                  >
+                  <textarea
+                    id="order-comment"
+                    class="form-textarea"
+                    rows="2"
+                    placeholder="Укажите важные детали для исполнения заказа"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn--large btn-checkout"
+                  id="checkout-btn"
+                >
+                  Оформить заказ
+                </button>
+                <!-- ID обновлен, type="submit" для формы -->
+              </form>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</main>
+    </main>
 
-<footer class="footer">
-  <div class="container footer__container">
-    <div class="footer__column footer__column--about">
-      <a href="index.html" class="logo footer__logo">Floww</a>
-      <p>Магазин свежих цветов и букетов с доставкой по всему городу. Создаем уникальные композиции для любого
-        случая.</p>
-    </div>
-    <div class="footer__column">
-      <h4 class="footer__title">Навигация</h4>
-      <ul class="footer__list">
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="catalog.html">Каталог</a></li>
-        <li><a href="delivery.html">Доставка</a></li>
-        <li><a href="about.html">О нас</a></li>
-        <li><a href="contact.html">Контакты</a></li>
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h4 class="footer__title">Категории</h4>
-      <ul class="footer__list" id="footer-categories-list"> <!-- Обновил ID для соответствия display.js -->
-        <!-- Категории будут загружены JavaScript -->
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h4 class="footer__title">Контакты</h4>
-      <address class="footer__contact-info">
-        <p>ул. Цветочная, 123<br>Москва, Россия</p>
-        <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
-        <p>Email: <a href="mailto:info@floww.com">info@floww.com</a></p> <!-- Изменил email для примера -->
-      </address>
-      <div class="footer__socials">
-        <!-- Убедитесь, что пути к иконкам соцсетей правильные (../assets/ или /assets/) -->
-        <a href="#" aria-label="Facebook"><img src="../assets/FacebookDark.svg" alt="Facebook"></a>
-        <a href="#" aria-label="Instagram"><img src="../assets/InstagramDark.svg" alt="Instagram"></a>
-        <a href="#" aria-label="VK"><img src="../assets/icons8-vk (1).svg" alt="VK"></a>
+    <footer class="footer">
+      <div class="container footer__container">
+        <div class="footer__column footer__column--about">
+          <a href="index.html" class="logo footer__logo">Floww</a>
+          <p>
+            Магазин свежих цветов и букетов с доставкой по всему городу. Создаем
+            уникальные композиции для любого случая.
+          </p>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__title">Навигация</h4>
+          <ul class="footer__list">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li><a href="delivery.html">Доставка</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__title">Категории</h4>
+          <ul class="footer__list" id="footer-categories-list">
+            <!-- Обновил ID для соответствия display.js -->
+            <!-- Категории будут загружены JavaScript -->
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__title">Контакты</h4>
+          <address class="footer__contact-info">
+            <p>ул. Цветочная, 123<br />Москва, Россия</p>
+            <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+            <p>Email: <a href="mailto:info@floww.com">info@floww.com</a></p>
+            <!-- Изменил email для примера -->
+          </address>
+          <div class="footer__socials">
+            <!-- Убедитесь, что пути к иконкам соцсетей правильные (../assets/ или /assets/) -->
+            <a href="#" aria-label="Facebook"
+              ><img src="../assets/FacebookDark.svg" alt="Facebook"
+            /></a>
+            <a href="#" aria-label="Instagram"
+              ><img src="../assets/InstagramDark.svg" alt="Instagram"
+            /></a>
+            <a href="#" aria-label="VK"
+              ><img src="../assets/icons8-vk (1).svg" alt="VK"
+            /></a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="footer__bottom">
-    <div class="container footer__bottom-container">
-      <p>© 2024 Floww. Все права защищены.</p> <!-- Обновил год -->
-      <nav>
-        <a href="#">Политика конфиденциальности</a>
-        <a href="#">Условия использования</a>
+      <div class="footer__bottom">
+        <div class="container footer__bottom-container">
+          <p>© 2024 Floww. Все права защищены.</p>
+          <!-- Обновил год -->
+          <nav>
+            <a href="#">Политика конфиденциальности</a>
+            <a href="#">Условия использования</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu">
+      <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
+      <nav class="mobile-menu__nav">
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="delivery.html">Доставка</a></li>
+          <li><a href="about.html">О нас</a></li>
+          <li><a href="contact.html">Контакты</a></li>
+        </ul>
       </nav>
-    </div>
-  </div>
-</footer>
-
-<!-- Мобильное меню -->
-<div class="mobile-menu">
-  <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
-  <nav class="mobile-menu__nav">
-    <ul>
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="catalog.html">Каталог</a></li>
-      <li><a href="delivery.html">Доставка</a></li>
-      <li><a href="about.html">О нас</a></li>
-      <li><a href="contact.html">Контакты</a></li>
-    </ul>
-  </nav>
-  <div class="mobile-menu__actions">
-    <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
-  </div>
-</div>
-<div class="overlay"></div> <!-- Оверлей для мобильного меню и модалок -->
-
-<!-- Модальное окно поиска -->
-<div class="search-modal" id="searchModal">
-  <div class="search-modal__content">
-    <button class="search-modal__close" id="closeSearchModalBtn" aria-label="Закрыть поиск"></button> <!-- Добавил Btn к ID -->
-    <h2 class="search-modal__title">Поиск товаров</h2>
-    <form class="search-form" id="modalSearchForm">
-      <div class="search-input-container">
-        <input type="search" id="modalSearchInput" placeholder="Название товара или артикул..." <!-- Обновил ID -->
-        aria-label="Поиск по каталогу" autofocus>
-        <button type="submit" class="btn btn-primary">Найти</button>
+      <div class="mobile-menu__actions">
+        <a href="cart.html" class="btn"
+          >Корзина (<span data-cart-count>0</span>)</a
+        >
       </div>
-    </form>
-    <div class="search-modal__results" id="modalSearchResultsContainer"> <!-- Обновил ID -->
-      <p class="search-hint">Введите запрос для поиска по каталогу</p>
     </div>
-  </div>
-</div>
+    <div class="overlay"></div>
+    <!-- Оверлей для мобильного меню и модалок -->
 
-<!-- Подключение скриптов -->
-<script src="../js/slider.js"></script>
-<script src="../js/utils.js"></script>
-<script src="../js/api.js"></script>
-<script src="../js/templates.js"></script>
+    <!-- Модальное окно поиска -->
+    <div class="search-modal" id="searchModal">
+      <div class="search-modal__content">
+        <button
+          class="search-modal__close"
+          id="closeSearchModalBtn"
+          aria-label="Закрыть поиск"
+        ></button>
+        <!-- Добавил Btn к ID -->
+        <h2 class="search-modal__title">Поиск товаров</h2>
+        <form class="search-form" id="modalSearchForm">
+          <div class="search-input-container">
+            <input
+              type="search"
+              id="modalSearchInput"
+              placeholder="Название товара или артикул..."
+              <!--
+              Обновил
+              id
+              --
+            />
+            aria-label="Поиск по каталогу" autofocus>
+            <button type="submit" class="btn btn--primary">Найти</button>
+          </div>
+        </form>
+        <div class="search-modal__results" id="modalSearchResultsContainer">
+          <!-- Обновил ID -->
+          <p class="search-hint">Введите запрос для поиска по каталогу</p>
+        </div>
+      </div>
+    </div>
 
-<script src="../js/cart.js"></script>    <!-- Важнейший для этой страницы -->
-<script src="../js/auth.js"></script>
+    <!-- Подключение скриптов -->
+    <script src="../js/slider.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/templates.js"></script>
+    <script src="../js/cart.js"></script>
+    <!-- Важнейший для этой страницы -->
+    <script src="../js/auth.js"></script>
 
-<script src="../js/menu.js"></script>
-<script src="../js/search.js"></script>
+    <script src="../js/menu.js"></script>
+    <script src="../js/search.js"></script>
 
-<script src="../js/display.js"></script> <!-- Для футера -->
+    <script src="../js/display.js"></script>
+    <!-- Для футера -->
 
-<script src="../js/app.js"></script>
-</body>
+    <script src="../js/app.js"></script>
+  </body>
 </html>

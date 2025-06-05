@@ -7,11 +7,11 @@
     "price": 2500,
     "oldPrice": 3000,
     "discount": 17,
-    "image": "../img/products/bouquet1.jpg",
+    "image": "../img/products/bounque(2).jpg",
     "images": [
-      "../img/products/bouquet1.jpg",
-      "../img/products/bouquet1-2.jpg",
-      "../img/products/bouquet1-3.jpg"
+      "../img/products/bounque(2).jpg",
+      "../img/products/bounque(2).jpg",
+      "../img/products/bounque(2).jpg"
     ],
     "popular": true,
     "description": "Нежный букет для самых любимых. Созданный с любовью и заботой.",
@@ -74,11 +74,11 @@
     "price": 3200,
     "oldPrice": null,
     "discount": null,
-    "image": "../img/products/bouquet2.jpg",
+    "image": "../img/products/bounque(3).jpg",
     "images": [
-      "../img/products/bouquet2.jpg",
-      "../img/products/bouquet2-2.jpg",
-      "../img/products/bouquet2-3.jpg"
+      "../img/products/bounque(3).jpg",
+      "../img/products/bounque(3).jpg",
+      "../img/products/bounque(3).jpg"
     ],
     "popular": true,
     "description": "Яркий летний букет из сезонных цветов. Подарит радость и хорошее настроение.",
@@ -133,8 +133,8 @@
     "image": "../img/products/bounque(1).jpg",
     "images": [
       "../img/products/bounque(1).jpg",
-      "../img/products/bounque(2).jpg",
-      "../img/products/bounque(3).jpg"
+      "../img/products/bounque(1).jpg",
+      "../img/products/bounque(1).jpg"
     ],
     "popular": true,
     "description": "Классический букет из красных роз. Вечная классика для особых случаев.",
@@ -178,17 +178,17 @@
   },
   {
     "id": 4,
-    "name": "Букет 'Классика'",
+    "name": "Букет 'Зимняя ночь'",
     "category": "bouquets",
     "categoryName": "Букеты",
     "price": 4000,
     "oldPrice": 4500,
     "discount": 11,
-    "image": "../img/products/roses2.jpg",
+    "image": "../img/products/bounque (4).jpg",
     "images": [
-      "../img/products/roses2.jpg",
-      "../img/products/roses2-2.jpg",
-      "../img/products/roses2-3.jpg"
+      "../img/products/bounque (4).jpg",
+      "../img/products/bounque (4).jpg",
+      "../img/products/bounque (4).jpg"
     ],
     "popular": true,
     "description": "Классический букет из красных роз. Вечная классика для особых случаев.",
@@ -238,11 +238,387 @@
     "price": 2800,
     "oldPrice": null,
     "discount": null,
-    "image": "../img/products/bouquet3.jpg",
+    "image": "../img/products/bounque (5).jpg",
     "images": [
-      "../img/products/bouquet3.jpg",
-      "../img/products/bouquet3-2.jpg",
-      "../img/products/bouquet3-3.jpg"
+      "../img/products/bounque (5).jpg",
+      "../img/products/bounque (5).jpg",
+      "../img/products/bounque (5).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Букет 'Волна'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (6).jpg",
+    "images": [
+      "../img/products/bounque (6).jpg",
+      "../img/products/bounque (6).jpg",
+      "../img/products/bounque (6).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Букет 'Яблоко'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (7).jpg",
+    "images": [
+      "../img/products/bounque (7).jpg",
+      "../img/products/bounque (7).jpg",
+      "../img/products/bounque (7).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Букет 'Морковь'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (8).jpg",
+    "images": [
+      "../img/products/bounque (8).jpg",
+      "../img/products/bounque (8).jpg",
+      "../img/products/bounque (8).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Букет 'Энергичная весна'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (9).jpg",
+    "images": [
+      "../img/products/bounque (9).jpg",
+      "../img/products/bounque (9).jpg",
+      "../img/products/bounque (9).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Букет 'Золотая пора'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (10).jpg",
+    "images": [
+      "../img/products/bounque (10).jpg",
+      "../img/products/bounque (10).jpg",
+      "../img/products/bounque (10).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Букет 'Магия'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (11).jpg",
+    "images": [
+      "../img/products/bounque (11).jpg",
+      "../img/products/bounque (11).jpg",
+      "../img/products/bounque (11).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Букет 'Полдень'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (12).jpg",
+    "images": [
+      "../img/products/bounque (12).jpg",
+      "../img/products/bounque (12).jpg",
+      "../img/products/bounque (12).jpg"
+    ],
+    "popular": true,
+    "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",
+    "details": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду. Этот букет станет отличным подарком для друзей и близких, а также украсит ваш дом.",
+    "sku": "FL-0004",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "productId": 4,
+        "name": "Екатерина Васильева",
+        "avatar": "../img/avatar4.jpg",
+        "date": "18.04.2025",
+        "rating": 5,
+        "text": "Очень яркий и красивый букет! Цветы свежие, ароматные. Доставили вовремя, спасибо!"
+      }
+    ],
+    "composition": [
+      "Желтые розы - 5 шт",
+      "Лилии - 2 шт",
+      "Зелень - 3 веточки",
+      "Упаковка: крафт-бумага, лента"
+    ],
+    "sizes": [
+      {
+        "name": "Стандарт",
+        "price": 2800
+      },
+      {
+        "name": "Большой",
+        "price": 4000
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Букет 'Каждый раз'",
+    "category": "bouquets",
+    "categoryName": "Букеты",
+    "price": 2800,
+    "oldPrice": null,
+    "discount": null,
+    "image": "../img/products/bounque (13).jpg",
+    "images": [
+      "../img/products/bounque (13).jpg",
+      "../img/products/bounque (13).jpg",
+      "../img/products/bounque (13).jpg"
     ],
     "popular": true,
     "description": "Солнечный букет из желтых цветов. Поднимет настроение в любую погоду.",

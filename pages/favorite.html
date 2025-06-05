@@ -1,48 +1,77 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Избранные товары - Floww. Ваши любимые цветы и букеты в одном месте."
+    />
+    <meta
+      name="keywords"
+      content="избранные товары, избранное, любимые цветы, Floww, букеты"
+    />
+    <title>Избранное - Floww</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Избранные товары - Floww. Ваши любимые цветы и букеты в одном месте.">
-  <meta name="keywords" content="избранные товары, избранное, любимые цветы, Floww, букеты">
-  <title>Избранное - Floww</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="icon" href="../favicon.ico" type="image/x-icon">
-</head>
-
-<body>
-<header class="header">
-  <div class="container header__container">
-    <a href="index.html" class="logo">Floww</a>
-    <nav class="nav header__nav">
-      <ul class="nav__list">
-        <li class="nav__item"><a href="index.html" class="nav__link">Главная</a></li>
-        <li class="nav__item"><a href="catalog.html" class="nav__link">Каталог</a></li>
-        <li class="nav__item"><a href="delivery.html" class="nav__link">Доставка</a></li>
-        <li class="nav__item"><a href="about.html" class="nav__link">О нас</a></li>
-        <li class="nav__item"><a href="contact.html" class="nav__link">Контакты</a></li>
-      </ul>
-    </nav>
-    <div class="header__actions">
-      <button class="header__action-btn js-search-toggle" aria-label="Поиск"><img src="../assets/search.svg"
-                                                                                  alt="Поиск"></button>
-      <a href="user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
-                                                                               alt="Аккаунт"></a>
-      <a href="favorite.html" class="header__action-btn active" aria-label="Избранное"><img
-        src="../assets/favorite.svg" alt="Избранное"></a> <!-- Класс active на этой странице -->
-      <a href="cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
-        <img src="../assets/cart.svg" alt="Корзина">
-        <span class="cart-count" data-cart-count>0</span>
-      </a>
-      <button class="burger-menu" aria-label="Открыть меню">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </div>
-</header>
+  <body>
+    <header class="header">
+      <div class="container header__container">
+        <a href="index.html" class="logo">Floww</a>
+        <nav class="nav header__nav">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link">Главная</a>
+            </li>
+            <li class="nav__item">
+              <a href="catalog.html" class="nav__link">Каталог</a>
+            </li>
+            <li class="nav__item">
+              <a href="delivery.html" class="nav__link">Доставка</a>
+            </li>
+            <li class="nav__item">
+              <a href="about.html" class="nav__link">О нас</a>
+            </li>
+            <li class="nav__item">
+              <a href="contact.html" class="nav__link">Контакты</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="header__actions">
+          <button
+            class="header__action-btn js-search-toggle"
+            aria-label="Поиск"
+          >
+            <img src="../assets/search.svg" alt="Поиск" />
+          </button>
+          <a href="user.html" class="header__action-btn" aria-label="Аккаунт"
+            ><img src="../assets/user.svg" alt="Аккаунт"
+          /></a>
+          <a
+            href="favorite.html"
+            class="header__action-btn active"
+            aria-label="Избранное"
+            ><img src="../assets/favorite.svg" alt="Избранное"
+          /></a>
+          <!-- Класс active на этой странице -->
+          <a
+            href="cart.html"
+            class="header__action-btn header__cart-btn"
+            aria-label="Корзина"
+          >
+            <img src="../assets/cart.svg" alt="Корзина" />
+            <span class="cart-count" data-cart-count>0</span>
+          </a>
+          <button class="burger-menu" aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
 
 <main class="favorite-page">
   <div class="container">
@@ -65,119 +94,142 @@
         </div>
         <div class="favorite-actions">
           <button class="btn btn-secondary" id="clear-favorite">Очистить избранное</button>
-          <a href="catalog.html" class="btn btn-primary">Продолжить покупки</a>
+          <a href="catalog.html" class="btn btn--primary">Продолжить покупки</a>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<footer class="footer">
-  <div class="container footer__container">
-    <div class="footer__column footer__column--about">
-      <a href="index.html" class="footer__logo logo">Floww</a>
-      <p>Мы создаем уникальные букеты и цветочные композиции с любовью и заботой, используя только свежие
-        цветы.</p>
-    </div>
-    <div class="footer__column">
-      <h3 class="footer__title">Информация</h3>
-      <ul class="footer__list">
-        <li><a href="about.html">О компании</a></li>
-        <li><a href="delivery.html">Доставка и оплата</a></li>
-        <li><a href="faq.html">FAQ</a></li> <!-- Добавил ссылку на FAQ, если есть такая страница -->
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h3 class="footer__title">Категории</h3>
-      <ul class="footer__list" id="footer-categories-list"> <!-- ID для JS -->
-        <!-- Категории будут загружены JavaScript -->
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h3 class="footer__title">Контакты</h3>
-      <address class="footer__contact-info">
-        <p>
-          <!-- <i class="fas fa-map-marker-alt"></i> Используйте SVG или CSS для иконок -->
-          г. Москва, ул. Цветочная, д. 10
-        </p>
-        <p>
-          <!-- <i class="fas fa-phone"></i> -->
-          <a href="tel:+74951234567">+7 (495) 123-45-67</a>
-        </p>
-        <p>
-          <!-- <i class="fas fa-envelope"></i> -->
-          <a href="mailto:hello@floww.com">hello@floww.com</a>
-        </p>
-        <div class="footer__socials">
-          <a href="#" aria-label="Instagram"><img src="../assets/instagram.svg" alt="Instagram"></a>
-          <a href="#" aria-label="Facebook"><img src="../assets/facebook.svg" alt="Facebook"></a>
-          <a href="#" aria-label="VK"><img src="../assets/vk.svg" alt="VK"></a>
+    <footer class="footer">
+      <div class="container footer__container">
+        <div class="footer__column footer__column--about">
+          <a href="index.html" class="footer__logo logo">Floww</a>
+          <p>
+            Мы создаем уникальные букеты и цветочные композиции с любовью и
+            заботой, используя только свежие цветы.
+          </p>
         </div>
-      </address>
-    </div>
-  </div>
-  <div class="footer__bottom">
-    <div class="container footer__bottom-container">
-      <p>© 2024 Floww. Все права защищены.</p>
-      <nav>
-        <a href="#">Политика конфиденциальности</a>
-        <a href="#">Пользовательское соглашение</a>
-      </nav>
-    </div>
-  </div>
-</footer>
-
-<!-- Мобильное меню -->
-<div class="mobile-menu">
-  <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
-  <nav class="mobile-menu__nav">
-    <ul>
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="catalog.html">Каталог</a></li>
-      <li><a href="delivery.html">Доставка</a></li>
-      <li><a href="about.html">О нас</a></li>
-      <li><a href="contact.html">Контакты</a></li>
-    </ul>
-  </nav>
-  <div class="mobile-menu__actions">
-    <a href="cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
-  </div>
-</div>
-<div class="overlay"></div>
-
-<!-- Модальное окно поиска -->
-<div class="search-modal" id="searchModal">
-  <div class="search-modal__content">
-    <button class="search-modal__close" id="closeSearchModalBtn" aria-label="Закрыть поиск"></button>
-    <h2 class="search-modal__title">Поиск товаров</h2>
-    <form class="search-form" id="modalSearchForm">
-      <div class="search-input-container">
-        <input type="search" id="modalSearchInput" placeholder="Название товара или артикул..."
-               aria-label="Поиск по каталогу" autofocus>
-        <button type="submit" class="btn btn-primary">Найти</button>
+        <div class="footer__column">
+          <h3 class="footer__title">Информация</h3>
+          <ul class="footer__list">
+            <li><a href="about.html">О компании</a></li>
+            <li><a href="delivery.html">Доставка и оплата</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h3 class="footer__title">Категории</h3>
+          <ul class="footer__list" id="footer-categories-list">
+            <!-- ID для JS -->
+            <!-- Категории будут загружены JavaScript -->
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h3 class="footer__title">Контакты</h3>
+          <address class="footer__contact-info">
+            <p>
+              <!-- <i class="fas fa-map-marker-alt"></i> Используйте SVG или CSS для иконок -->
+              г. Казань, ул. Баумана, д. 10
+            </p>
+            <p>
+              <!-- <i class="fas fa-phone"></i> -->
+              <a href="tel:+74951234567">+7 (495) 123-45-67</a>
+            </p>
+            <p>
+              <!-- <i class="fas fa-envelope"></i> -->
+              <a href="mailto:hello@floww.com">hello@floww.com</a>
+            </p>
+            <div class="footer__socials">
+              <a href="#" aria-label="Instagram"
+                ><img src="../assets/InstagramDark.svg" alt="Instagram"
+              /></a>
+              <a href="#" aria-label="Facebook"
+                ><img src="../assets/FacebookDark.svg" alt="Facebook"
+              /></a>
+              <a href="#" aria-label="VK"
+                ><img src="../assets/icons8-vk (1).svg" alt="VK"
+              /></a>
+            </div>
+          </address>
+        </div>
       </div>
-    </form>
-    <div class="search-modal__results" id="modalSearchResultsContainer">
-      <p class="search-hint">Введите запрос для поиска по каталогу</p>
+      <div class="footer__bottom">
+        <div class="container footer__bottom-container">
+          <p>© 2024 Floww. Все права защищены.</p>
+          <nav>
+            <a href="#">Политика конфиденциальности</a>
+            <a href="#">Пользовательское соглашение</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu">
+      <button class="mobile-menu__close" aria-label="Закрыть меню">×</button>
+      <nav class="mobile-menu__nav">
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="delivery.html">Доставка</a></li>
+          <li><a href="about.html">О нас</a></li>
+          <li><a href="contact.html">Контакты</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-menu__actions">
+        <a href="cart.html" class="btn"
+          >Корзина (<span data-cart-count>0</span>)</a
+        >
+      </div>
     </div>
-  </div>
-</div>
+    <div class="overlay"></div>
 
-<!-- Подключение скриптов -->
-<script src="../js/utils.js"></script>
-<script src="../js/api.js"></script>
-<script src="../js/templates.js"></script>
+    <!-- Модальное окно поиска -->
+    <div class="search-modal" id="searchModal">
+      <div class="search-modal__content">
+        <button
+          class="search-modal__close"
+          id="closeSearchModalBtn"
+          aria-label="Закрыть поиск"
+        ></button>
+        <h2 class="search-modal__title">Поиск товаров</h2>
+        <form class="search-form" id="modalSearchForm">
+          <div class="search-input-container">
+            <input
+              type="search"
+              id="modalSearchInput"
+              placeholder="Название товара или артикул..."
+              aria-label="Поиск по каталогу"
+              autofocus
+            />
+            <button type="submit" class="btn btn-primary">Найти</button>
+          </div>
+        </form>
+        <div class="search-modal__results" id="modalSearchResultsContainer">
+          <p class="search-hint">Введите запрос для поиска по каталогу</p>
+        </div>
+      </div>
+    </div>
 
-<script src="../js/cart.js"></script>
-<script src="../js/auth.js"></script>
+    <!-- Подключение скриптов -->
+    <script src="../js/slider.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/templates.js"></script>
 
-<script src="../js/menu.js"></script>
-<script src="../js/search.js"></script> <!-- Для модалки и setupProductCardActionsForContainer -->
+    <script src="../js/cart.js"></script>
+    <script src="../js/auth.js"></script>
 
-<script src="../js/display.js"></script> <!-- Для футера -->
+    <script src="../js/menu.js"></script>
+    <script src="../js/search.js"></script>
+    <!-- Для модалки и setupProductCardActionsForContainer -->
 
-<script src="../js/favorite.js"></script> <!-- Скрипт для этой страницы -->
+    <script src="../js/display.js"></script>
+    <!-- Для футера -->
 
-<script src="../js/app.js"></script>
-</body>
+    <script src="../js/favorite.js"></script>
+    <!-- Скрипт для этой страницы -->
+
+    <script src="../js/app.js"></script>
+  </body>
 </html>
