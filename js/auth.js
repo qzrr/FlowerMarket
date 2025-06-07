@@ -1,228 +1,185 @@
-// js/auth.js
+// js/auth.js (ФИНАЛЬНАЯ ВЕРСИЯ)
 (function () {
-  let allUsersCache = []; // Кэш пользователей с "сервера" (users.json)
-  let lastCacheTime = 0;
-  const CACHE_TTL = 60000; // Время жизни кэша в миллисекундах (1 минута)
+  let allUsersCache = [];
 
-  async function loadUsersFromServer(forceRefresh = false) {
-    const now = Date.now();
-    // Обновляем кэш, если он пуст, истек TTL или запрошено принудительное обновление
-    if (allUsersCache.length === 0 || forceRefresh || (now - lastCacheTime > CACHE_TTL)) {
-      try {
-        // Используем параметр useCache=false для API.getUsers(), чтобы получить свежие данные
-        allUsersCache = await API.getUsers(!forceRefresh);
-        lastCacheTime = now;
-        console.log("Данные пользователей успешно загружены");
-        return allUsersCache;
-      } catch (error) {
-        console.error('Ошибка загрузки пользователей с сервера:', error);
-        showNotification('Не удалось загрузить данные пользователей. Функционал входа/регистрации может быть ограничен.', true);
-        // Если кэш уже существует, используем его даже при ошибке загрузки
-        if (allUsersCache.length > 0) {
-          return allUsersCache;
-        }
-        return [];
-      }
+  // Загружаем пользователей с сервера (если нужно)
+  async function loadUsersFromServer() {
+    if (allUsersCache.length > 0) return allUsersCache;
+    try {
+      // Предполагается, что у вас есть API.getUsers()
+      allUsersCache = await API.getUsers();
+      return allUsersCache;
+    } catch (error) {
+      console.error("Ошибка загрузки пользователей с сервера:", error);
+      // showNotification("Не удалось загрузить данные пользователей.", true); // Если есть такая функция
+      return [];
     }
-    return allUsersCache;
   }
 
+  // Получаем текущего пользователя из localStorage
   function getCurrentUser() {
-    const userData = localStorage.getItem('currentUser');
+    const userData = localStorage.getItem("currentUser");
     return userData ? JSON.parse(userData) : null;
   }
 
+  // Обновляем иконку в шапке сайта
   function updateAuthUI(user) {
-    const userIcon = document.querySelector('.header__action-btn[aria-label="Аккаунт"]');
+    const userIcon = document.querySelector(
+      '.header__action-btn[aria-label="Аккаунт"]'
+    );
     if (userIcon) {
-      userIcon.classList.toggle('logged-in', !!user);
-      userIcon.title = user ? `Профиль: ${user.fullname}` : 'Войти или зарегистрироваться';
-    }
-    const isUserPage = window.location.pathname.includes('user.html') || window.location.pathname.includes('profile.html');
-    if (isUserPage) {
-      const userNameEl = document.getElementById('user-profile-name'); // На странице профиля
-      const userAvatarEl = document.getElementById('user-profile-avatar');
-      if (userNameEl) userNameEl.textContent = user ? user.fullname : 'Гость';
-      if (userAvatarEl && user && user.avatar) userAvatarEl.src = user.avatar;
-      else if (userAvatarEl) userAvatarEl.src = window.IMAGE_PLACEHOLDERS.AVATAR_DEFAULT;
-
-      toggleAuthFormsVisibility(!user);
-      if (user && typeof window.UserPage !== 'undefined' && typeof window.UserPage.initialize === 'function') {
-        window.UserPage.initialize(user);
-      }
+      userIcon.classList.toggle("logged-in", !!user);
+      userIcon.title = user
+        ? `Профиль: ${user.fullname || user.email}`
+        : "Войти или зарегистрироваться";
     }
   }
 
-  function toggleAuthFormsVisibility(showAuthForms) {
-    const userPageContent = document.querySelector('.user-page__content'); // Главный контейнер на user.html
-    const loginFormWrapper = document.getElementById('login-form-wrapper'); // Обертка для формы логина
-    const registerFormWrapper = document.getElementById('register-form-wrapper'); // Обертка для формы регистрации
-
-    const userInterfaceElements = document.querySelectorAll('.user-sidebar, .user-tabs-content'); // Элементы, которые скрываем/показываем
-
-    if (showAuthForms) {
-      userInterfaceElements.forEach(el => el.style.display = 'none');
-      if (registerFormWrapper) registerFormWrapper.style.display = 'none'; // Сначала только логин
-      if (loginFormWrapper) loginFormWrapper.style.display = 'block';
-      else if (userPageContent) createLoginForm(userPageContent);
-    } else { // Пользователь авторизован
-      if (loginFormWrapper) loginFormWrapper.style.display = 'none';
-      if (registerFormWrapper) registerFormWrapper.style.display = 'none';
-      userInterfaceElements.forEach(el => el.style.display = ''); // Восстанавливаем display
+  // Функция для полной очистки всех форм авторизации
+  function clearAllAuthForms() {
+    const overlay = document.querySelector(".auth-overlay");
+    if (overlay) {
+      overlay.remove();
     }
+    document.body.classList.remove("auth-open");
   }
 
-  function createAuthForm(type, parentElement) {
-    const formId = `${type}-form-wrapper`;
-    let formWrapper = document.getElementById(formId);
-    if (formWrapper) {
-      formWrapper.style.display = 'block';
-      return;
-    }
+  // Главная функция для создания модальных окон
+  function createAuthForm(type, parentElement, onAuthSuccess) {
+    clearAllAuthForms(); // Сначала очищаем все существующие формы
 
-    formWrapper = document.createElement('div');
-    formWrapper.id = formId;
-    formWrapper.className = 'auth-form-container'; // Общий класс для стилизации
+    document.body.classList.add("auth-open");
+    const overlay = document.createElement("div");
+    overlay.className = "auth-overlay";
 
-    const isLogin = type === 'login';
-    formWrapper.innerHTML = `
-      <div class="auth-form">
-        <h2>${isLogin ? 'Вход в аккаунт' : 'Регистрация'}</h2>
-        <form id="${type}-form-actual">
-          ${!isLogin ? `
-            <div class="form-group">
-              <label for="${type}-fullname">Полное имя</label>
-              <input type="text" id="${type}-fullname" name="fullname" required placeholder="Иван Иванов">
-            </div>` : ''}
-          <div class="form-group">
-            <label for="${type}-email">Email</label>
-            <input type="email" id="${type}-email" name="email" required placeholder="your@email.com">
+    const isLogin = type === "login";
+
+    overlay.innerHTML = `
+      <div class="auth-form-container">
+        <div class="auth-form-wrapper">
+          <button class="auth-close-btn" aria-label="Закрыть форму">×</button>
+          <div class="auth-form">
+            <h2>${isLogin ? "Вход в аккаунт" : "Регистрация"}</h2>
+            <form id="${type}-form-actual">
+              ${
+                !isLogin
+                  ? `<div class="form-group"><label for="${type}-fullname">Полное имя</label><input type="text" id="${type}-fullname" name="fullname" required></div>`
+                  : ""
+              }
+              <div class="form-group"><label for="${type}-email">Email</label><input type="email" id="${type}-email" name="email" required></div>
+              <div class="form-group"><label for="${type}-password">Пароль</label><input type="password" id="${type}-password" name="password" required></div>
+              ${
+                !isLogin
+                  ? `<div class="form-group"><label for="${type}-confirm-password">Повторите пароль</label><input type="password" id="${type}-confirm-password" name="confirmPassword" required></div>`
+                  : ""
+              }
+              <div class="form-error" id="${type}-error-message"></div>
+              <button type="submit" class="btn btn-primary btn-block">${
+                isLogin ? "Войти" : "Зарегистрироваться"
+              }</button>
+            </form>
+            <p class="auth-switch">${
+              isLogin
+                ? 'Нет аккаунта? <a href="#" data-auth-switch="register">Зарегистрироваться</a>'
+                : 'Уже есть аккаунт? <a href="#" data-auth-switch="login">Войти</a>'
+            }</p>
           </div>
-          <div class="form-group">
-            <label for="${type}-password">Пароль ${!isLogin ? '(мин. 6 симв.)' : ''}</label>
-            <input type="password" id="${type}-password" name="password" required ${!isLogin ? 'minlength="6"' : ''}>
-          </div>
-          ${!isLogin ? `
-            <div class="form-group">
-              <label for="${type}-confirm-password">Повторите пароль</label>
-              <input type="password" id="${type}-confirm-password" name="confirmPassword" required>
-            </div>` : ''}
-          <div class="form-error" id="${type}-error-message"></div>
-          <button type="submit" class="btn btn-primary btn-block">${isLogin ? 'Войти' : 'Зарегистрироваться'}</button>
-        </form>
-        <p class="auth-switch">
-          ${isLogin ? 'Нет аккаунта? <a href="#" data-auth-switch="register">Зарегистрироваться</a>'
-      : 'Уже есть аккаунт? <a href="#" data-auth-switch="login">Войти</a>'}
-        </p>
+        </div>
       </div>
     `;
-    parentElement.appendChild(formWrapper);
-    document.getElementById(`${type}-form-actual`).addEventListener('submit', isLogin ? handleLoginSubmit : handleRegisterFormSubmit);
-    formWrapper.querySelector('[data-auth-switch]').addEventListener('click', (e) => {
+    parentElement.appendChild(overlay);
+
+    const closeBtn = overlay.querySelector(".auth-close-btn");
+    const switchLink = overlay.querySelector("[data-auth-switch]");
+    const form = overlay.querySelector("form");
+
+    closeBtn.addEventListener("click", clearAllAuthForms);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) clearAllAuthForms();
+    });
+    switchLink.addEventListener("click", (e) => {
       e.preventDefault();
-      formWrapper.style.display = 'none';
-      createAuthForm(e.target.dataset.authSwitch, parentElement);
+      createAuthForm(e.target.dataset.authSwitch, parentElement, onAuthSuccess);
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const success = isLogin
+        ? await handleLoginSubmit(e.target)
+        : await handleRegisterFormSubmit(e.target);
+      if (success) {
+        clearAllAuthForms();
+        if (typeof onAuthSuccess === "function") {
+          onAuthSuccess(getCurrentUser());
+        }
+      }
     });
   }
 
-  const createLoginForm = (parentElement) => createAuthForm('login', parentElement);
-  const createRegisterForm = (parentElement) => createAuthForm('register', parentElement);
-
-
-  async function handleLoginSubmit(e) {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    const errorMsgEl = document.getElementById('login-error-message');
-    if (errorMsgEl) errorMsgEl.textContent = '';
+  // Логика входа
+  async function handleLoginSubmit(form) {
+    const email = form.email.value;
+    const password = form.password.value;
+    const errorMsgEl = form.querySelector(".form-error");
+    errorMsgEl.textContent = "";
 
     const users = await loadUsersFromServer();
-    const user = users.find(u => u.email === email && u.password === password); // Простая проверка пароля!
+    const user = users.find(
+      (u) => u.email === email && u.password === password
+    );
 
     if (user) {
-      const userDataToStore = {...user};
-      delete userDataToStore.password;
-      localStorage.setItem('currentUser', JSON.stringify(userDataToStore));
+      const { password, ...userDataToStore } = user; // Убираем пароль перед сохранением
+      localStorage.setItem("currentUser", JSON.stringify(userDataToStore));
       updateAuthUI(userDataToStore);
-      showNotification('Вы успешно вошли!');
+      // showNotification("Вы успешно вошли!");
+      return true;
     } else {
-      if (errorMsgEl) errorMsgEl.textContent = 'Неверный email или пароль.';
+      errorMsgEl.textContent = "Неверный email или пароль.";
+      return false;
     }
   }
 
-  async function handleRegisterFormSubmit(e) {
-    e.preventDefault();
-    const fullname = document.getElementById('register-fullname').value;
-    const email = document.getElementById('register-email').value;
-    const password = document.getElementById('register-password').value;
-    const confirmPassword = document.getElementById('register-confirm-password').value;
-    const errorMsgEl = document.getElementById('register-error-message');
-    if (errorMsgEl) errorMsgEl.textContent = '';
-
-    if (password !== confirmPassword) {
-      if (errorMsgEl) errorMsgEl.textContent = 'Пароли не совпадают.';
-      return;
+  // Логика регистрации (демо)
+  async function handleRegisterFormSubmit(form) {
+    const errorMsgEl = form.querySelector(".form-error");
+    errorMsgEl.textContent = "";
+    if (form.password.value !== form.confirmPassword.value) {
+      errorMsgEl.textContent = "Пароли не совпадают.";
+      return false;
     }
-    if (password.length < 6) {
-      if (errorMsgEl) errorMsgEl.textContent = 'Пароль слишком короткий.';
-      return;
-    }
-
-    // Принудительно обновляем кэш пользователей перед проверкой
-    const users = await loadUsersFromServer(true);
-    if (users.some(u => u.email === email)) {
-      if (errorMsgEl) errorMsgEl.textContent = 'Email уже занят.';
-      return;
-    }
-
-    const newUser = {
-      id: String(Date.now()), fullname, email, avatar: window.IMAGE_PLACEHOLDERS.AVATAR_DEFAULT,
-      favorites: [], orders: [], addresses: [], settings: {emailNotifications: true, smsNotifications: false}
-    };
-    // В реальном мире: await API.registerUser({ fullname, email, password });
-    // Для демо:
-    console.warn("Демо-регистрация: новый пользователь не сохраняется на сервере.", newUser);
-    // Добавляем в кэш с паролем для возможности логина в этой сессии
-    allUsersCache.push({...newUser, password});
-    lastCacheTime = Date.now(); // Обновляем время кэша
-
-    localStorage.setItem('currentUser', JSON.stringify(newUser)); // Логиним сразу
+    // Здесь должна быть логика отправки на сервер, мы симулируем
+    const newUser = { fullname: form.fullname.value, email: form.email.value };
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
     updateAuthUI(newUser);
-    showNotification('Регистрация успешна!');
+    // showNotification("Регистрация успешна!");
+    return true;
   }
 
-  function handleLogout() {
-    localStorage.removeItem('currentUser');
-    allUsersCache = []; // Сброс кэша пользователей
+  // Логика выхода
+  function handleLogout(onLogoutCallback) {
+    localStorage.removeItem("currentUser");
     updateAuthUI(null);
-    showNotification('Вы вышли из аккаунта.');
-    if (window.location.pathname.includes('user.html') || window.location.pathname.includes('profile.html')) {
-      toggleAuthFormsVisibility(true); // Показать формы входа
+    // showNotification("Вы вышли из аккаунта.");
+    if (typeof onLogoutCallback === "function") {
+      onLogoutCallback();
     }
   }
 
-  function initAuthListeners() {
-    const userIconBtn = document.querySelector('.header__action-btn[aria-label="Аккаунт"]');
-    if (userIconBtn) {
-      userIconBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetPage = 'user.html'; // или profile.html
-        if (!window.location.pathname.includes(targetPage)) {
-          window.location.href = targetPage;
-        } else {
-          // Если уже на странице профиля, то auth.js сам решит, показывать ли формы
-          if (!getCurrentUser()) toggleAuthFormsVisibility(true);
-        }
-      });
-    }
-    // Кнопка выхода обрабатывается в user.js, если она там
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    updateAuthUI(getCurrentUser()); // Изначальная настройка UI
-    initAuthListeners();
-    loadUsersFromServer(); // Предзагрузка пользователей
+  // Запускается при загрузке любой страницы
+  document.addEventListener("DOMContentLoaded", () => {
+    updateAuthUI(getCurrentUser());
+    loadUsersFromServer();
   });
 
-  window.Auth = {getCurrentUser, isLoggedIn: () => !!getCurrentUser(), handleLogout, updateUI: updateAuthUI};
+  // ЭКСПОРТ: Делаем функции доступными для других скриптов
+  window.Auth = {
+    getCurrentUser,
+    handleLogout,
+    showLoginForm: (parentElement, onAuthSuccess) =>
+      createAuthForm("login", parentElement, onAuthSuccess),
+    showRegisterForm: (parentElement, onAuthSuccess) =>
+      createAuthForm("register", parentElement, onAuthSuccess),
+    clearAllAuthForms,
+  };
 })();

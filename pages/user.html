@@ -21,7 +21,6 @@
     <header class="header">
       <div class="container header__container">
         <a href="index.html" class="logo">Floww</a>
-        <!-- Путь к главной, если user.html в pages/ -->
         <nav class="nav header__nav">
           <ul class="nav__list">
             <li class="nav__item">
@@ -80,6 +79,7 @@
         <h1 class="page-title">Личный кабинет</h1>
 
         <div class="user-dashboard">
+          <!-- Этот блок виден только гостям. JS будет его скрывать для авторизованных пользователей. -->
           <div class="user-header">
             <h2 class="user-header__title">
               Добро пожаловать в личный кабинет
@@ -93,12 +93,8 @@
             </button>
           </div>
 
-          <aside
-            class="user-sidebar"
-            id="user-sidebar-nav"
-            style="display: none"
-          >
-            <!-- Изначально скрыт, если не авторизован -->
+          <!-- Боковая панель личного кабинета. Изначально скрыта. -->
+          <aside class="user-sidebar" id="user-sidebar-nav">
             <div class="user-profile-info">
               <div class="user-avatar-wrapper">
                 <img
@@ -153,29 +149,8 @@
           </aside>
 
           <div class="user-content user-page__content">
-            <!-- Контейнеры для форм входа/регистрации -->
-            <div
-              id="login-form-wrapper"
-              class="auth-form-container"
-              style="display: none"
-            >
-              <!-- JS создаст форму входа здесь -->
-            </div>
-            <div
-              id="register-form-wrapper"
-              class="auth-form-container"
-              style="display: none"
-            >
-              <!-- JS создаст форму регистрации здесь -->
-            </div>
-
-            <!-- Контент вкладок личного кабинета -->
-            <div
-              class="user-tabs-content"
-              id="user-tabs-container"
-              style="display: none"
-            >
-              <!-- Изначально скрыт -->
+            <!-- Контент вкладок личного кабинета. Изначально скрыт. -->
+            <div class="user-tabs-content" id="user-tabs-container">
               <section class="user-tab active" id="profile">
                 <h2>Мой профиль</h2>
                 <form class="user-form" id="profile-form">
@@ -327,7 +302,7 @@
             </div>
             <!-- /user-tabs-content -->
           </div>
-          <!-- /user-content user-page__content -->
+          <!-- /user-content -->
         </div>
         <!-- /user-dashboard -->
       </div>
@@ -441,17 +416,11 @@
     <script src="../js/utils.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/templates.js"></script>
-
-    <script src="../js/cart.js"></script>
-    <!-- userPageHandler.js будет содержать логику auth.js и user.js -->
-    <script src="../js/userPageHandler.js"></script>
-
+    <script src="../js/auth.js"></script>
+    <script src="../js/user.js"></script>
     <script src="../js/menu.js"></script>
     <script src="../js/search.js"></script>
-
     <script src="../js/display.js"></script>
-    <!-- Для футера -->
-
     <script src="../js/app.js"></script>
   </body>
 </html>

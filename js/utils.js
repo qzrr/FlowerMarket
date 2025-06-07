@@ -1,64 +1,104 @@
-// js/utils.js
-function showNotification(message, isError = false) {
-  let notificationContainer = document.querySelector('.notification-container');
-  if (!notificationContainer) {
-    notificationContainer = document.createElement('div');
-    notificationContainer.className = 'notification-container';
-    // Стили можно вынести в CSS
-    Object.assign(notificationContainer.style, {
-      position: 'fixed', top: '20px', right: '20px', zIndex: '10001',
-      display: 'flex', flexDirection: 'column', gap: '10px'
-    });
-    document.body.appendChild(notificationContainer);
+// js/user.js (ОБНОВЛЕННАЯ ВЕРСИЯ С РАБОЧИМИ ТАБАМИ)
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Проверяем, что мы на странице личного кабинета
+  const userPage = document.querySelector(".user-page");
+  if (!userPage) {
+    return;
   }
 
-  const notification = document.createElement('div');
-  notification.className = `notification ${isError ? 'notification--error' : 'notification--success'}`;
-  notification.textContent = message;
-  Object.assign(notification.style, {
-    padding: '12px 20px', borderRadius: '5px', color: '#fff',
-    backgroundColor: isError ? '#e74c3c' : '#27ae60', // Красный / Зеленый
-    boxShadow: '0 3px 15px rgba(0,0,0,0.15)', opacity: '0',
-    transform: 'translateX(110%)', transition: 'opacity 0.3s ease-out, transform 0.4s ease-out',
-    minWidth: '250px', textAlign: 'center'
-  });
-  notificationContainer.appendChild(notification);
+  // --- Находим все необходимые элементы ---
+  const userDashboard = document.querySelector(".user-dashboard");
+  const userHeader = document.querySelector(".user-header");
+  const userSidebar = document.getElementById("user-sidebar-nav");
+  const userContentContainer = document.getElementById("user-tabs-container"); // Переименовал для ясности
 
-  setTimeout(() => {
-    notification.style.opacity = '1';
-    notification.style.transform = 'translateX(0)';
-  }, 10);
+  const initialLoginBtn = document.getElementById("login-btn");
+  const initialRegisterBtn = document.getElementById("register-btn");
+  const logoutBtn = document.getElementById("logout-btn");
 
-  setTimeout(() => {
-    notification.style.opacity = '0';
-    notification.style.transform = 'translateX(110%)';
-    setTimeout(() => {
-      notification.remove();
-      // if (notificationContainer.children.length === 0 && notificationContainer.parentNode) {
-      //   notificationContainer.remove(); // Можно удалять контейнер, если он пуст
-      // }
-    }, 400);
-  }, 3000);
-}
+  const userProfileName = document.getElementById("user-profile-name");
 
-function formatPrice(price) {
-  const numPrice = parseFloat(String(price).replace(',', '.'));
-  if (isNaN(numPrice)) return '0 ₽';
-  return `${numPrice.toLocaleString('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ₽`;
-}
+  function initTabSystem() {
+    // Проверяем, есть ли нужные элементы
+    if (!userSidebar || !userContentContainer) return;
 
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func.apply(this, args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
+    const tabLinks = userSidebar.querySelectorAll(".user-sidebar__link");
+    const tabContents = userContentContainer.querySelectorAll(".user-tab");
 
-window.showNotification = showNotification;
-window.formatPrice = formatPrice;
-window.debounce = debounce;
+    userSidebar.addEventListener("click", (e) => {
+      // Ищем клик именно по ссылке
+      const link = e.target.closest(".user-sidebar__link");
+      if (!link) return;
+
+      e.preventDefault(); // Отменяем стандартный переход по ссылке #
+      const tabId = link.dataset.tab;
+      if (!tabId) return;
+
+      const targetTab = document.getElementById(tabId);
+      if (!targetTab) return;
+
+      // 1. Убираем класс 'active' со всех ссылок и вкладок
+      tabLinks.forEach((l) => l.classList.remove("active"));
+      tabContents.forEach((t) => t.classList.remove("active"));
+
+      // 2. Добавляем класс 'active' нужной ссылке и вкладке
+      link.classList.add("active");
+      targetTab.classList.add("active");
+    });
+
+    // Активируем первую вкладку по умолчанию при загрузке
+    const firstLink = userSidebar.querySelector(".user-sidebar__link");
+    if (firstLink) {
+      firstLink.click();
+    }
+  }
+
+  // --- Главная функция для отрисовки состояния страницы ---
+  function renderPage() {
+    const currentUser = Auth.getCurrentUser();
+
+    if (currentUser) {
+      // --- СОСТОЯНИЕ: ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН ---
+      if (userDashboard) userDashboard.classList.add("is-logged-in");
+      if (userHeader) userHeader.style.display = "none";
+      if (userSidebar) userSidebar.style.display = "";
+      if (userContentContainer) userContentContainer.style.display = "";
+
+      if (userProfileName)
+        userProfileName.textContent = currentUser.fullname || "Пользователь";
+
+      initTabSystem();
+    } else {
+      // --- СОСТОЯНИЕ: ПОЛЬЗОВАТЕЛЬ НЕ АВТОРИЗОВАН (ГОСТЬ) ---
+      if (userDashboard) userDashboard.classList.remove("is-logged-in");
+      if (userHeader) userHeader.style.display = "";
+      if (userSidebar) userSidebar.style.display = "none";
+      if (userContentContainer) userContentContainer.style.display = "none";
+
+      if (userProfileName) userProfileName.textContent = "Гость";
+    }
+  }
+
+  // --- Установка обработчиков событий ---
+  if (initialLoginBtn) {
+    initialLoginBtn.addEventListener("click", () => {
+      Auth.showLoginForm(document.body, renderPage);
+    });
+  }
+
+  if (initialRegisterBtn) {
+    initialRegisterBtn.addEventListener("click", () => {
+      Auth.showRegisterForm(document.body, renderPage);
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      Auth.handleLogout(renderPage);
+    });
+  }
+
+  // --- Первый запуск при загрузке страницы ---
+  renderPage();
+});

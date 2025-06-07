@@ -1,314 +1,148 @@
-/* Стили для авторизации и личного кабинета */
+/* css/auth.css (ВЕРСИЯ 2.0) */
 
-/* Форма входа */
-.login-form-container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* --- Стили для макета личного кабинета (РЕШЕНИЕ ПРОБЛЕМЫ) --- */
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+/* По умолчанию (для гостя) .user-dashboard ведет себя как обычный блок */
+.user-dashboard {
+  display: block; /* Белый квадрат исчезнет */
 }
 
-.login-form {
-    margin-bottom: 1.5rem;
+/* Когда JS добавит класс .is-logged-in, мы ПЕРЕКЛЮЧАЕМ dashboard в режим сетки */
+.user-dashboard.is-logged-in {
+  display: grid;
+  grid-template-columns: 250px 1fr; /* 2 колонки: сайдбар и контент */
+  gap: 30px;
+  align-items: start;
 }
 
-.login-links {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-    font-size: 0.9rem;
+/* Стили для блока приветствия гостя */
+.user-header {
+  text-align: center;
+  padding: 40px 20px;
+  /* Убираем фон и тень, чтобы не было "белого квадрата" в любом случае */
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
-.login-links a {
-    color: #ff6b6b;
-    text-decoration: none;
-    transition: color 0.3s;
+.user-header__title {
+  margin-bottom: 0.5em;
 }
 
-.login-links a:hover {
-    color: #ff4757;
-    text-decoration: underline;
+.user-header__subtitle {
+  margin-bottom: 1.5em;
+  color: #666;
 }
 
-/* Форма регистрации */
-.register-form-container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.user-header .btn {
+  margin: 0 10px;
 }
 
-.register-form {
-    margin-bottom: 1.5rem;
+/* --- Стили для модальных окон входа/регистрации (остаются без изменений) --- */
+
+body.auth-open {
+  overflow: hidden;
 }
 
-.register-links {
-    text-align: center;
-    margin-top: 1rem;
-    font-size: 0.9rem;
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
 }
 
-.register-links a {
-    color: #ff6b6b;
-    text-decoration: none;
-    transition: color 0.3s;
+.auth-form-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
 }
 
-.register-links a:hover {
-    color: #ff4757;
-    text-decoration: underline;
+.auth-form-wrapper {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 2.5rem 2rem;
+  animation: slideIn 0.3s ease-out;
 }
 
-/* Сообщения об ошибках */
+.auth-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.auth-close-btn:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+
+.auth-form h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9em;
+}
+
 .form-error {
-    color: #ff4757;
-    font-size: 0.9rem;
-    margin: 0.5rem 0;
-    min-height: 1.2rem;
+  color: #d9534f;
+  font-size: 0.85em;
+  margin-top: 10px;
+  min-height: 1em;
+  text-align: center;
 }
 
-/* Стили для авторизованного пользователя в хедере */
-.header__action-btn.logged-in {
-    position: relative;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.header__action-btn.logged-in::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 8px;
-    height: 8px;
-    background-color: #4cd137;
-    border-radius: 50%;
-    border: 2px solid #fff;
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-/* Стили для истории заказов */
-.orders-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.order-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-.order-card__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #eee;
-}
-
-.order-card__id {
-    font-weight: 600;
-}
-
-.order-card__date {
-    color: #777;
-}
-
-.order-card__status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.order-card__status.pending {
-    background-color: #ffeaa7;
-    color: #fdcb6e;
-}
-
-.order-card__status.processing {
-    background-color: #81ecec;
-    color: #00cec9;
-}
-
-.order-card__status.shipped {
-    background-color: #a29bfe;
-    color: #6c5ce7;
-}
-
-.order-card__status.delivered {
-    background-color: #55efc4;
-    color: #00b894;
-}
-
-.order-card__status.cancelled {
-    background-color: #fab1a0;
-    color: #e17055;
-}
-
-.order-card__content {
-    padding: 1rem;
-}
-
-.order-card__items {
-    margin-bottom: 1.5rem;
-}
-
-.order-item {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #eee;
-}
-
-.order-item:last-child {
-    border-bottom: none;
-}
-
-.order-item__image {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-right: 1rem;
-}
-
-.order-item__details h4 {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
-}
-
-.order-item__details p {
-    margin: 0;
-    color: #777;
-}
-
-.order-card__summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
-}
-
-.order-card__delivery h4,
-.order-card__payment h4,
-.order-card__total h4 {
-    margin: 0 0 0.5rem;
-    font-size: 1rem;
-}
-
-.order-card__delivery p,
-.order-card__payment p {
-    margin: 0 0 0.25rem;
-    color: #777;
-}
-
-.order-card__total-price {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #ff6b6b;
-}
-
-.order-card__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-top: 1px solid #eee;
-}
-
-/* Стили для адресов доставки */
-.addresses-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-}
-
-.address-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    position: relative;
-}
-
-.address-card.default {
-    border: 2px solid #ff6b6b;
-}
-
-.address-card__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.address-card__header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-.address-card__default-badge {
-    background-color: #ff6b6b;
-    color: #fff;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-}
-
-.address-card__content {
-    margin-bottom: 1.5rem;
-}
-
-.address-card__content p {
-    margin: 0 0 0.5rem;
-    color: #555;
-}
-
-.address-card__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-/* Адаптивность для мобильных устройств */
+/* Адаптивность для мобильных */
 @media (max-width: 768px) {
-    .login-form-container,
-    .register-form-container {
-        padding: 1.5rem;
-    }
-    
-    .login-links,
-    .register-links {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: center;
-    }
-    
-    .order-card__header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    
-    .order-card__summary {
-        grid-template-columns: 1fr;
-    }
-    
-    .order-card__actions {
-        flex-direction: column;
-    }
-    
-    .addresses-list {
-        grid-template-columns: 1fr;
-    }
+  .user-dashboard.is-logged-in {
+    /* На мобильных сетка всегда в одну колонку */
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }

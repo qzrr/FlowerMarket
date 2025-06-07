@@ -1576,7 +1576,6 @@ address {
   border-right: none;
   text-align: center;
   font-size: 1.6rem;
-  -moz-appearance: textfield;
 }
 
 .quantity-input::-webkit-outer-spin-button,
@@ -1828,8 +1827,12 @@ address {
   width: fit-content; /* делает ширину по содержимому */
   padding: 16px;
   margin: 20px auto 40px; /* сверху, по центру, снизу */
-  background-color: rgba(var(--border-color), 0.08); /* светлый фон (опционально) */
+  background-color: rgba(
+    var(--border-color),
+    0.08
+  ); /* светлый фон (опционально) */
 }
+
 
 /* --- Адаптивность (Примерные точки) --- */
 
