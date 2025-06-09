@@ -677,6 +677,7 @@ main {
   overflow-x: auto;
   padding-bottom: 1rem;
 }
+
 .product-grid-catalog {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
@@ -916,6 +917,7 @@ main {
 .mobile-filter-btn {
   display: none;
 }
+
 /* --- Стили для панели фильтров --- */
 .catalog__filters {
   background-color: var(--light-bg);
@@ -930,6 +932,7 @@ main {
 .filter-group {
   margin-bottom: 1.5rem; /* Отступ между группами фильтров */
 }
+
 .filter-group:last-of-type {
   /* Убираем отступ у последней группы перед кнопками */
   margin-bottom: 1rem;
@@ -965,6 +968,7 @@ main {
   background-size: 16px 12px; /* Размер стрелки */
   cursor: pointer;
 }
+
 .form-select:focus {
   outline: none;
   border-color: var(--primary-color);
@@ -992,20 +996,24 @@ main {
   box-sizing: border-box;
   text-align: center; /* Можно центрировать текст "От" "До" */
 }
+
 .price-input:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px var(--primary-light);
 }
+
 .price-input::placeholder {
   color: var(--lightest-text);
 }
+
 /* Убираем стрелки у number input для чистоты */
 .price-input::-webkit-outer-spin-button,
 .price-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 .price-input[type="number"] {
   -moz-appearance: textfield;
 }
@@ -1091,6 +1099,7 @@ main {
   transition: var(--transition);
   border: 1px solid transparent; /* Базовая рамка */
 }
+
 .btn-block {
   width: 100%;
   display: block;
@@ -1101,6 +1110,7 @@ main {
   color: var(--white);
   border-color: var(--secondary-color);
 }
+
 .btn-primary:hover {
   background-color: var(--secondary-dark);
   border-color: var(--secondary-dark);
@@ -1111,6 +1121,7 @@ main {
   color: var(--primary-color);
   border-color: var(--primary-color);
 }
+
 .btn-outline:hover {
   background-color: var(--primary-light); /* Легкий фон при наведении */
   color: var(--primary-dark); /* Можно сделать текст темнее */
@@ -1719,37 +1730,40 @@ address {
   width: 100%;
   margin-top: 2.5rem;
 }
+
 .checkout-form-simple {
-  background-color: var(--light-bg); /* Используем ваш светлый фон */
-  padding: 1.5rem; /* Отступы можно задавать в rem или px */
+  background-color: var(--light-bg);
+  padding: 1.5rem;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
-  margin-top: 1rem; /* Отступ от других элементов, если нужно */
+  margin-top: 1rem;
   box-shadow: var(--shadow-sm);
 }
+
 .checkout-form-simple h3 {
   font-size: 1.4em;
   color: var(--text-color);
   margin-top: 0;
   margin-bottom: 1.2rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--primary-color); /* Основной цвет для акцента */
+  border-bottom: 2px solid var(--primary-color);
   display: inline-block;
 }
+
 #checkout-form .form-group {
   margin-bottom: 1rem;
 }
+
 .form-label {
   display: block;
-  margin-bottom: 0.3rem; /* Немного уменьшил отступ */
-  font-weight: 500; /* Можно сделать чуть жирнее, если нужно */
+  margin-bottom: 0.3rem;
+  font-weight: 500;
   font-size: 0.9em;
-  color: var(--light-text); /* Используем ваш цвет для менее важного текста */
+  color: var(--light-text);
 }
 
 .form-label .required {
-  /* Если вы добавляете звездочку через span */
-  color: var(--primary-dark); /* Используем темный оттенок основного цвета */
+  color: var(--primary-dark);
   margin-left: 2px;
   font-weight: bold;
 }
@@ -1757,28 +1771,27 @@ address {
 .form-input,
 .form-textarea {
   width: 100%;
-  padding: 0.75rem 1rem; /* Немного увеличенные паддинги для "воздуха" */
+  padding: 0.75rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   font-size: 1em;
   font-family: inherit;
   color: var(--text-color);
-  background-color: var(--white); /* Поля ввода обычно белые */
-  transition: var(--transition); /* Используем вашу переменную для transition */
+  background-color: var(--white);
+  transition: var(--transition);
   box-sizing: border-box;
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: var(--primary-color); /* При фокусе основной цвет */
-  /* Можно добавить тень при фокусе, используя ваши переменные, если хотите */
-  box-shadow: 0 0 0 3px var(--primary-light); /* Тень из вашего --primary-light */
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: var(--lightest-text); /* Самый светлый текст для плейсхолдеров */
+  color: var(--lightest-text);
   opacity: 1;
 }
 
@@ -1796,41 +1809,41 @@ address {
   border: none;
   border-radius: var(--border-radius);
   font-size: 1.05em;
-  font-weight: 500; /* Или 600, если хотите жирнее */
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: var(--transition);
   text-align: center;
   margin-top: 1rem;
-  box-shadow: var(--shadow-sm); /* Тень для кнопки */
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-checkout:hover {
   background-color: var(
     --secondary-dark
-  ); /* Используем ваш темный оттенок при наведении */
-  box-shadow: var(--shadow-md); /* Более выраженная тень при наведении */
+  );
+  box-shadow: var(--shadow-md);
 }
 
 .btn-checkout:active {
   background-color: var(
     --primary-dark
-  ); /* Можно оставить темный или сделать еще темнее */
+  );
   transform: translateY(1px);
-  box-shadow: none; /* Убрать тень при нажатии */
+  box-shadow: none;
 }
 
 .favorite-actions {
   display: flex;
   justify-content: space-between;
-  gap: 10px; /* отступ между кнопками */
-  width: fit-content; /* делает ширину по содержимому */
+  gap: 10px;
+  width: fit-content;
   padding: 16px;
-  margin: 20px auto 40px; /* сверху, по центру, снизу */
+  margin: 20px auto 40px;
   background-color: rgba(
     var(--border-color),
     0.08
-  ); /* светлый фон (опционально) */
+  );
 }
 
 
@@ -2933,6 +2946,7 @@ main.error-content {
   flex-direction: column;
   gap: 2rem;
 }
+
 .favorite-item-section {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));

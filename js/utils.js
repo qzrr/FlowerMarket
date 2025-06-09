@@ -1,4 +1,4 @@
-// js/user.js (ОБНОВЛЕННАЯ ВЕРСИЯ С РАБОЧИМИ ТАБАМИ)
+// js/user.js
 
 document.addEventListener("DOMContentLoaded", () => {
   // Проверяем, что мы на странице личного кабинета
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userDashboard = document.querySelector(".user-dashboard");
   const userHeader = document.querySelector(".user-header");
   const userSidebar = document.getElementById("user-sidebar-nav");
-  const userContentContainer = document.getElementById("user-tabs-container"); // Переименовал для ясности
+  const userContentContainer = document.getElementById("user-tabs-container");
 
   const initialLoginBtn = document.getElementById("login-btn");
   const initialRegisterBtn = document.getElementById("register-btn");
@@ -102,3 +102,53 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Первый запуск при загрузке страницы ---
   renderPage();
 });
+
+// Функция для форматирования цены
+function formatPrice(price) {
+  if (typeof price !== 'number') {
+    price = parseFloat(price);
+  }
+  if (isNaN(price)) return '0 ₽';
+  return new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'RUB',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+}
+
+// Функция debounce для ограничения частоты вызова функций
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// Функция для отображения уведомлений
+function showNotification(message, isError = false) {
+  const notification = document.createElement('div');
+  notification.className = `notification ${isError ? 'error' : 'success'}`;
+  notification.textContent = message;
+
+  document.body.appendChild(notification);
+
+  // Анимация появления
+  setTimeout(() => notification.classList.add('show'), 10);
+
+  // Удаление через 3 секунды
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+
+// Экспортируем функции в глобальную область видимости
+window.formatPrice = formatPrice;
+window.debounce = debounce;
+window.showNotification = showNotification;

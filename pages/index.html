@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta
-    name="description"
-    content="Floww - магазин свежих цветов и изысканных букетов с быстрой доставкой по городу. Закажите цветы онлайн!"
-  />
-  <meta
-    name="keywords"
-    content="цветы, букеты, доставка цветов, цветочный магазин, Floww, заказать цветы онлайн"
-  />
+  <meta name="description"
+        content="Floww - магазин свежих цветов и изысканных букетов с быстрой доставкой по городу. Закажите цветы онлайн!"/>
+  <meta name="keywords" content="цветы, букеты, доставка цветов, цветочный магазин, Floww, заказать цветы онлайн"/>
   <title>Floww - Цветы и Букеты с Доставкой</title>
   <link rel="stylesheet" href="../css/style.css"/> <!-- Путь от корня, если index.html в корне -->
   <link rel="icon" href="../favicon.ico" type="image/x-icon"/>
@@ -41,26 +37,14 @@
       </ul>
     </nav>
     <div class="header__actions">
-      <button
-        class="header__action-btn js-search-toggle"
-        aria-label="Поиск"
-      >
+      <button class="header__action-btn js-search-toggle" aria-label="Поиск">
         <img src="../assets/search.svg" alt="Поиск"/> <!-- Путь от корня -->
       </button>
-      <a href="../pages/user.html" class="header__action-btn" aria-label="Аккаунт"
-      ><img src="../assets/user.svg" alt="Аккаунт"
-      /></a>
-      <a
-        href="../pages/favorite.html"
-        class="header__action-btn"
-        aria-label="Избранное"
-      ><img src="../assets/favorite.svg" alt="Избранное"
-      /></a>
-      <a
-        href="../pages/cart.html"
-        class="header__action-btn header__cart-btn"
-        aria-label="Корзина"
-      >
+      <a href="../pages/user.html" class="header__action-btn" aria-label="Аккаунт"><img src="../assets/user.svg"
+                                                                                        alt="Аккаунт"/></a>
+      <a href="../pages/favorite.html" class="header__action-btn" aria-label="Избранное"><img
+        src="../assets/favorite.svg" alt="Избранное"/></a>
+      <a href="../pages/cart.html" class="header__action-btn header__cart-btn" aria-label="Корзина">
         <img src="../assets/cart.svg" alt="Корзина"/>
         <span class="cart-count" data-cart-count>0</span>
       </a>
@@ -75,47 +59,31 @@
 
 <main>
   <!-- Hero Section (Slider) -->
-  <section class="hero" id="hero-slider-container"> <!-- Добавлен ID для slider.js -->
+  <section class="hero" id="hero-slider-container">
     <div class="hero__slider">
-      <div
-        class="hero__slide active"
-        style="background-image: url('../img/картинка rose.png')"
-      >
+      <div class="hero__slide active" style="background-image: url('../img/картинка rose.png')">
         <div class="container hero__slide-content">
           <h2>Комнатные растения</h2>
           <p>Создайте уютную атмосферу в вашем доме</p>
-          <a href="../pages/catalog.html?category=plants" class="btn"
-          >Выбрать букет</a
-          >
+          <a href="../pages/catalog.html?category=plants" class="btn">Выбрать букет</a>
         </div>
       </div>
-      <div
-        class="hero__slide"
-        style="
+      <div class="hero__slide" style="
               background-image: url('../img/pngtree-floral-flowers-bright-blank-background-image_2160290.jpg');
-            "
-      >
+            ">
         <div class="container hero__slide-content">
           <h2>Свежие Букеты</h2>
           <p>Доставка по городу в течение 2 часов</p>
-          <a href="../pages/catalog.html?category=bouquets" class="btn"
-          >Выбрать букет</a
-          >
+          <a href="../pages/catalog.html?category=bouquets" class="btn">Выбрать букет</a>
         </div>
       </div>
     </div>
     <div class="hero__controls">
-      <button
-        class="hero__control hero__control--prev"
-        aria-label="Предыдущий слайд"
-      >
+      <button class="hero__control hero__control--prev" aria-label="Предыдущий слайд">
         <
       </button>
       <div class="hero__dots"></div>
-      <button
-        class="hero__control hero__control--next"
-        aria-label="Следующий слайд"
-      >
+      <button class="hero__control hero__control--next" aria-label="Следующий слайд">
         >
       </button>
     </div>
@@ -126,7 +94,6 @@
     <div class="container">
       <h2 class="section__title">Категории цветов</h2>
       <div class="categories__grid" id="categories-container">
-        <!-- Плейсхолдеры или индикатор загрузки -->
         <div class="loading-indicator">Загрузка категорий...</div>
       </div>
     </div>
@@ -161,15 +128,10 @@
           проверенных поставщиков, чтобы ваш букет радовал вас как можно
           дольше.
         </p>
-        <a href="../pages/about.html" class="btn btn--secondary"
-        >Узнать больше</a
-        >
+        <a href="../pages/about.html" class="btn btn--secondary">Узнать больше</a>
       </div>
       <div class="about__image">
-        <img
-          src="../img/image-10.jpg"
-          alt="Интерьер магазина Floww"
-        />
+        <img src="../img/image-10.jpg" alt="Интерьер магазина Floww"/>
       </div>
     </div>
   </section>
@@ -181,7 +143,7 @@
       <div class="delivery__grid">
         <div class="delivery__item">
           <div class="delivery__icon">
-            <img src="../assets/Shopping%20cart.svg" alt="Быстрая доставка"/> <!-- Замените на свои иконки -->
+            <img src="../assets/Shopping%20cart.svg" alt="Быстрая доставка"/>
           </div>
           <h3>Быстрая доставка</h3>
           <p>Доставляем букеты в течение 2 часов по всему городу</p>
@@ -223,11 +185,7 @@
           </p>
         </div>
         <div class="testimonial-card__author">
-          <img
-            src="../img/аватар%20алисы.png"
-            alt="Мария Иванова"
-            class="testimonial-card__avatar"
-          />
+          <img src="../img/аватар%20алисы.png" alt="Мария Иванова" class="testimonial-card__avatar"/>
           <div>
             <strong>Мария Иванова</strong>
             <div class="testimonial-card__rating">★★★★★</div>
@@ -244,11 +202,7 @@
           </p>
         </div>
         <div class="testimonial-card__author">
-          <img
-            src="../img/аватар%20ольга.png"
-            alt="Ольга Олеговна"
-            class="testimonial-card__avatar"
-          />
+          <img src="../img/аватар%20ольга.png" alt="Ольга Олеговна" class="testimonial-card__avatar"/>
           <div>
             <strong>Ольга Олеговна</strong>
             <div class="testimonial-card__rating">★★★★★</div>
@@ -263,11 +217,7 @@
           </p>
         </div>
         <div class="testimonial-card__author">
-          <img
-            src="../img/ава%20саши.png"
-            alt="Алексей Петров"
-            class="testimonial-card__avatar"
-          />
+          <img src="../img/ава%20саши.png" alt="Алексей Петров" class="testimonial-card__avatar"/>
           <div>
             <strong>Алексей Петров</strong>
             <div class="testimonial-card__rating">★★★★★</div>
@@ -287,12 +237,8 @@
         Мы доставим ваш букет в любую точку города в течение 2 часов.
       </p>
       <div class="cta__actions">
-        <a href="../pages/catalog.html" class="btn btn--outline-light"
-        >Выбрать букет</a
-        >
-        <a href="../pages/contact.html" class="btn btn--outline-light"
-        >Связаться с нами</a
-        >
+        <a href="../pages/catalog.html" class="btn btn--outline-light">Выбрать букет</a>
+        <a href="../pages/contact.html" class="btn btn--outline-light">Связаться с нами</a>
       </div>
     </div>
   </section>
@@ -320,7 +266,6 @@
     <div class="footer__column">
       <h4 class="footer__title">Категории</h4>
       <ul class="footer__list" id="footer-categories-list"> <!-- ID для JS -->
-        <!-- Категории будут загружены JavaScript -->
       </ul>
     </div>
     <div class="footer__column">
@@ -334,15 +279,9 @@
         </p>
       </address>
       <div class="footer__socials">
-        <a href="#" aria-label="Facebook"
-        ><img src="../assets/FacebookDark.svg" alt="Facebook"
-        /></a>
-        <a href="#" aria-label="Instagram"
-        ><img src="../assets/InstagramDark.svg" alt="Instagram"
-        /></a>
-        <a href="#" aria-label="VK"
-        ><img src="../assets/icons8-vk%20(1).svg" alt="VK"
-        /></a>
+        <a href="#" aria-label="Facebook"><img src="../assets/FacebookDark.svg" alt="Facebook"/></a>
+        <a href="#" aria-label="Instagram"><img src="../assets/InstagramDark.svg" alt="Instagram"/></a>
+        <a href="#" aria-label="VK"><img src="../assets/icons8-vk%20(1).svg" alt="VK"/></a>
       </div>
     </div>
   </div>
@@ -370,9 +309,7 @@
     </ul>
   </nav>
   <div class="mobile-menu__actions">
-    <a href="../pages/cart.html" class="btn"
-    >Корзина (<span data-cart-count>0</span>)</a
-    >
+    <a href="../pages/cart.html" class="btn">Корзина (<span data-cart-count>0</span>)</a>
   </div>
 </div>
 <div class="overlay"></div>
@@ -380,21 +317,12 @@
 <!-- Модальное окно поиска -->
 <div class="search-modal" id="searchModal">
   <div class="search-modal__content">
-    <button
-      class="search-modal__close"
-      id="closeSearchModalBtn"
-      aria-label="Закрыть поиск"
-    ></button>
+    <button class="search-modal__close" id="closeSearchModalBtn" aria-label="Закрыть поиск"></button>
     <h2 class="search-modal__title">Поиск товаров</h2>
     <form class="search-form" id="modalSearchForm">
       <div class="search-input-container">
-        <input
-          type="search"
-          id="modalSearchInput"
-          placeholder="Название товара или артикул..."
-          aria-label="Поиск по каталогу"
-          autofocus
-        />
+        <input type="search" id="modalSearchInput" placeholder="Название товара или артикул..."
+               aria-label="Поиск по каталогу" autofocus/>
         <button type="submit" class="btn btn--primary">Найти</button>
       </div>
     </form>
@@ -403,21 +331,20 @@
     </div>
   </div>
 </div>
-
-<!-- Подключение скриптов -->
+<!-- Скрипты -->
 <script src="../js/utils.js"></script>
 <script src="../js/api.js"></script>
 <script src="../js/templates.js"></script>
-
-<script src="../js/cart.js"></script>
-<script src="../js/auth.js"></script>
-
-<script src="../js/menu.js"></script>
 <script src="../js/slider.js"></script>
 <script src="../js/search.js"></script>
-
+<script src="../js/cart.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/menu.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/templates.js"></script>
+<script src="../js/api.js"></script>
 <script src="../js/display.js"></script>
-
 <script src="../js/app.js"></script>
 </body>
+
 </html>

@@ -22,7 +22,6 @@ async function loadPageSpecificData() {
 
   // Загрузка категорий для футера (на всех страницах)
   if (window.Display && Display.displayFooterCategories) await Display.displayFooterCategories();
-
   if (pageName === 'index.html' || pageName === '') {
     if (window.Display && Display.displayHomepageCategories) await Display.displayHomepageCategories();
     if (window.Display && Display.displayPopularProducts) await Display.displayPopularProducts();
@@ -30,7 +29,7 @@ async function loadPageSpecificData() {
   }
 }
 
-// Добавьте этот код в app.js для загрузки товаров на главной странице
+
 document.addEventListener('DOMContentLoaded', async function () {
   // Проверяем, находимся ли мы на главной странице
   const isHomePage = window.location.pathname === '/' ||
@@ -66,4 +65,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 });
+
 

@@ -188,8 +188,6 @@
   window.Search = {
     initSearchModal,
     setupPopularSearch,
-    setupProductCardActionsForContainer // Экспортируем для использования другими модулями
+    setupProductCardActionsForContainer 
   };
 })();
-// Инициализация initSearchModal будет в app.js
-// setupPopularSearch будет вызываться из display.js после загрузки популярных товаров

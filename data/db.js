@@ -126,53 +126,8 @@ class Database {
     return (db.products || []).find((p) => p.id === productId);
   }
 
-  // static async getProductsByCategory(categoryIdentifier, forceRefresh = false) {
-  //   const productsDb = await loadFlowersDb(forceRefresh); // Исправлена опечатка productsBb -> productsDb
-  //   const categories = await loadCategoriesDb(forceRefresh);
-
-  //   if (!categoryIdentifier) {
-  //     console.error("Ошибка: categoryIdentifier не указан");
-  //     return [];
-  //   }
-
-  //   const lowerIdentifier = String(categoryIdentifier).toLowerCase();
-
-  //   let targetCategory; // <--- ОБЪЯВЛЯЕМ ПЕРЕМЕННУЮ ЗДЕСЬ
-
-  //   // Сначала проверяем по id категории
-  //   if (!isNaN(parseInt(categoryIdentifier, 10))) {
-  //     const categoryId = parseInt(categoryIdentifier, 10);
-  //     targetCategory = categories.find((c) => c.id === categoryId);
-  //   } else {
-  //     targetCategory = categories.find(
-  //       (c) =>
-  //         (c.slug && c.slug.toLowerCase() === lowerIdentifier) ||
-  //         (c.name && c.name.toLowerCase() === lowerIdentifier)
-  //     );
-  //   }
-
-  //   if (!targetCategory) {
-  //     console.warn(
-  //       `Категория с идентификатором "${categoryIdentifier}" не найдена.`
-  //     );
-  //     return [];
-  //   }
-
-  //   return (productsDb.products || []).filter((p) => {
-  //     return (
-  //       (p.categoryId && p.categoryId === targetCategory.id) ||
-  //       (p.categorySlug &&
-  //         targetCategory.slug &&
-  //         p.categorySlug.toLowerCase() === targetCategory.slug.toLowerCase())
-  //     );
-  //   });
-  // }
-
   static async getProductsByCategory(categoryIdentifier, forceRefresh = false) {
-    console.log(
-      "[DB] getProductsByCategory вызван с идентификатором:",
-      categoryIdentifier
-    );
+    console.log("[DB] getProductsByCategory вызван с идентификатором:", categoryIdentifier);
     const productsDb = await loadFlowersDb(forceRefresh);
     const categories = await loadCategoriesDb(forceRefresh);
 
@@ -191,35 +146,26 @@ class Database {
           (c.name && c.name.toLowerCase() === lowerIdentifier)
       );
     } else {
-      console.error(
-        "[DB] Ошибка: 'categories' не загружены или не являются массивом."
-      );
+      console.error("[DB] Ошибка: 'categories' не загружены или не являются массивом.");
       return [];
     }
 
     if (!targetCategory) {
-      console.warn(
-        `[DB] Категория с идентификатором "${categoryIdentifier}" (lower: "${lowerIdentifier}") НЕ НАЙДЕНА в списке категорий.`
-      );
+      console.warn(`[DB] Категория с идентификатором "${categoryIdentifier}" (lower: "${lowerIdentifier}") НЕ НАЙДЕНА в списке категорий.`);
       return [];
     }
 
-    console.log(
-      `[DB] Найдена targetCategory: id=${targetCategory.id}, name=${targetCategory.name}`
-    );
+    console.log(`[DB] Найдена targetCategory: id=${targetCategory.id}, name=${targetCategory.name}`);
 
     const filteredProducts = (productsDb.products || []).filter((p) => {
       if (p.category && targetCategory.id) {
-        const match =
-          p.category.toLowerCase() === targetCategory.id.toLowerCase();
+        const match = p.category.toLowerCase() === targetCategory.id.toLowerCase();
         return match;
       }
       return false;
     });
 
-    console.log(
-      `[DB] Найдено ${filteredProducts.length} товаров для категории "${targetCategory.name}"`
-    );
+    console.log(`[DB] Найдено ${filteredProducts.length} товаров для категории "${targetCategory.name}"`);
     return filteredProducts;
   }
 

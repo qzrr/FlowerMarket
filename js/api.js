@@ -1,4 +1,3 @@
-// js/api.js
 class API {
   static BASE_URL = "/api"; // Относительный путь к вашему API
   static CACHE_TTL = 60000; // Время жизни кэша в миллисекундах (1 минута)
@@ -35,7 +34,8 @@ class API {
           try {
             const jsonError = await response.json();
             if (jsonError && jsonError.error) errorData.message = jsonError.error;
-          } catch (e) { /* Ошибка парсинга JSON, используем response.statusText */ }
+          } catch (e) { /* Ошибка парсинга JSON, используем response.statusText */
+          }
 
           console.error(`API Error ${response.status} for ${endpoint}:`, errorData.message);
 

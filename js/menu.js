@@ -36,4 +36,7 @@ function initMobileMenu() {
   });
 }
 
+// Экспортируем функцию в глобальную область видимости
+window.initMobileMenu = initMobileMenu;
+
 // Инициализация в app.js
