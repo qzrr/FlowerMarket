@@ -133,17 +133,17 @@ function debounce(func, wait) {
 // Функция для отображения уведомлений
 function showNotification(message, isError = false) {
   const notification = document.createElement('div');
-  notification.className = `notification ${isError ? 'error' : 'success'}`;
+  notification.className = `user-notification ${isError ? 'user-notification--error' : ''}`;
   notification.textContent = message;
 
   document.body.appendChild(notification);
 
   // Анимация появления
-  setTimeout(() => notification.classList.add('show'), 10);
+  setTimeout(() => notification.classList.add('active'), 10);
 
   // Удаление через 3 секунды
   setTimeout(() => {
-    notification.classList.remove('show');
+    notification.classList.remove('active');
     setTimeout(() => notification.remove(), 300);
   }, 3000);
 }
