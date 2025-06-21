@@ -377,16 +377,28 @@
         </div>
         <div class="footer__column">
           <h4 class="footer__title">Категории</h4>
-          <ul class="footer__list" id="footer-categories-list">
-            <!-- Категории будут загружены JavaScript -->
+          <ul class="footer__list" id="footer-categories">
+            <!-- Категории будут загружены из JSON -->
+            <li><a href="catalog.html?category=bouquets">Букеты</a></li>
+            <li><a href="catalog.html?category=roses">Розы</a></li>
+            <li>
+              <a href="catalog.html?category=plants">Комнатные растения</a>
+            </li>
+            <li><a href="catalog.html?category=gifts">Подарки</a></li>
+            <li>
+              <a href="catalog.html?category=wedding">Свадебные букеты</a>
+            </li>
           </ul>
         </div>
         <div class="footer__column">
           <h4 class="footer__title">Контакты</h4>
           <address class="footer__contact-info">
-            <p>ул. Цветочная, 10<br />Москва, Россия</p>
-            <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
-            <p>Email: <a href="mailto:hello@floww.com">hello@floww.com</a></p>
+            <p>ул. Баумана, 123<br />Баумана, Россия</p>
+            <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+            <p>
+              Email:
+              <a href="mailto:info@flowerparadise.ru">info@flowerparadise.ru</a>
+            </p>
           </address>
           <div class="footer__socials">
             <a href="#" aria-label="Facebook"
@@ -403,7 +415,7 @@
       </div>
       <div class="footer__bottom">
         <div class="container footer__bottom-container">
-          <p>© 2024 Floww. Все права защищены.</p>
+          <p>© 2025 Floww. Все права защищены.</p>
           <nav>
             <a href="#">Политика конфиденциальности</a>
             <a href="#">Условия использования</a>
@@ -554,24 +566,15 @@
       </div>
     </div>
 
-    <!-- Подключение скриптов -->
-    <script src="../js/utils.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/templates.js"></script>
-
-    <script src="../js/cart.js"></script>
-    <script src="../js/auth.js"></script>
-
-    <script src="../js/menu.js"></script>
-    <script src="../js/search.js"></script>
-    <!-- Для модалки и setupProductCardActionsForContainer -->
-
-    <script src="../js/display.js"></script>
-    <!-- Для generateRatingStarsHTML и футера -->
-
-    <script src="../js/product.js"></script>
-    <!-- Специфичный для этой страницы -->
-
-    <script src="../js/app.js"></script>
+    <!-- Подключение скриптов --><script src="/js/utils.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/templates.js"></script>
+<script src="/js/slider.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/menu.js"></script>
+<script src="/js/display.js"></script>
+<script src="/js/app.js"></script>
   </body>
 </html>

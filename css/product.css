@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
 }
@@ -223,7 +222,6 @@ img {
 .footer {
   background-color: #222;
   color: white;
-  padding: 40px 0 20px;
 }
 .footer__container {
   display: flex;
